@@ -12,13 +12,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.adarp.xiwami.repository.*;
 import com.adarp.xiwami.domain.Family;
 import com.adarp.xiwami.domain.Member;
 import com.adarp.xiwami.web.dto.*;
 
-@Controller
+@RestController
 public class FamilyController {
 	@Autowired
 	private FamilyRepository familyRep;
@@ -28,7 +29,6 @@ public class FamilyController {
 
 	// Get all families
 	@RequestMapping(value = "/families", method = RequestMethod.GET, produces = "application/json")
-	@ResponseBody
 	public Map<String,List<Family>> FindFamilies() {
 		try {				
 			Map<String,List<Family>> responseBody = new HashMap<String,List<Family>>();
@@ -45,7 +45,6 @@ public class FamilyController {
 
 	// Get Family by ID
 	@RequestMapping(value = "/families/{id}", method = RequestMethod.GET, produces = "application/json")
-	@ResponseBody
 	public FamilySideload FindByFamilyId(@PathVariable("id") String id) {
 		
 		try {
@@ -75,7 +74,6 @@ public class FamilyController {
 	
 	// Add New Family
 	@RequestMapping(value = "/families", method = RequestMethod.POST, produces = "application/json")
-	@ResponseBody
 	public void AddFamily(@RequestBody FamilySideload newFamily)
 	{
 		try {
@@ -89,7 +87,6 @@ public class FamilyController {
 	
 	// Update Family
 	@RequestMapping(value = "/families/{id}", method = RequestMethod.PUT, produces = "application/json")
-	@ResponseBody
 	public void EditFamily(@PathVariable("id") String id, @RequestBody FamilySideload updatedFamily)
 	{
 		try {
@@ -104,7 +101,6 @@ public class FamilyController {
 	
 	// Delete Family
 	@RequestMapping (value = "/families/{id}", method = RequestMethod.DELETE, produces = "application/json")
-	@ResponseBody
 	public void DeleteFamily(@PathVariable("id")String id) {
 		try {
 			familyRep.DeleteFamily(id);
