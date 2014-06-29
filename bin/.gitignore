@@ -1,1 +1,4 @@
-/com
+/application.properties
+/com/
+/static/
+/templates/
