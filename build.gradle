@@ -28,6 +28,7 @@ repositories {
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.data:spring-data-mongodb")
+	compile group: 'com.google.guava', name: 'guava', version: '17.0'    
     // tag::actuator[]
     //compile("org.springframework.boot:spring-boot-starter-actuator")
     // end::actuator[]

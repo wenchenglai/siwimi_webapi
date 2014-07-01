@@ -82,7 +82,6 @@ public class FamilyController {
 			e.printStackTrace();
 			System.out.println("Error : unable to add Family.");
 		}
-		
 	}	
 	
 	// Update Family

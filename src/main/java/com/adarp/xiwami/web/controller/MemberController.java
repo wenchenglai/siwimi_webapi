@@ -1,5 +1,7 @@
 package com.adarp.xiwami.web.controller;
 
+import java.io.File;
+
 import com.adarp.xiwami.web.dto.MemberSideload;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.adarp.xiwami.repository.MemberRepository;
+import com.google.common.io.BaseEncoding;
+import com.google.common.io.Files;
 
 @Controller
 public class MemberController {
@@ -40,6 +44,18 @@ public class MemberController {
 	{
 		try {
 			member.member.setId(id);
+			
+			File file = new File("src/main/java/com/adarp/xiwami/a.jpg");
+			file.deleteOnExit();
+			
+			String raw = member.member.getImageData();
+			raw = raw.substring(23);
+			
+			BaseEncoding baseEncoding = BaseEncoding.base64();
+			byte[] bytes = baseEncoding.decode(raw);
+			
+			Files.write(bytes, file);			
+			
 			memberRep.UpdateMember(member.member);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

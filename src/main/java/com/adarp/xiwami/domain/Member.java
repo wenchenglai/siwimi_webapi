@@ -26,6 +26,7 @@ public class Member {
 	private String facebookId;	
 	private List<Item> items = new ArrayList<Item>();
 	private String family;
+	private String imageData;
 	
 	public Member() {
 		id = new ObjectId();
@@ -150,5 +151,13 @@ public class Member {
 
 	public void setFamily(String familyId) {
 		this.family = familyId;
+	}	
+	
+	public String getImageData() {
+		return imageData;
+	}
+
+	public void setImage(String imageData) {
+		this.imageData = imageData;
 	}		
 }
