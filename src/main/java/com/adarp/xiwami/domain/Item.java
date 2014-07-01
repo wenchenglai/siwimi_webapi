@@ -4,11 +4,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
+
 public class Item {
-//	@Id
-//	private ObjectId _id;
 	
-	private int id;
+	@Id
+	private ObjectId _id;
+	
 	private String name;
 	private String description;
 	private String size;
@@ -21,25 +24,16 @@ public class Item {
 	private String status;
 	private String imageUrl;
 	private Date createdDate;
-
-//	public Item() {
-//		_id = new ObjectId();
-//	}
-//	
-//	public void set_id(String _id) {
-//		this._id = ObjectId.massageToObjectId(_id);
-//	}
-//
-//	public String get_id() {
-//		return _id.toString();
-//	}
-
-	public int getId() {
-		return id;
+	private String sellerId;
+	private String buyerId;
+	private String isDeleted;
+	
+	public void set_Id(String id) {
+		this._id = new ObjectId(id);
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public String get_Id() {
+		return _id.toString();
 	}
 
 	public String getName() {
@@ -131,12 +125,12 @@ public class Item {
 	}
 
 	public String getCreatedDate() {
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd"); 
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss"); 
 		return formatter.format(createdDate);
 	}
 
 	public void setCreatedDate(String createdDate) {
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd"); 
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss"); 
 		try {	 
 			Date mycreatedDate = formatter.parse(createdDate);
 			this.createdDate = mycreatedDate; 
@@ -144,4 +138,30 @@ public class Item {
 			e.printStackTrace();
 		}
 	}
+
+	public String getSellerId() {
+		return sellerId;
+	}
+
+	public void setSellerId(String sellerId) {
+		this.sellerId = sellerId;
+	}
+
+	public String getBuyerId() {
+		return buyerId;
+	}
+
+	public void setBuyerId(String buyerId) {
+		this.buyerId = buyerId;
+	}
+
+	public String getIsDeleted() {
+		return isDeleted;
+	}
+
+	public void setIsDeleted(String isDeleted) {
+		this.isDeleted = isDeleted;
+	}
+	
+	
 }
