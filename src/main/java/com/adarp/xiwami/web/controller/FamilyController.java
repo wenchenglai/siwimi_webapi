@@ -6,12 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.adarp.xiwami.repository.*;
@@ -21,6 +19,7 @@ import com.adarp.xiwami.web.dto.*;
 
 @RestController
 public class FamilyController {
+	
 	@Autowired
 	private FamilyRepository familyRep;
 	
@@ -32,7 +31,8 @@ public class FamilyController {
 	public Map<String,List<Family>> FindFamilies() {
 		try {				
 			Map<String,List<Family>> responseBody = new HashMap<String,List<Family>>();
-			List<Family> list = familyRep.GetFamilies();
+			//List<Family> list = familyRep.GetFamilies();
+			List<Family> list = familyRep.findAll();
 			responseBody.put("family", list);
 			return responseBody;
 		} catch (Exception e) {
@@ -51,13 +51,14 @@ public class FamilyController {
 			//return "Family:{" + myFamily.GetFamilyById(id) + "}";
 			FamilySideload responseBody = new FamilySideload();
 			
-			Family family = familyRep.GetFamilyById(id);
+			//Family family = familyRep.GetFamilyById(id);
+			Family family = familyRep.findOne(id);
 			
-			List<Member> members = memberRep.FindMembers(family.getId());
+			List<Member> members = memberRep.FindMembers(family.get_Id());
 			
 			List<String> memberIds = new ArrayList<String>();
 			for (Member member : members) {
-				memberIds.add(member.getId());
+				memberIds.add(member.get_Id());
 			}
 			family.setMembers(memberIds);
 			
@@ -77,7 +78,8 @@ public class FamilyController {
 	public void AddFamily(@RequestBody FamilySideload newFamily)
 	{
 		try {
-			familyRep.AddFamily(newFamily.family);
+			//familyRep.AddFamily(newFamily.family);
+			familyRep.save(newFamily.family);
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("Error : unable to add Family.");
@@ -89,7 +91,7 @@ public class FamilyController {
 	public void EditFamily(@PathVariable("id") String id, @RequestBody FamilySideload updatedFamily)
 	{
 		try {
-			updatedFamily.family.setId(id);
+			updatedFamily.family.set_Id(id);
 			familyRep.UpdateFamily(updatedFamily.family);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

@@ -26,7 +26,8 @@ public class ItemController {
 	public Map<String,List<Item>> FindItems() {
 		try {				
 			Map<String,List<Item>> responseBody = new HashMap<String,List<Item>>();
-			List<Item> list = itemRep.GetItems();
+			//List<Item> list = itemRep.GetItems();
+			List<Item> list = itemRep.findAll();
 			responseBody.put("item", list);
 			return responseBody;
 		} catch (Exception e) {
@@ -43,7 +44,8 @@ public class ItemController {
 		
 		try {
 			Map<String,Item> responseBody = new HashMap<String,Item>();			
-			Item item = itemRep.GetItemById(id);
+			//Item item = itemRep.GetItemById(id);
+			Item item = itemRep.findOne(id);
 			responseBody.put("item", item);
 			return responseBody;
 		} catch (Exception e) {
@@ -59,7 +61,8 @@ public class ItemController {
 	public void AddItem(@RequestBody ItemSideload newItem)
 	{
 		try {
-			itemRep.AddItem(newItem.item);
+			//itemRep.AddItem(newItem.item);
+			itemRep.save(newItem.item);
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("Error : unable to add Item.");
@@ -71,7 +74,9 @@ public class ItemController {
 	public void EditItem(@PathVariable("id") String id, @RequestBody ItemSideload updatedItem)
 	{
 		try {
-			itemRep.UpdateItem(id,updatedItem.item);
+			itemRep.UpdateItem(id,updatedItem.item);			
+			//updatedItem.item.set_Id(id);
+			//itemRep.save(updatedItem.item);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

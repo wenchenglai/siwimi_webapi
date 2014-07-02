@@ -1,20 +1,11 @@
 package com.adarp.xiwami.repository;
 
+import org.springframework.data.mongodb.repository.MongoRepository;
+
 import com.adarp.xiwami.domain.Family;
 
-import java.util.List;
 
-import org.springframework.stereotype.Service;
+public interface FamilyRepository extends MongoRepository<Family, String>, FamilyRepositoryCustom{
+	
 
-@Service
-public interface FamilyRepository {
-	public List<Family> GetFamilies() throws Exception;
-	
-	public Family GetFamilyById(String id) throws Exception;
-	
-	public void AddFamily(Family newFamily) throws Exception;
-	
-	public void UpdateFamily(Family updateFamily) throws Exception;
-	
-	public void DeleteFamily(String id) throws Exception;		
 }

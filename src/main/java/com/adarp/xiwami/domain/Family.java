@@ -8,8 +8,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "Family")
 public class Family {
+	
 	@Id
-	private String id;
+	private String _id;
 	
 	private String zipcode;
 	private String cityState;
@@ -17,12 +18,12 @@ public class Family {
 	private String description;	
 	private List<String> members = new ArrayList<String>();
 
-	public String getId() {
-		return id;
+	public String get_Id() {
+		return _id;
 	}
 	
-	public void setId(String id) {
-		this.id = id;
+	public void set_Id(String id) {
+		this._id = id;
 	}
 
 	public String getZipcode() {

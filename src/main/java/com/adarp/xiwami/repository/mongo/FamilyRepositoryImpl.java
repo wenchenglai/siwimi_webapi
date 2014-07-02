@@ -12,12 +12,12 @@ import org.springframework.stereotype.Repository;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 
-import com.adarp.xiwami.repository.FamilyRepository;
+import com.adarp.xiwami.repository.FamilyRepositoryCustom;
 import com.adarp.xiwami.domain.Family;
 import com.adarp.xiwami.domain.Member;
 
 @Repository
-public class FamilyMongoRepository implements FamilyRepository {
+public class FamilyRepositoryImpl implements FamilyRepositoryCustom {
 	@Autowired
 	private MongoTemplate mongoTemplate;
 	
@@ -46,7 +46,7 @@ public class FamilyMongoRepository implements FamilyRepository {
 	@Override
 	public void UpdateFamily(Family updatedFamily) throws Exception {
 		Query myQuery = new Query();
-		myQuery.addCriteria(Criteria.where("_id").is(updatedFamily.getId()));
+		myQuery.addCriteria(Criteria.where("_id").is(updatedFamily.get_Id()));
 
 		DBObject updatedFamilyDBObject = (DBObject) mongoTemplate.getConverter().convertToMongoType(updatedFamily);
 		updatedFamilyDBObject.removeField("_id");
@@ -63,7 +63,7 @@ public class FamilyMongoRepository implements FamilyRepository {
 		Family result = mongoTemplate.findAndRemove(query, Family.class, "Family");
 		
 		query = new Query();
-		query.addCriteria(Criteria.where("family").is(result.getId()));
+		query.addCriteria(Criteria.where("family").is(result.get_Id()));
 		mongoTemplate.remove(query, Member.class, "Member");
 	}	
 }

@@ -7,17 +7,18 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+//import org.springframework.stereotype.Repository;
+
 import org.springframework.stereotype.Repository;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
-
-import com.adarp.xiwami.repository.ActivityRepository;
+import com.adarp.xiwami.repository.ActivityRepositoryCustom;
 import com.adarp.xiwami.domain.Activity;
 
 
 @Repository
-public class ActivityMongoRepository implements ActivityRepository {
+public class ActivityRepositoryImpl implements ActivityRepositoryCustom {
 	
 	@Autowired
 	private MongoTemplate mongoTemplate;
