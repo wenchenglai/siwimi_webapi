@@ -45,7 +45,12 @@ public class MemberController {
 		try {
 			member.member.setId(id);
 			
-			File file = new File("src/main/java/com/adarp/xiwami/a.jpg");
+			StringBuilder sb = new StringBuilder();
+			sb.append("src/main/resources/assets/img/");
+			sb.append(id);
+			sb.append(".jpg");
+			
+			File file = new File(sb.toString());
 			file.deleteOnExit();
 			
 			String raw = member.member.getImageData();
@@ -56,6 +61,7 @@ public class MemberController {
 			
 			Files.write(bytes, file);			
 			
+			member.member.setAvatarUrl(id + ".jpg");
 			memberRep.UpdateMember(member.member);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
