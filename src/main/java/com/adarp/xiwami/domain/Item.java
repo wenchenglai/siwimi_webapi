@@ -1,9 +1,5 @@
 package com.adarp.xiwami.domain;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -24,7 +20,7 @@ public class Item {
 	private String type;
 	private String status;
 	private String imageUrl;
-	private Date createdDate;
+	//private Date createdDate;
 	private String sellerId;
 	private String buyerId;
 	private String isDeleted;
@@ -125,7 +121,7 @@ public class Item {
 		this.imageUrl = imageUrl;
 	}
 
-	public String getCreatedDate() {
+/*	public String getCreatedDate() {
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss"); 
 		return formatter.format(createdDate);
 	}
@@ -138,7 +134,7 @@ public class Item {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-	}
+	}*/
 
 	public String getSellerId() {
 		return sellerId;

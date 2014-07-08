@@ -23,7 +23,7 @@ public class Activity {
 	private String originalLink;
 	private String facebookEventUrl;
 	private String imageUrl;
-	private Date createdDate;
+	//private Date createdDate;
 	private String isDeleted;
 	
 	public void set_Id(String id) {
@@ -120,20 +120,20 @@ public class Activity {
 		this.imageUrl = imageUrl;
 	}
 	
-	public String getCreatedDate() {
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss"); 
-		return formatter.format(createdDate);
-	}
-
-	public void setCreatedDate(String createdDate) {
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss"); 
-		try {	 
-			Date mycreatedDate = formatter.parse(createdDate);
-			this.createdDate = mycreatedDate; 
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-	}
+//	public String getCreatedDate() {
+//		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss"); 
+//		return formatter.format(createdDate);
+//	}
+//
+//	public void setCreatedDate(String createdDate) {
+//		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss"); 
+//		try {	 
+//			Date mycreatedDate = formatter.parse(createdDate);
+//			this.createdDate = mycreatedDate; 
+//		} catch (ParseException e) {
+//			e.printStackTrace();
+//		}
+//	}
 	
 	public String getIsDeleted() {
 		return isDeleted;

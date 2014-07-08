@@ -1,9 +1,5 @@
 package com.adarp.xiwami.domain;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -15,7 +11,7 @@ public class Question {
 	
 	private String userId;
 	private String question;
-	private Date createdDate;
+	//private Date createdDate;
 	private String isAnswered;
 	private String isDeleted;
 	
@@ -43,7 +39,7 @@ public class Question {
 		this.question = question;
 	}
 	
-	public String getCreatedDate() {
+/*	public String getCreatedDate() {
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss"); 
 		return formatter.format(createdDate);
 	}
@@ -56,7 +52,7 @@ public class Question {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-	}
+	}*/
 	
 	public String getIsAnswered() {
 		return isAnswered;

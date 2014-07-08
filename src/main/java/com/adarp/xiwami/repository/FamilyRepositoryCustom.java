@@ -2,14 +2,12 @@ package com.adarp.xiwami.repository;
 
 import com.adarp.xiwami.domain.Family;
 
-import java.util.List;
-
 
 public interface FamilyRepositoryCustom {
 	
-	public List<Family> GetFamilies() throws Exception;
+	//public List<Family> GetFamilies() throws Exception;
 	
-	public Family GetFamilyById(String id) throws Exception;
+	//public Family GetFamilyById(String id) throws Exception;
 	
 	public void AddFamily(Family newFamily) throws Exception;
 	

@@ -17,6 +17,9 @@ public class Family {
 	private String familyName;
 	private String description;	
 	private List<String> members = new ArrayList<String>();
+	
+	private double[] location;
+	
 
 	public String get_Id() {
 		return _id;
@@ -64,5 +67,13 @@ public class Family {
 
 	public void setMembers(List<String> member) {
 		this.members = member;
+	}
+
+	public double[] getLocation() {
+		return location;
+	}
+
+	public void setLocation(double[] location) {
+		this.location = location;
 	}
 }

@@ -30,6 +30,7 @@ dependencies {
     compile("org.springframework.data:spring-data-mongodb")
 	compile("org.springframework.boot:spring-boot-starter-thymeleaf")
 	compile group: 'com.google.guava', name: 'guava', version: '17.0'
+	//compile group: 'commons-beanutils', name: 'commons-beanutils', version: '1.9.2'
     // tag::actuator[]
     //compile("org.springframework.boot:spring-boot-starter-actuator")
     // end::actuator[]

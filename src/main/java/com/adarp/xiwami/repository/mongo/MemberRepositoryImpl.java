@@ -28,11 +28,12 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
 	public void UpdateMember(Member member) {
 		
 		Query QueryInUser = new Query();
-		QueryInUser.addCriteria(Criteria.where("_id").is(member.get_Id()));
+		QueryInUser.addCriteria(Criteria.where("_id").is(member.get_Id()));		
 		DBObject updatedUserDBObject = (DBObject) mongoTemplate.getConverter().convertToMongoType(member);
 		updatedUserDBObject.removeField("_id");		
 		updatedUserDBObject.removeField("facebookId");
 		Update setUserUpdate = Update.fromDBObject(new BasicDBObject("$set",updatedUserDBObject));
+		
 		mongoTemplate.findAndModify(QueryInUser, setUserUpdate, Member.class, "Member");
 	}
 	

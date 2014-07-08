@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.adarp.xiwami.repository.*;
+import com.adarp.xiwami.service.FamilyService;
 import com.adarp.xiwami.domain.Family;
 import com.adarp.xiwami.domain.Member;
 import com.adarp.xiwami.web.dto.*;
@@ -20,39 +21,38 @@ import com.adarp.xiwami.web.dto.*;
 @RestController
 public class FamilyController {
 	
+	//@Autowired
+	//private FamilyRepository familyRep;
+	
 	@Autowired
-	private FamilyRepository familyRep;
+	private FamilyService familyService;
 	
 	@Autowired
 	private MemberRepository memberRep;	
 
 	// Get all families
 	@RequestMapping(value = "/families", method = RequestMethod.GET, produces = "application/json")
-	public Map<String,List<Family>> FindFamilies() {
-		try {				
-			Map<String,List<Family>> responseBody = new HashMap<String,List<Family>>();
-			//List<Family> list = familyRep.GetFamilies();
-			List<Family> list = familyRep.findAll();
-			responseBody.put("family", list);
-			return responseBody;
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			System.out.println("Error : unable to query Families.");
-			return null;
-		}
+	public Map<String,List<Family>> FindFamilies() {			
+		Map<String,List<Family>> responseBody = new HashMap<String,List<Family>>();
+		//List<Family> list = familyRep.GetFamilies();
+		//List<Family> list = familyRep.findAll();
+		List<Family> list = familyService.FindFamilies();
+		responseBody.put("family", list);
+		return responseBody;		
 	}
 
 	// Get Family by ID
 	@RequestMapping(value = "/families/{id}", method = RequestMethod.GET, produces = "application/json")
 	public FamilySideload FindByFamilyId(@PathVariable("id") String id) {
 		
+		// note : because of memberRep.FindMembers(...), we have keep try-catch here.....
 		try {
 			//return "Family:{" + myFamily.GetFamilyById(id) + "}";
 			FamilySideload responseBody = new FamilySideload();
 			
 			//Family family = familyRep.GetFamilyById(id);
-			Family family = familyRep.findOne(id);
+			//Family family = familyRep.findOne(id);
+			Family family = familyService.FindByFamilyId(id);
 			
 			List<Member> members = memberRep.FindMembers(family.get_Id());
 			
@@ -77,37 +77,31 @@ public class FamilyController {
 	@RequestMapping(value = "/families", method = RequestMethod.POST, produces = "application/json")
 	public void AddFamily(@RequestBody FamilySideload newFamily)
 	{
-		try {
-			//familyRep.AddFamily(newFamily.family);
-			familyRep.save(newFamily.family);
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("Error : unable to add Family.");
-		}
+		//familyRep.AddFamily(newFamily.family);
+		//familyRep.save(newFamily.family);
+		familyService.AddFamily(newFamily);
 	}	
 	
 	// Update Family
 	@RequestMapping(value = "/families/{id}", method = RequestMethod.PUT, produces = "application/json")
 	public void EditFamily(@PathVariable("id") String id, @RequestBody FamilySideload updatedFamily)
 	{
-		try {
-			updatedFamily.family.set_Id(id);
-			familyRep.UpdateFamily(updatedFamily.family);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			System.out.println("Error : unable to add Family.");
-		}
+		//updatedFamily.family.set_Id(id);
+		//familyRep.UpdateFamily(updatedFamily.family);
+		familyService.EditFamily(id, updatedFamily);
 	}
 	
 	// Delete Family
 	@RequestMapping (value = "/families/{id}", method = RequestMethod.DELETE, produces = "application/json")
 	public void DeleteFamily(@PathVariable("id")String id) {
-		try {
-			familyRep.DeleteFamily(id);
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("Error : unable to add Family.");			
-		}
+		//familyRep.DeleteFamily(id);
+		familyService.DeleteFamily(id);
+	}	
+	
+	// Search nearby Family
+	@RequestMapping (value = "/families/{id}/{radius}", method = RequestMethod.GET, produces = "application/json")
+	public void SearchFamilyNearby(@PathVariable("id")String id, @PathVariable("id")double radius) {
+		//familyRep.DeleteFamily(id);
+		familyService.SearchFamilyNearby(id, radius);
 	}	
 }
