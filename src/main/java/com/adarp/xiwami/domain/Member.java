@@ -30,10 +30,6 @@ public class Member {
 	private String family;
 	private String imageData;
 	
-/*	public Member() {
-		id = new ObjectId();
-	} */
-	
 	public void set_Id(String id) {
 		this._id = id;
 	}
