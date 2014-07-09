@@ -2,6 +2,7 @@ package com.adarp.xiwami.repository.mongo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.index.GeospatialIndex;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
@@ -20,33 +21,18 @@ public class FamilyRepositoryImpl implements FamilyRepositoryCustom {
 	@Autowired
 	private MongoTemplate mongoTemplate;
 	
-/*	public List<Family> GetFamilies() throws Exception {
-		
-		return (mongoTemplate.findAll(Family.class, "Family"));
-	}*/	
-	
-/*	@Override
-	public Family GetFamilyById(String id) throws Exception {
-
-		Query myQuery = new Query();
-		myQuery.addCriteria(Criteria.where("_id").is(id));
-		myQuery.fields().exclude("members.items");
-		
-		return mongoTemplate.findOne(myQuery, Family.class, "Family");		
-		
-	}*/		
-	
 	@Override
 	public void AddFamily(Family newFamily) throws Exception {
 
 		// Retrieve longitude and latitude from the collection of ZipCode
 		Query myQuery = new Query();
-		myQuery.addCriteria(Criteria.where("ZipCode").is(newFamily.getZipcode()));	
-		Zipcode zipcode = mongoTemplate.findOne(myQuery, Zipcode.class, "Zipcode");	
+		myQuery.addCriteria(Criteria.where("zipCode").is(Integer.parseInt(newFamily.getZipCode())));
+		Zipcode zipcode = mongoTemplate.findOne(myQuery, Zipcode.class, "ZipCode");
 		// set longitude and latitude of the family object 
-		double[] location = {zipcode.getLatitude(), zipcode.getLongitude()};
+		double[] location = {zipcode.getLongitude(), zipcode.getLatitude()};
 		newFamily.setLocation(location);
 		// Save family object into family collection
+		mongoTemplate.indexOps(Family.class).ensureIndex(new GeospatialIndex("location") );
 		mongoTemplate.save(newFamily,"Family");
 	}
 	
@@ -54,13 +40,14 @@ public class FamilyRepositoryImpl implements FamilyRepositoryCustom {
 	public void UpdateFamily(Family updatedFamily) throws Exception {
 		
 		// Retrieve longitude and latitude from the collection of ZipCode, if there is any updated zipcode in the family object
-		if (updatedFamily.getZipcode() != null) {
+		if (updatedFamily.getZipCode() != null) {
 			Query zipCodeQuery = new Query();
-			zipCodeQuery.addCriteria(Criteria.where("ZipCode").is(updatedFamily.getZipcode()));	
-			Zipcode zipcode = mongoTemplate.findOne(zipCodeQuery, Zipcode.class, "Zipcode");	
+			zipCodeQuery.addCriteria(Criteria.where("zipCode").is(Integer.parseInt(updatedFamily.getZipCode())));
+			Zipcode zipcode = mongoTemplate.findOne(zipCodeQuery, Zipcode.class, "ZipCode");	
 			// update longitude and latitude of the family object 
-			double[] location = {zipcode.getLatitude(), zipcode.getLongitude()};
-			updatedFamily.setLocation(location);			
+			double[] location = {zipcode.getLongitude(), zipcode.getLatitude()};
+			updatedFamily.setLocation(location);	
+			mongoTemplate.indexOps(Family.class).ensureIndex(new GeospatialIndex("location") );
 		}
 				
 		Query myQuery = new Query();

@@ -3,7 +3,9 @@ package com.adarp.xiwami.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.geo.Circle;
+import org.springframework.data.geo.Distance;
+import org.springframework.data.geo.Metrics;
+import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Service;
 
 import com.adarp.xiwami.domain.Family;
@@ -16,7 +18,6 @@ public class FamilyService {
 	@Autowired
 	private FamilyRepository familyRep;
 	
-	
 	public List<Family> FindFamilies() {
 		try {
 			return familyRep.findAll();
@@ -25,7 +26,6 @@ public class FamilyService {
 			System.out.println("Error : unable to query Families.");
 			return null;
 		}
-
 	}
 	
 	public Family FindByFamilyId(String id) {
@@ -40,7 +40,6 @@ public class FamilyService {
 	
 	public void AddFamily(FamilySideload newFamily) {
 		try {
-			//familyRep.save(newFamily.family);
 			familyRep.AddFamily(newFamily.family);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -68,10 +67,10 @@ public class FamilyService {
 		}
 	}
 	
-	public List<Family> SearchFamilyNearby(String id, double radius) {
+	public List<Family> SearchFamilyNearby(String id, double distance) {
 		Family thisFamily = familyRep.findOne(id);
-		double latitude = thisFamily.getLocation()[0];
-		double longitude = thisFamily.getLocation()[1];
-		return familyRep.findByLocationWithin(new Circle(latitude,longitude,radius));
+		double[] coordinates = thisFamily.getLocation();	
+		Point point = new Point(coordinates[0],coordinates[1]);
+		return familyRep.findByLocationNear(point,new Distance(distance,Metrics.MILES));
 	}
 }

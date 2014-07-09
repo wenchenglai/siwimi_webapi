@@ -12,8 +12,8 @@ public class Family {
 	@Id
 	private String _id;
 	
-	private String zipcode;
-	private String cityState;
+	private String zipCode;
+	//private String cityState;
 	private String familyName;
 	private String description;	
 	private List<String> members = new ArrayList<String>();
@@ -29,21 +29,21 @@ public class Family {
 		this._id = id;
 	}
 
-	public String getZipcode() {
-		return zipcode;
+	public String getZipCode() {
+		return zipCode;
 	}
 
-	public void setZipcode(String zipcode) {
-		this.zipcode = zipcode;
+	public void setZipCode(String zipCode) {
+		this.zipCode = zipCode;
 	}
 	
-	public String getCityState() {
+/*	public String getCityState() {
 		return cityState;
 	}
 
 	public void setCityState(String cityState) {
 		this.cityState = cityState;
-	}	
+	}*/
 
 	public String getFamilyName() {
 		return familyName;

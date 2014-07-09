@@ -3,14 +3,15 @@ package com.adarp.xiwami.domain;
 public class Zipcode {
 
 	private String countryCode;
+	private String zipCode;
 	private String township;
 	private String state;
 	private String stateCode;
 	private String county;
 	private String countyCode;
 	
-	private double latitude;
 	private double longitude;
+	private double latitude;
 	
 	public String getCountryCode() {
 		return countryCode;
@@ -38,6 +39,9 @@ public class Zipcode {
 
 	public double getLongitude() {
 		return longitude;
+	}
+	public String getZipCode() {
+		return zipCode;
 	}
 	
 }
