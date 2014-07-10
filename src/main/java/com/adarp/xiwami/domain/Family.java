@@ -10,10 +10,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Family {
 	
 	@Id
-	private String _id;
+	private String id;
 	
 	private String zipCode;
-	//private String cityState;
+	private String cityState;
 	private String familyName;
 	private String description;	
 	private List<String> members = new ArrayList<String>();
@@ -21,12 +21,12 @@ public class Family {
 	private double[] location;
 	
 
-	public String get_Id() {
-		return _id;
+	public String getId() {
+		return id;
 	}
 	
-	public void set_Id(String id) {
-		this._id = id;
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public String getZipCode() {
@@ -37,13 +37,13 @@ public class Family {
 		this.zipCode = zipCode;
 	}
 	
-/*	public String getCityState() {
+	public String getCityState() {
 		return cityState;
 	}
 
 	public void setCityState(String cityState) {
 		this.cityState = cityState;
-	}*/
+	}
 
 	public String getFamilyName() {
 		return familyName;

@@ -13,7 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Member {
 	
 	@Id
-	private String _id; 
+	private String id; 
 	
 	private String lastName;
 	private String firstName;
@@ -30,12 +30,12 @@ public class Member {
 	private String family;
 	private String imageData;
 	
-	public void set_Id(String id) {
-		this._id = id;
+	public void setId(String id) {
+		this.id = id;
 	}
 
-	public String get_Id() {
-		return _id;
+	public String getId() {
+		return id;
 	}
 
 	public String getLastName() {

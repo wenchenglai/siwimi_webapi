@@ -50,7 +50,7 @@ public class FamilyService {
 	
 	public void EditFamily(String id,FamilySideload updatedFamily) {
 		try {
-			updatedFamily.family.set_Id(id);
+			updatedFamily.family.setId(id);
 			familyRep.UpdateFamily(updatedFamily.family);
 		} catch (Exception e) {
 			e.printStackTrace();

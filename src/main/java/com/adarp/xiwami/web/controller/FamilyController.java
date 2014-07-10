@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.adarp.xiwami.repository.*;
@@ -29,7 +30,12 @@ public class FamilyController {
 
 	// Get all families
 	@RequestMapping(value = "/families", method = RequestMethod.GET, produces = "application/json")
-	public Map<String,List<Family>> FindFamilies() {			
+	public Map<String,List<Family>> FindFamilies(
+			@RequestParam(value="zipcode", required=true) int zipcode,
+			@RequestParam(value="distance", required=true) String qsDistance, 
+			@RequestParam(value="fromAge", required=false) int fromAge,
+			@RequestParam(value="toAge", required=false) int toAge,
+			@RequestParam(value="languages[]", required=false) String[] languages) {			
 		Map<String,List<Family>> responseBody = new HashMap<String,List<Family>>();
 		responseBody.put("family", familyService.FindFamilies());
 		return responseBody;		
@@ -44,11 +50,11 @@ public class FamilyController {
 			FamilySideload responseBody = new FamilySideload();
 			Family family = familyService.FindByFamilyId(id);
 			
-			List<Member> members = memberRep.FindMembers(family.get_Id());
+			List<Member> members = memberRep.FindMembers(family.getId());
 			
 			List<String> memberIds = new ArrayList<String>();
 			for (Member member : members) {
-				memberIds.add(member.get_Id());
+				memberIds.add(member.getId());
 			}
 			family.setMembers(memberIds);
 			

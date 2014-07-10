@@ -51,7 +51,7 @@ public class FamilyRepositoryImpl implements FamilyRepositoryCustom {
 		}
 				
 		Query myQuery = new Query();
-		myQuery.addCriteria(Criteria.where("_id").is(updatedFamily.get_Id()));
+		myQuery.addCriteria(Criteria.where("_id").is(updatedFamily.getId()));
 		DBObject updatedFamilyDBObject = (DBObject) mongoTemplate.getConverter().convertToMongoType(updatedFamily);
 		updatedFamilyDBObject.removeField("_id");
 		updatedFamilyDBObject.removeField("members");
@@ -66,7 +66,7 @@ public class FamilyRepositoryImpl implements FamilyRepositoryCustom {
 		Family result = mongoTemplate.findAndRemove(query, Family.class, "Family");
 		
 		query = new Query();
-		query.addCriteria(Criteria.where("family").is(result.get_Id()));
+		query.addCriteria(Criteria.where("family").is(result.getId()));
 		mongoTemplate.remove(query, Member.class, "Member");
 	}	
 }

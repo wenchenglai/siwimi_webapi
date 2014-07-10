@@ -28,7 +28,7 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
 	public void UpdateMember(Member member) {
 		
 		Query QueryInUser = new Query();
-		QueryInUser.addCriteria(Criteria.where("_id").is(member.get_Id()));		
+		QueryInUser.addCriteria(Criteria.where("_id").is(member.getId()));		
 		DBObject updatedUserDBObject = (DBObject) mongoTemplate.getConverter().convertToMongoType(member);
 		updatedUserDBObject.removeField("_id");		
 		updatedUserDBObject.removeField("facebookId");
