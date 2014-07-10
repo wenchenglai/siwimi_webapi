@@ -26,7 +26,8 @@ public class QuestionController {
 	public Map<String,List<Question>> FindQuestions() {
 		try {				
 			Map<String,List<Question>> responseBody = new HashMap<String,List<Question>>();
-			List<Question> list = questionRep.GetQuestions();
+			//List<Question> list = questionRep.GetQuestions();
+			List<Question> list = questionRep.findAll();
 			responseBody.put("question", list);
 			return responseBody;
 		} catch (Exception e) {
@@ -43,7 +44,8 @@ public class QuestionController {
 		
 		try {
 			Map<String,Question> responseBody = new HashMap<String,Question>();			
-			Question question = questionRep.GetQuestionById(id);
+			//Question question = questionRep.GetQuestionById(id);
+			Question question = questionRep.findOne(id);
 			responseBody.put("question", question);
 			return responseBody;
 		} catch (Exception e) {
@@ -59,7 +61,8 @@ public class QuestionController {
 	public void AddActivity(@RequestBody QuestionSideload newQuestion)
 	{
 		try {
-			questionRep.AddQuestion(newQuestion.question);
+			//questionRep.AddQuestion(newQuestion.question);
+			questionRep.save(newQuestion.question);
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("Error : unable to add Question.");

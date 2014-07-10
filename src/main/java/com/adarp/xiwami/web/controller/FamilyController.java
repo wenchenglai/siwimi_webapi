@@ -6,58 +6,49 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.adarp.xiwami.repository.*;
+import com.adarp.xiwami.service.FamilyService;
 import com.adarp.xiwami.domain.Family;
 import com.adarp.xiwami.domain.Member;
 import com.adarp.xiwami.web.dto.*;
 
 @RestController
 public class FamilyController {
+	
 	@Autowired
-	private FamilyRepository familyRep;
+	private FamilyService familyService;
 	
 	@Autowired
 	private MemberRepository memberRep;	
 
 	// Get all families
 	@RequestMapping(value = "/families", method = RequestMethod.GET, produces = "application/json")
-	public Map<String,List<Family>> FindFamilies() {
-		try {				
-			Map<String,List<Family>> responseBody = new HashMap<String,List<Family>>();
-			List<Family> list = familyRep.GetFamilies();
-			responseBody.put("family", list);
-			return responseBody;
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			System.out.println("Error : unable to query Families.");
-			return null;
-		}
+	public Map<String,List<Family>> FindFamilies() {			
+		Map<String,List<Family>> responseBody = new HashMap<String,List<Family>>();
+		responseBody.put("family", familyService.FindFamilies());
+		return responseBody;		
 	}
 
 	// Get Family by ID
 	@RequestMapping(value = "/families/{id}", method = RequestMethod.GET, produces = "application/json")
 	public FamilySideload FindByFamilyId(@PathVariable("id") String id) {
 		
-		try {
-			//return "Family:{" + myFamily.GetFamilyById(id) + "}";
+		// note : because of memberRep.FindMembers(...), we have keep try-catch here.....
+		try {			
 			FamilySideload responseBody = new FamilySideload();
+			Family family = familyService.FindByFamilyId(id);
 			
-			Family family = familyRep.GetFamilyById(id);
-			
-			List<Member> members = memberRep.FindMembers(family.getId());
+			List<Member> members = memberRep.FindMembers(family.get_Id());
 			
 			List<String> memberIds = new ArrayList<String>();
 			for (Member member : members) {
-				memberIds.add(member.getId());
+				memberIds.add(member.get_Id());
 			}
 			family.setMembers(memberIds);
 			
@@ -65,7 +56,6 @@ public class FamilyController {
 			responseBody.members = members;
 			return responseBody;
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			System.out.println("Error : unable to query Family.");
 			return null;
@@ -74,38 +64,27 @@ public class FamilyController {
 	
 	// Add New Family
 	@RequestMapping(value = "/families", method = RequestMethod.POST, produces = "application/json")
-	public void AddFamily(@RequestBody FamilySideload newFamily)
-	{
-		try {
-			familyRep.AddFamily(newFamily.family);
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("Error : unable to add Family.");
-		}
+	public void AddFamily(@RequestBody FamilySideload newFamily) {
+		familyService.AddFamily(newFamily);
 	}	
 	
 	// Update Family
 	@RequestMapping(value = "/families/{id}", method = RequestMethod.PUT, produces = "application/json")
-	public void EditFamily(@PathVariable("id") String id, @RequestBody FamilySideload updatedFamily)
-	{
-		try {
-			updatedFamily.family.setId(id);
-			familyRep.UpdateFamily(updatedFamily.family);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			System.out.println("Error : unable to add Family.");
-		}
+	public void EditFamily(@PathVariable("id") String id, @RequestBody FamilySideload updatedFamily) {
+		familyService.EditFamily(id, updatedFamily);
 	}
 	
 	// Delete Family
 	@RequestMapping (value = "/families/{id}", method = RequestMethod.DELETE, produces = "application/json")
 	public void DeleteFamily(@PathVariable("id")String id) {
-		try {
-			familyRep.DeleteFamily(id);
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("Error : unable to add Family.");			
-		}
+		familyService.DeleteFamily(id);
+	}	
+	
+	// Search nearby Family
+	@RequestMapping (value = "/families/{id}/{distance}", method = RequestMethod.GET, produces = "application/json")
+	public Map<String,List<Family>> SearchFamilyNearby(@PathVariable("id")String id, @PathVariable("distance")double distance) {
+		Map<String,List<Family>> responseBody = new HashMap<String,List<Family>>();
+		responseBody.put("family", familyService.SearchFamilyNearby(id, distance));
+		return responseBody;
 	}	
 }

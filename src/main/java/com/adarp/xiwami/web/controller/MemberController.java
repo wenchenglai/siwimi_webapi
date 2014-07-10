@@ -28,7 +28,8 @@ public class MemberController {
 	public void AddMember(@RequestBody MemberSideload member)
 	{
 		try {
-			memberRep.AddMember(member.member);
+			//memberRep.AddMember(member.member);
+			memberRep.save(member.member);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -43,7 +44,7 @@ public class MemberController {
 	public void EditMember(@PathVariable("id") String id, @RequestBody MemberSideload member)
 	{
 		try {
-			member.member.setId(id);
+			member.member.set_Id(id);
 			
 			StringBuilder sb = new StringBuilder();
 			sb.append("src/main/resources/assets/img/");

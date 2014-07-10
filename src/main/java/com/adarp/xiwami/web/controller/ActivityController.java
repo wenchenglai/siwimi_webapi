@@ -26,7 +26,8 @@ public class ActivityController {
 	public Map<String,List<Activity>> FindActivities() {
 		try {				
 			Map<String,List<Activity>> responseBody = new HashMap<String,List<Activity>>();
-			List<Activity> list = activityRep.GetActivities();
+			//List<Activity> list = activityRep.GetActivities();
+			List<Activity> list = activityRep.findAll();
 			responseBody.put("activity", list);
 			return responseBody;
 		} catch (Exception e) {
@@ -43,7 +44,8 @@ public class ActivityController {
 		
 		try {
 			Map<String,Activity> responseBody = new HashMap<String,Activity>();			
-			Activity activity = activityRep.GetActivityById(id);
+			//Activity activity = activityRep.GetActivityById(id);
+			Activity activity = activityRep.findOne(id);
 			responseBody.put("activity", activity);
 			return responseBody;
 		} catch (Exception e) {
@@ -59,7 +61,8 @@ public class ActivityController {
 	public void AddActivity(@RequestBody ActivitySideload newActivity)
 	{
 		try {
-			activityRep.AddActivity(newActivity.activity);
+			//activityRep.AddActivity(newActivity.activity);
+			activityRep.save(newActivity.activity);
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("Error : unable to add Activity.");
@@ -71,8 +74,9 @@ public class ActivityController {
 	public void EditActivity(@PathVariable("id") String id, @RequestBody ActivitySideload updatedActivity)
 	{
 		try {
-			//updatedActivity.setId(id);
 			activityRep.UpdateActivity(id,updatedActivity.activity);
+			//updatedActivity.activity.set_Id(id);
+			//activityRep.save(updatedActivity.activity);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

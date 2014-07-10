@@ -6,12 +6,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+@Document(collection="Member")
 public class Member {
+	
 	@Id
-	private ObjectId id; 
+	private String _id; 
 	
 	private String lastName;
 	private String firstName;
@@ -28,16 +30,12 @@ public class Member {
 	private String family;
 	private String imageData;
 	
-	public Member() {
-		id = new ObjectId();
-	}
-	
-	public void setId(String id) {
-		this.id = new ObjectId(id);
+	public void set_Id(String id) {
+		this._id = id;
 	}
 
-	public String getId() {
-		return id.toString();
+	public String get_Id() {
+		return _id;
 	}
 
 	public String getLastName() {

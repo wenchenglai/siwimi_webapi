@@ -11,13 +11,12 @@ import org.springframework.stereotype.Repository;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
-
-import com.adarp.xiwami.repository.ActivityRepository;
+import com.adarp.xiwami.repository.ActivityRepositoryCustom;
 import com.adarp.xiwami.domain.Activity;
 
 
 @Repository
-public class ActivityMongoRepository implements ActivityRepository {
+public class ActivityRepositoryImpl implements ActivityRepositoryCustom {
 	
 	@Autowired
 	private MongoTemplate mongoTemplate;
@@ -44,11 +43,13 @@ public class ActivityMongoRepository implements ActivityRepository {
 	@Override
 	public void UpdateActivity(String id, Activity updatedActivity) throws Exception {
 		Query myQuery = new Query();
-		myQuery.addCriteria(Criteria.where("_id").is(id));		
+		myQuery.addCriteria(Criteria.where("_id").is(id));	
+
 		DBObject updatedActivityDBObject = (DBObject) mongoTemplate.getConverter().convertToMongoType(updatedActivity);
-		updatedActivityDBObject.removeField("_id");
+		updatedActivityDBObject.removeField("_id");		
 		Update setUpdate = Update.fromDBObject(new BasicDBObject("$set",updatedActivityDBObject));
 		mongoTemplate.updateFirst(myQuery, setUpdate, Activity.class, "Activity");
+
 	}
 
 	@Override

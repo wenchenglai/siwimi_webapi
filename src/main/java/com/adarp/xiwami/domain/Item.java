@@ -1,16 +1,13 @@
 package com.adarp.xiwami.domain;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+@Document(collection="Item")
 public class Item {
 	
 	@Id
-	private ObjectId _id;
+	private String _id;
 	
 	private String name;
 	private String description;
@@ -23,13 +20,13 @@ public class Item {
 	private String type;
 	private String status;
 	private String imageUrl;
-	private Date createdDate;
+	//private Date createdDate;
 	private String sellerId;
 	private String buyerId;
 	private String isDeleted;
 	
 	public void set_Id(String id) {
-		this._id = new ObjectId(id);
+		this._id = id;
 	}
 
 	public String get_Id() {
@@ -124,7 +121,7 @@ public class Item {
 		this.imageUrl = imageUrl;
 	}
 
-	public String getCreatedDate() {
+/*	public String getCreatedDate() {
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss"); 
 		return formatter.format(createdDate);
 	}
@@ -137,7 +134,7 @@ public class Item {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-	}
+	}*/
 
 	public String getSellerId() {
 		return sellerId;

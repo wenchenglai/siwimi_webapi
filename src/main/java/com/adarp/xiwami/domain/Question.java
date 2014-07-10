@@ -1,25 +1,22 @@
 package com.adarp.xiwami.domain;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+@Document(collection="Question")
 public class Question {
 
 	@Id
-	private ObjectId _id;
+	private String _id;
 	
 	private String userId;
 	private String question;
-	private Date createdDate;
+	//private Date createdDate;
 	private String isAnswered;
 	private String isDeleted;
 	
 	public void set_Id(String id) {
-		this._id = new ObjectId(id);
+		this._id = id;
 	}
 
 	public String get_Id() {
@@ -42,7 +39,7 @@ public class Question {
 		this.question = question;
 	}
 	
-	public String getCreatedDate() {
+/*	public String getCreatedDate() {
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss"); 
 		return formatter.format(createdDate);
 	}
@@ -55,7 +52,7 @@ public class Question {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-	}
+	}*/
 	
 	public String getIsAnswered() {
 		return isAnswered;

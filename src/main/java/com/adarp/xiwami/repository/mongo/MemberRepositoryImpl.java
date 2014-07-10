@@ -9,13 +9,13 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
-import com.adarp.xiwami.repository.MemberRepository;
+import com.adarp.xiwami.repository.MemberRepositoryCustom;
 import com.adarp.xiwami.domain.Member;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 
 @Repository
-public class MemberMongoRepository implements MemberRepository {
+public class MemberRepositoryImpl implements MemberRepositoryCustom {
 	@Autowired
 	private MongoTemplate mongoTemplate;	
 	
@@ -28,11 +28,12 @@ public class MemberMongoRepository implements MemberRepository {
 	public void UpdateMember(Member member) {
 		
 		Query QueryInUser = new Query();
-		QueryInUser.addCriteria(Criteria.where("id").is(member.getId()));
+		QueryInUser.addCriteria(Criteria.where("_id").is(member.get_Id()));		
 		DBObject updatedUserDBObject = (DBObject) mongoTemplate.getConverter().convertToMongoType(member);
 		updatedUserDBObject.removeField("_id");		
 		updatedUserDBObject.removeField("facebookId");
 		Update setUserUpdate = Update.fromDBObject(new BasicDBObject("$set",updatedUserDBObject));
+		
 		mongoTemplate.findAndModify(QueryInUser, setUserUpdate, Member.class, "Member");
 	}
 	

@@ -12,12 +12,12 @@ import org.springframework.stereotype.Repository;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 
-import com.adarp.xiwami.repository.QuestionRepository;
+import com.adarp.xiwami.repository.QuestionRepositoryCustom;
 import com.adarp.xiwami.domain.Question;
 
 
 @Repository
-public class QuestionMongoRepository implements QuestionRepository {
+public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
 	
 	@Autowired
 	private MongoTemplate mongoTemplate;
