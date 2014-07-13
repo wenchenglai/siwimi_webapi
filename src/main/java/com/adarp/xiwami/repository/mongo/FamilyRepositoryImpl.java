@@ -1,6 +1,9 @@
 package com.adarp.xiwami.repository.mongo;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.geo.Point;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.index.GeospatialIndex;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -20,6 +23,27 @@ public class FamilyRepositoryImpl implements FamilyRepositoryCustom {
 	
 	@Autowired
 	private MongoTemplate mongoTemplate;
+	
+	//@Override
+//	public List<Family> FindFamilyFromMemberCustom(Double longitude,Double latitude, String qsDistance, Integer fromAge, Integer toAge, String[] languages) throws Exception {
+		
+/*		// Save the longitude and latitude to the Point object
+		Point point = new Point(longitude,latitude);
+
+		// Retrieve distance and its unit				
+		String [] parts = qsDistance.split(" ");
+		double distance = Double.parseDouble(parts[0]); 
+		if (parts[1].toLowerCase().contains("mile"))
+			distance = distance/3959;
+		else
+			distance = distance/6371;   //Convert kilometers to radians
+		
+		Criteria cZipcode = Criteria.where("location").nearSphere(point).maxDistance(distance);			
+		Query myQuery = new Query();
+		myQuery.addCriteria(cZipcode);		
+		return mongoTemplate.find(myQuery, Family.class, "Family");*/
+
+	//}
 	
 	@Override
 	public void AddFamily(Family newFamily) throws Exception {

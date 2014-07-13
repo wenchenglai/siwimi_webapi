@@ -73,7 +73,6 @@ public class Member {
 	public String getBirthday() {		
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd"); 
 		return formatter.format(birthday);
-		//return "1980/1/1";
 	}
 
 	public void setBirthday(String birthday) {		

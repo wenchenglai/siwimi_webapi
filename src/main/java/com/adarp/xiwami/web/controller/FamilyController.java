@@ -31,13 +31,14 @@ public class FamilyController {
 	// Get all families
 	@RequestMapping(value = "/families", method = RequestMethod.GET, produces = "application/json")
 	public Map<String,List<Family>> FindFamilies(
-			@RequestParam(value="zipcode", required=true) int zipcode,
+			@RequestParam(value="longitude", required=true) Double longitude,
+			@RequestParam(value="latitude", required=true) Double latitude,
 			@RequestParam(value="distance", required=true) String qsDistance, 
-			@RequestParam(value="fromAge", required=false) int fromAge,
-			@RequestParam(value="toAge", required=false) int toAge,
+			@RequestParam(value="fromAge", required=false) Integer fromAge,
+			@RequestParam(value="toAge", required=false) Integer toAge,
 			@RequestParam(value="languages[]", required=false) String[] languages) {			
 		Map<String,List<Family>> responseBody = new HashMap<String,List<Family>>();
-		responseBody.put("family", familyService.FindFamilies());
+		responseBody.put("family", familyService.FindFamilies(longitude,latitude,qsDistance,fromAge,toAge,languages));
 		return responseBody;		
 	}
 
