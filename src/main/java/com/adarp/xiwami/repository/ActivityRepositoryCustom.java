@@ -1,13 +1,8 @@
 package com.adarp.xiwami.repository;
 
-import com.adarp.xiwami.domain.Activity;
-
-import java.util.List;
-
-
 public interface ActivityRepositoryCustom {
 	
-	public List<Activity> GetActivities() throws Exception;
+/*	public List<Activity> GetActivities() throws Exception;
 	
 	public Activity GetActivityById(String id) throws Exception;
 	
@@ -15,5 +10,5 @@ public interface ActivityRepositoryCustom {
 	
 	public void UpdateActivity(String id, Activity updateActivity) throws Exception;
 	
-	public void DeleteActivity(String id) throws Exception;		
+	public void DeleteActivity(String id) throws Exception;	*/	
 }

@@ -1,20 +1,11 @@
 package com.adarp.xiwami.repository.mongo;
 
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
-
 import com.adarp.xiwami.repository.ItemRepositoryCustom;
-import com.adarp.xiwami.domain.Item;
-
 
 @Repository
 public class ItemRepositoryImpl implements ItemRepositoryCustom {
@@ -22,7 +13,7 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
 	@Autowired
 	private MongoTemplate mongoTemplate;
 	
-	public List<Item> GetItems() throws Exception {
+/*	public List<Item> GetItems() throws Exception {
 		
 		return (mongoTemplate.findAll(Item.class, "Item"));
 	}	
@@ -53,12 +44,8 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
 
 	@Override
 	public void DeleteItem(String id) throws Exception {
-//		Query query = new Query();
-//		query.addCriteria(Criteria.where("_id").is(id));
-//		mongoTemplate.remove(query, Item.class, "Item");
-
 		Query query = new Query();
 		query.addCriteria(Criteria.where("_id").is(id));
 		mongoTemplate.updateFirst(query, Update.update("isDeleted", "Y"), Item.class, "Item");		
-	}	
+	}	*/
 }

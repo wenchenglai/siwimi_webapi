@@ -1,9 +1,6 @@
 package com.adarp.xiwami.repository.mongo;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.geo.Point;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.index.GeospatialIndex;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -11,12 +8,11 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
 import com.adarp.xiwami.repository.FamilyRepositoryCustom;
 import com.adarp.xiwami.domain.Family;
-import com.adarp.xiwami.domain.Member;
 import com.adarp.xiwami.domain.Zipcode;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
 
 @Repository
 public class FamilyRepositoryImpl implements FamilyRepositoryCustom {
@@ -46,7 +42,7 @@ public class FamilyRepositoryImpl implements FamilyRepositoryCustom {
 	//}
 	
 	@Override
-	public void AddFamily(Family newFamily) throws Exception {
+	public void AddFamily(Family newFamily){
 
 		// Retrieve longitude and latitude from the collection of ZipCode
 		Query myQuery = new Query();
@@ -60,8 +56,8 @@ public class FamilyRepositoryImpl implements FamilyRepositoryCustom {
 		mongoTemplate.save(newFamily,"Family");
 	}
 	
-	@Override
-	public void UpdateFamily(Family updatedFamily) throws Exception {
+/*	@Override
+	public void UpdateFamily(Family updatedFamily){
 		
 		// Retrieve longitude and latitude from the collection of ZipCode, if there is any updated zipcode in the family object
 		if (updatedFamily.getZipCode() != null) {
@@ -75,16 +71,16 @@ public class FamilyRepositoryImpl implements FamilyRepositoryCustom {
 		}
 				
 		Query myQuery = new Query();
-		myQuery.addCriteria(Criteria.where("_id").is(updatedFamily.getId()));
+		myQuery.addCriteria(Criteria.where("id").is(updatedFamily.getId()));
 		DBObject updatedFamilyDBObject = (DBObject) mongoTemplate.getConverter().convertToMongoType(updatedFamily);
-		updatedFamilyDBObject.removeField("_id");
-		updatedFamilyDBObject.removeField("members");
+		updatedFamilyDBObject.removeField("id");
+		//updatedFamilyDBObject.removeField("members");
 		Update setUpdate = Update.fromDBObject(new BasicDBObject("$set",updatedFamilyDBObject));
 		mongoTemplate.updateFirst(myQuery, setUpdate, Family.class, "Family");
-	}
+	}*/
 
-	@Override
-	public void DeleteFamily(String id) throws Exception {
+/*	@Override
+	public void DeleteFamily(String id){
 		Query query = new Query();
 		query.addCriteria(Criteria.where("_id").is(id));
 		Family result = mongoTemplate.findAndRemove(query, Family.class, "Family");
@@ -92,5 +88,5 @@ public class FamilyRepositoryImpl implements FamilyRepositoryCustom {
 		query = new Query();
 		query.addCriteria(Criteria.where("family").is(result.getId()));
 		mongoTemplate.remove(query, Member.class, "Member");
-	}	
+	}*/	
 }

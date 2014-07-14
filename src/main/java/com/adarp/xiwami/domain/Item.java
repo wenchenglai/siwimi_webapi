@@ -20,10 +20,11 @@ public class Item {
 	private String type;
 	private String status;
 	private String imageUrl;
-	//private Date createdDate;
 	private String sellerId;
 	private String buyerId;
-	private String isDeleted;
+	
+	//The default of the below field is set by backend
+	private Boolean isDeleted;
 	
 	public void set_Id(String id) {
 		this._id = id;
@@ -121,21 +122,6 @@ public class Item {
 		this.imageUrl = imageUrl;
 	}
 
-/*	public String getCreatedDate() {
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss"); 
-		return formatter.format(createdDate);
-	}
-
-	public void setCreatedDate(String createdDate) {
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss"); 
-		try {	 
-			Date mycreatedDate = formatter.parse(createdDate);
-			this.createdDate = mycreatedDate; 
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-	}*/
-
 	public String getSellerId() {
 		return sellerId;
 	}
@@ -152,13 +138,11 @@ public class Item {
 		this.buyerId = buyerId;
 	}
 
-	public String getIsDeleted() {
+	public Boolean getIsDeleted() {
 		return isDeleted;
 	}
 
-	public void setIsDeleted(String isDeleted) {
+	public void setIsDeleted(Boolean isDeleted) {
 		this.isDeleted = isDeleted;
 	}
-	
-	
 }

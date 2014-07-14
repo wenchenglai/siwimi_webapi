@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.adarp.xiwami.repository.*;
 import com.adarp.xiwami.service.FamilyService;
+import com.adarp.xiwami.service.MemberService;
+import com.adarp.xiwami.web.dto.FamilySideload;
 import com.adarp.xiwami.domain.Family;
 import com.adarp.xiwami.domain.Member;
-import com.adarp.xiwami.web.dto.*;
 
 @RestController
 public class FamilyController {
@@ -26,7 +26,7 @@ public class FamilyController {
 	private FamilyService familyService;
 	
 	@Autowired
-	private MemberRepository memberRep;	
+	private MemberService memberService;
 
 	// Get all families
 	@RequestMapping(value = "/families", method = RequestMethod.GET, produces = "application/json")
@@ -46,39 +46,32 @@ public class FamilyController {
 	@RequestMapping(value = "/families/{id}", method = RequestMethod.GET, produces = "application/json")
 	public FamilySideload FindByFamilyId(@PathVariable("id") String id) {
 		
-		// note : because of memberRep.FindMembers(...), we have keep try-catch here.....
-		try {			
-			FamilySideload responseBody = new FamilySideload();
-			Family family = familyService.FindByFamilyId(id);
-			
-			List<Member> members = memberRep.FindMembers(family.getId());
-			
-			List<String> memberIds = new ArrayList<String>();
-			for (Member member : members) {
-				memberIds.add(member.getId());
-			}
-			family.setMembers(memberIds);
-			
-			responseBody.family = family;
-			responseBody.members = members;
-			return responseBody;
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("Error : unable to query Family.");
-			return null;
+		FamilySideload responseBody = new FamilySideload();
+		Family family = familyService.FindByFamilyId(id);
+		
+		List<Member> members = memberService.FindMembers(family.getId());
+		List<String> memberIds = new ArrayList<String>();
+		for (Member member : members) {
+			memberIds.add(member.getId());
 		}
+		family.setMembers(memberIds);
+		
+		responseBody.family = family;
+		responseBody.members = members;
+		
+		return responseBody;
 	}
 	
 	// Add New Family
 	@RequestMapping(value = "/families", method = RequestMethod.POST, produces = "application/json")
 	public void AddFamily(@RequestBody FamilySideload newFamily) {
-		familyService.AddFamily(newFamily);
+		familyService.AddFamily(newFamily.family);
 	}	
 	
 	// Update Family
 	@RequestMapping(value = "/families/{id}", method = RequestMethod.PUT, produces = "application/json")
-	public void EditFamily(@PathVariable("id") String id, @RequestBody FamilySideload updatedFamily) {
-		familyService.EditFamily(id, updatedFamily);
+	public void UpdateFamily(@PathVariable("id") String id, @RequestBody FamilySideload updatedFamily) {
+		familyService.UpdateFamily(id, updatedFamily.family);
 	}
 	
 	// Delete Family
@@ -88,10 +81,10 @@ public class FamilyController {
 	}	
 	
 	// Search nearby Family
-	@RequestMapping (value = "/families/{id}/{distance}", method = RequestMethod.GET, produces = "application/json")
+/*	@RequestMapping (value = "/families/{id}/{distance}", method = RequestMethod.GET, produces = "application/json")
 	public Map<String,List<Family>> SearchFamilyNearby(@PathVariable("id")String id, @PathVariable("distance")double distance) {
 		Map<String,List<Family>> responseBody = new HashMap<String,List<Family>>();
 		responseBody.put("family", familyService.SearchFamilyNearby(id, distance));
 		return responseBody;
-	}	
+	}*/	
 }
