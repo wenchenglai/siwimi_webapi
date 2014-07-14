@@ -12,4 +12,6 @@ public interface MemberRepository extends MongoRepository<Member, String>, Membe
 	List<Member> findByFamilyInAndIsDeletedIsFalse(String familyId);
 	List<Member> findByFamilyInAndBirthdayBetweenAndIsDeletedIsFalse(List<String> geoFamilyId,Date fromDate, Date toDate);
 	List<Member> findByFamilyInAndLanguagesInAndBirthdayBetweenAndIsDeletedIsFalse(List<String> geoFamilyId,List<String> languageList,Date fromDate, Date toDate);
+	List<Member> findByFacebookId(String id);
+	List<Member> findByGoogleplusId(String id);
 }

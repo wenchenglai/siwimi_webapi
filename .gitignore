@@ -4,6 +4,7 @@
 bin/
 tmp/
 build/
+.project
 
 *.tmp
 *.bak

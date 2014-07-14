@@ -25,7 +25,8 @@ public class Member {
 	private String gender;
 	private String avatarUrl;
 	private boolean isUser;
-	private String facebookId;	
+	private String facebookId;
+	private String googleplusId;
 	private List<Item> items = new ArrayList<Item>();
 	private String family;
 	private String imageData;
@@ -135,7 +136,15 @@ public class Member {
 
 	public void setFacebookId(String facebookId) {
 		this.facebookId = facebookId;
-	}	
+	}
+	
+	public String getGoogleplusId() {
+		return googleplusId;
+	}
+
+	public void setGoogleplusId(String googleplusId) {
+		this.googleplusId = googleplusId;
+	}		
 
 	public List<Item> getItems() {
 		return items;
