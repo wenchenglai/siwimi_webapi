@@ -47,8 +47,8 @@ public class QuestionController {
 	
 	// Update Question
 	@RequestMapping(value = "/questions/{id}", method = RequestMethod.PUT, produces = "application/json")
-	public void EditQuestion(@PathVariable("id") String id, @RequestBody QuestionSideload updatedQuestion){
-		questionService.EditQuestion(id, updatedQuestion.question);
+	public void UpdateQuestion(@PathVariable("id") String id, @RequestBody QuestionSideload updatedQuestion){
+		questionService.UpdateQuestion(id, updatedQuestion.question);
 	}
 	
 	// Delete Question

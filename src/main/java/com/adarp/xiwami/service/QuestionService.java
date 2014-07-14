@@ -27,7 +27,7 @@ public class QuestionService {
 		questionRep.save(newQuestion);
 	}
 	
-	public void EditQuestion(String id, Question updatedQuestion) {
+	public void UpdateQuestion(String id, Question updatedQuestion) {
 		updatedQuestion.set_Id(id);
 		questionRep.save(updatedQuestion);
 	}

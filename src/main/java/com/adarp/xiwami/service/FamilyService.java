@@ -16,8 +16,10 @@ import org.springframework.stereotype.Service;
 
 import com.adarp.xiwami.domain.Family;
 import com.adarp.xiwami.domain.Member;
+import com.adarp.xiwami.domain.ZipCode;
 import com.adarp.xiwami.repository.FamilyRepository;
 import com.adarp.xiwami.repository.MemberRepository;
+import com.adarp.xiwami.repository.ZipCodeRepository;
 
 @Service
 public class FamilyService {
@@ -27,6 +29,9 @@ public class FamilyService {
 	
 	@Autowired
 	private MemberRepository memberRep;
+	
+	@Autowired
+	private ZipCodeRepository zipCodeRep;
 	
 	public List<Family> FindFamilies(Double longitude,Double latitude,String qsDistance,Integer fromAge,Integer toAge,String[] languages) {
 		// Geo search in family collection				
@@ -97,7 +102,33 @@ public class FamilyService {
 	}
 	
 	public void AddFamily(Family newFamily) {
-		// need to convert zipcode to latitude/longitude before saving.
+		// lookup zipcode from the collection ZipCode;
+		ZipCode thisZipCode = new ZipCode();
+		
+		// if the zipCode is not provided by the user
+		if (newFamily.getZipCode()==null) {				
+			if (newFamily.getCityState()==null){
+				// if both zipcode and cityState are not completed, set default to 48105
+				thisZipCode = zipCodeRep.findByzipCode(48105);
+			} else {
+				String [] parts = newFamily.getCityState().split(",");
+				String city = parts[0].replaceAll("\\s+", "");
+				String stateCode = parts[1].replaceAll("\\s+", "");	
+				thisZipCode = zipCodeRep.findByTownshipAndStateCode(city, stateCode);				
+			}						
+		} else {
+			// if the zipCode is provided by the user:
+			// (1) ignore stateCity provided by the user, 
+			// (2) lookup zipcode from the collection ZipCode
+			// (3) please note that the type of zipcode is "int" in the mongoDB collection
+			thisZipCode = zipCodeRep.findByzipCode(Integer.parseInt(newFamily.getZipCode()));			
+		}
+		
+		// set longitude and latitude of the family object 
+		double[] location = {thisZipCode.getLongitude(), thisZipCode.getLatitude()};
+		newFamily.setZipCode(thisZipCode.getZipCode());
+		newFamily.setLocation(location);
+		newFamily.setCityState(thisZipCode.getTownship()+", "+thisZipCode.getStateCode());
 		newFamily.setIsDeleted(false);
 		familyRep.AddFamily(newFamily);
 	}

@@ -47,8 +47,8 @@ public class ItemController {
 	
 	// Update Item
 	@RequestMapping(value = "/items/{id}", method = RequestMethod.PUT, produces = "application/json")
-	public void EditItem(@PathVariable("id") String id, @RequestBody ItemSideload updatedItem) {
-		itemService.EditItem(id,updatedItem.item);
+	public void UpdateItem(@PathVariable("id") String id, @RequestBody ItemSideload updatedItem) {
+		itemService.UpdateItem(id,updatedItem.item);
 	}
 	
 	// Delete Item
