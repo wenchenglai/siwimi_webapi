@@ -64,11 +64,11 @@ public class MemberService {
 		return memberRep.findByFamilyInAndIsDeletedIsFalse(familyId);
 	}
 	
-	public Member FindMemberByFacebookId(String id) {
+	public List<Member> FindMemberByFacebookId(String id) {
 		return memberRep.findByFacebookId(id);
 	}
 	
-	public Member FindMemberByGoogleplusId(String id) {
+	public List<Member> FindMemberByGoogleplusId(String id) {
 		return memberRep.findByGoogleplusId(id);
 	}
 }
