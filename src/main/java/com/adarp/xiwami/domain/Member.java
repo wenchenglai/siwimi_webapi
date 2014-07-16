@@ -30,6 +30,9 @@ public class Member {
 	private String family;
 	private String imageData;
 	
+	//The default of the below field is set by backend
+	private boolean isDeleted;
+	
 	public void setId(String id) {
 		this.id = id;
 	}
@@ -156,5 +159,13 @@ public class Member {
 
 	public void setImage(String imageData) {
 		this.imageData = imageData;
+	}
+
+	public boolean isIsDeleted() {
+		return isDeleted;
+	}
+
+	public void setIsDeleted(boolean isDeleted) {
+		this.isDeleted = isDeleted;
 	}		
 }

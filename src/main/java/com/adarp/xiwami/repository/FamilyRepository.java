@@ -11,6 +11,6 @@ import com.adarp.xiwami.domain.Family;
 
 
 public interface FamilyRepository extends MongoRepository<Family, String>, FamilyRepositoryCustom{	
-	List<Family> findByLocationNear(Point p, Distance d);
+	List<Family> findByLocationNearAndIsDeletedIsFalse(Point p, Distance d);
 	List<Family> findByIdIn(Set<String> foundFamilyId);
 }

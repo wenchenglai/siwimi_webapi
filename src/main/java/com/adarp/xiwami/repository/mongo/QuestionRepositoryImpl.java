@@ -1,27 +1,17 @@
 package com.adarp.xiwami.repository.mongo;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
-
 import com.adarp.xiwami.repository.QuestionRepositoryCustom;
-import com.adarp.xiwami.domain.Question;
-
 
 @Repository
 public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
 	
 	@Autowired
 	private MongoTemplate mongoTemplate;
-	
+/*	
 	public List<Question> GetQuestions() throws Exception {
 		
 		return (mongoTemplate.findAll(Question.class, "Question"));
@@ -60,5 +50,5 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
 		Query query = new Query();
 		query.addCriteria(Criteria.where("_id").is(id));
 		mongoTemplate.updateFirst(query, Update.update("isDeleted", "Y"), Question.class, "Question");		
-	}	
+	}	*/
 }

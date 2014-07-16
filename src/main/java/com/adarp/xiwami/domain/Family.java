@@ -18,8 +18,9 @@ public class Family {
 	private String description;	
 	private List<String> members = new ArrayList<String>();
 	
+	//The defaults of the below fields are set by backend
 	private double[] location;
-	
+	private Boolean isDeleted;
 
 	public String getId() {
 		return id;
@@ -75,5 +76,13 @@ public class Family {
 
 	public void setLocation(double[] location) {
 		this.location = location;
+	}
+
+	public Boolean getIsDeleted() {
+		return isDeleted;
+	}
+
+	public void setIsDeleted(Boolean isDeleted) {
+		this.isDeleted = isDeleted;
 	}
 }

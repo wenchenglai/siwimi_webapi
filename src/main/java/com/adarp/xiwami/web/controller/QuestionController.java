@@ -11,85 +11,49 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.adarp.xiwami.repository.*;
+import com.adarp.xiwami.service.QuestionService;
+import com.adarp.xiwami.web.dto.QuestionSideload;
 import com.adarp.xiwami.domain.Question;
-import com.adarp.xiwami.web.dto.*;
 
 @RestController
 public class QuestionController {
 
 	@Autowired
-	private QuestionRepository questionRep;
+	private QuestionService questionService;
 
 	// Get all questions
 	@RequestMapping(value = "/questions", method = RequestMethod.GET, produces = "application/json")
 	public Map<String,List<Question>> FindQuestions() {
-		try {				
-			Map<String,List<Question>> responseBody = new HashMap<String,List<Question>>();
-			//List<Question> list = questionRep.GetQuestions();
-			List<Question> list = questionRep.findAll();
-			responseBody.put("question", list);
-			return responseBody;
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			System.out.println("Error : unable to query Question.");
-			return null;
-		}
+		Map<String,List<Question>> responseBody = new HashMap<String,List<Question>>();
+		List<Question> list = questionService.FindQuestions();
+		responseBody.put("question", list);
+		return responseBody;
 	}
 
 	// Get Question by ID
 	@RequestMapping(value = "/questions/{id}", method = RequestMethod.GET, produces = "application/json")
 	public Map<String,Question> FindByQuestionId(@PathVariable("id") String id) {
-		
-		try {
-			Map<String,Question> responseBody = new HashMap<String,Question>();			
-			//Question question = questionRep.GetQuestionById(id);
-			Question question = questionRep.findOne(id);
-			responseBody.put("question", question);
-			return responseBody;
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			System.out.println("Error : unable to query Question.");
-			return null;
-		}
+		Map<String,Question> responseBody = new HashMap<String,Question>();			
+		Question question = questionService.FindByQuestionId(id);
+		responseBody.put("question", question);
+		return responseBody;
 	}
 	
 	// Add New Question
 	@RequestMapping(value = "/questions", method = RequestMethod.POST, produces = "application/json")
-	public void AddActivity(@RequestBody QuestionSideload newQuestion)
-	{
-		try {
-			//questionRep.AddQuestion(newQuestion.question);
-			questionRep.save(newQuestion.question);
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("Error : unable to add Question.");
-		}		
+	public void AddQuestion(@RequestBody QuestionSideload newQuestion) {
+		questionService.AddQuestion(newQuestion.question);	
 	}	
 	
 	// Update Question
 	@RequestMapping(value = "/questions/{id}", method = RequestMethod.PUT, produces = "application/json")
-	public void EditFamily(@PathVariable("id") String id, @RequestBody QuestionSideload updatedQuestion)
-	{
-		try {
-			questionRep.UpdateQuestion(id,updatedQuestion.question);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			System.out.println("Error : unable to update Activity.");
-		}
+	public void EditQuestion(@PathVariable("id") String id, @RequestBody QuestionSideload updatedQuestion){
+		questionService.EditQuestion(id, updatedQuestion.question);
 	}
 	
 	// Delete Question
 	@RequestMapping (value = "/questions/{id}", method = RequestMethod.DELETE, produces = "application/json")
 	public void DeleteQuestion(@PathVariable("id")String id) {
-		try {
-			questionRep.DeleteQuestion(id);
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("Error : unable to delete Question.");			
-		}
+		questionService.DeleteQuestion(id);
 	}	
 }

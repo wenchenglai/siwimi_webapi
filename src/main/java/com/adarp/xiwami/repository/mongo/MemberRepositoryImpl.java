@@ -1,25 +1,18 @@
 package com.adarp.xiwami.repository.mongo;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
 import com.adarp.xiwami.repository.MemberRepositoryCustom;
-import com.adarp.xiwami.domain.Member;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
 
 @Repository
 public class MemberRepositoryImpl implements MemberRepositoryCustom {
+	
 	@Autowired
 	private MongoTemplate mongoTemplate;	
 	
-	@Override
+/*	@Override
 	public void AddMember(Member newMember) throws Exception {
 		mongoTemplate.save(newMember, "Member");
 	}
@@ -52,5 +45,5 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
 		List<Member> members = mongoTemplate.find(myQuery, Member.class, "Member");
 		
 		return members;
-	}		
+	}	*/	
 }
