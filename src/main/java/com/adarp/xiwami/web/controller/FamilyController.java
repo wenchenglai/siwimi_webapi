@@ -80,11 +80,4 @@ public class FamilyController {
 		familyService.DeleteFamily(id);
 	}	
 	
-	// Search nearby Family
-/*	@RequestMapping (value = "/families/{id}/{distance}", method = RequestMethod.GET, produces = "application/json")
-	public Map<String,List<Family>> SearchFamilyNearby(@PathVariable("id")String id, @PathVariable("distance")double distance) {
-		Map<String,List<Family>> responseBody = new HashMap<String,List<Family>>();
-		responseBody.put("family", familyService.SearchFamilyNearby(id, distance));
-		return responseBody;
-	}*/	
 }

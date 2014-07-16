@@ -70,7 +70,7 @@ public class FamilyService {
 			return geoFamilies;
 		else if (languages==null) {
 			// Query the qualified members from geoFamily.
-			List<Member> foundMember = memberRep.findByFamilyInAndBirthdayBetweenAndIsDeletedIsFalse(geoFamilyId, fromDate, toDate);
+			List<Member> foundMember = memberRep.findByFamilyInAndBirthdayBetweenAndIsDeletedIsFalse(geoFamilyId, toDate, fromDate);
 			// Retrieve the familyId of the qualified members.
 			Set<String> foundFamilyId = new HashSet<String>();
 			for (Member member:foundMember) {
@@ -82,7 +82,7 @@ public class FamilyService {
 			// Convert String[] to List<String>
 			List<String> languageList = new ArrayList<String>(Arrays.asList(languages));
 			// Query the qualified members from geoFamily.
-			List<Member> foundMember = memberRep.findByFamilyInAndLanguagesInAndBirthdayBetweenAndIsDeletedIsFalse(geoFamilyId, languageList, fromDate, toDate);
+			List<Member> foundMember = memberRep.findByFamilyInAndLanguagesInAndBirthdayBetweenAndIsDeletedIsFalse(geoFamilyId, languageList, toDate, fromDate);
 			// Retrieve the familyId of the qualified members.
 			Set<String> foundFamilyId = new HashSet<String>();
 			for (Member member:foundMember) {
@@ -114,10 +114,4 @@ public class FamilyService {
 		familyRep.save(family);
 	}
 	
-/*	public List<Family> SearchFamilyNearby(String id, double distance) {
-		Family thisFamily = familyRep.findOne(id);
-		double[] coordinates = thisFamily.getLocation();	
-		Point point = new Point(coordinates[0],coordinates[1]);
-		return familyRep.findByLocationNear(point,new Distance(distance,Metrics.MILES));
-	}*/
 }
