@@ -27,7 +27,7 @@ public class ActivityService {
 		activityRep.save(newActivity);
 	}
 	
-	public void EditActivity(String id, Activity updatedActivity) {
+	public void UpdateActivity(String id, Activity updatedActivity) {
 		updatedActivity.set_Id(id);
 		activityRep.save(updatedActivity);
 	}

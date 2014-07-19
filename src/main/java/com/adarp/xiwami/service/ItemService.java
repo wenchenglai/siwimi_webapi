@@ -27,7 +27,7 @@ public class ItemService {
 		itemRep.save(newItem);
 	}
 	
-	public void EditItem(String id, Item updatedItem) {
+	public void UpdateItem(String id, Item updatedItem) {
 		updatedItem.set_Id(id);
 		itemRep.save(updatedItem);
 	}

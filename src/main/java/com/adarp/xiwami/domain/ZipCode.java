@@ -1,6 +1,9 @@
 package com.adarp.xiwami.domain;
 
-public class Zipcode {
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection = "ZipCode")
+public class ZipCode {
 
 	private String countryCode;
 	private String zipCode;

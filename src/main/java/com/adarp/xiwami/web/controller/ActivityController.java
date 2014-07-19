@@ -47,8 +47,8 @@ public class ActivityController {
 	
 	// Update Activity
 	@RequestMapping(value = "/activities/{id}", method = RequestMethod.PUT, produces = "application/json")
-	public void EditActivity(@PathVariable("id") String id, @RequestBody ActivitySideload updatedActivity) {
-		activityService.EditActivity(id, updatedActivity.activity);
+	public void UpdateActivity(@PathVariable("id") String id, @RequestBody ActivitySideload updatedActivity) {
+		activityService.UpdateActivity(id, updatedActivity.activity);
 	}
 	
 	// Delete Activity
