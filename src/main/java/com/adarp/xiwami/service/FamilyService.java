@@ -101,7 +101,7 @@ public class FamilyService {
 		return familyRep.findOne(id);
 	}
 	
-	public void AddFamily(Family newFamily) {
+	public Family AddFamily(Family newFamily) {
 		// lookup zipcode from the collection ZipCode;
 		ZipCode thisZipCode = new ZipCode();
 		
@@ -130,7 +130,7 @@ public class FamilyService {
 		newFamily.setLocation(location);
 		newFamily.setCityState(thisZipCode.getTownship()+", "+thisZipCode.getStateCode());
 		newFamily.setIsDeleted(false);
-		familyRep.AddFamily(newFamily);
+		return familyRep.AddFamily(newFamily);
 	}
 	
 	public void UpdateFamily(String id,Family updatedFamily) {

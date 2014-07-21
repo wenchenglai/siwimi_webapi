@@ -7,9 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,19 +32,20 @@ public class MemberController {
 			@RequestParam(value="facebookId", required=false) String facebookId,
 			@RequestParam(value="googleplusId", required=false) String googleplusId) {			
 		Map<String, List<Member>> responseBody = new HashMap<String,List<Member>>();
-		responseBody.put("member", memberService.FindMemberByFacebookId(facebookId));
+		List<Member> list =  memberService.FindMemberByFacebookId(facebookId);
+		responseBody.put("member", list);
 		return responseBody;
 	}	
 	
 	// Add New Member
 	@RequestMapping(value = "/members", method = RequestMethod.POST, produces = "application/json")
-	public ResponseEntity<String> AddMember(@RequestBody MemberSideload member) {
-		memberService.AddMember(member.member);	
+	public Map<String, Member> AddMember(@RequestBody MemberSideload member) {
+		Member savedMember = memberService.AddMember(member.member);	
 		
-		HttpHeaders headers = new HttpHeaders();
-	    headers.add("Content-Type", "application/json");
-	    return new ResponseEntity<String>(headers, HttpStatus.CREATED);	
-	    //return new ResponseEntity<String>(HttpStatus.CREATED);	
+		Map<String, Member> responseBody = new HashMap<String, Member>();
+		responseBody.put("family", savedMember);
+		
+		return responseBody;
 	}	
 	
 	// Update Member

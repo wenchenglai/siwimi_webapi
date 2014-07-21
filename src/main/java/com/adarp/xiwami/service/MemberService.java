@@ -20,10 +20,10 @@ public class MemberService {
 	@Autowired
 	private FamilyRepository familyRep;
 	
-	public void AddMember(Member newMember){
+	public Member AddMember(Member newMember){
 		// For Member collection
 		newMember.setIsDeleted(false);
-		memberRep.save(newMember);	
+		Member member = memberRep.save(newMember);	
 		
 		// it's possible to add a member without a family associated, e.g. sing up for the first time using facebook/google+
 		if (newMember.getFamily() != null) {
@@ -34,6 +34,8 @@ public class MemberService {
 			thisFamily.setMembers(thisFamilyMembers);
 			familyRep.save(thisFamily);		
 		}
+		
+		return member;
 	}	
 	
 	public void UpdateMember(String id, Member updatedMember) {

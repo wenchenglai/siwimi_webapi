@@ -74,9 +74,14 @@ public class Member {
 		this.email = email;
 	}
 
-	public String getBirthday() {		
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd"); 
-		return formatter.format(birthday);
+	public String getBirthday() {
+		if (this.birthday != null) {
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
+			return formatter.format(this.birthday);			
+		} else {
+			return null;
+		}
+
 	}
 
 	public void setBirthday(String birthday) {		
