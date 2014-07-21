@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -64,8 +66,9 @@ public class FamilyController {
 	
 	// Add New Family
 	@RequestMapping(value = "/families", method = RequestMethod.POST, produces = "application/json")
-	public void AddFamily(@RequestBody FamilySideload newFamily) {
+	public ResponseEntity<String> AddFamily(@RequestBody FamilySideload newFamily) {
 		familyService.AddFamily(newFamily.family);
+		return new ResponseEntity<String>(HttpStatus.CREATED);
 	}	
 	
 	// Update Family

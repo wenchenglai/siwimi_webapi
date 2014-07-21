@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,8 +41,13 @@ public class MemberController {
 	
 	// Add New Member
 	@RequestMapping(value = "/members", method = RequestMethod.POST, produces = "application/json")
-	public void AddMember(@RequestBody MemberSideload member) {
-		memberService.AddMember(member.member);		
+	public ResponseEntity<String> AddMember(@RequestBody MemberSideload member) {
+		memberService.AddMember(member.member);	
+		
+		HttpHeaders headers = new HttpHeaders();
+	    headers.add("Content-Type", "application/json");
+	    return new ResponseEntity<String>(headers, HttpStatus.CREATED);	
+	    //return new ResponseEntity<String>(HttpStatus.CREATED);	
 	}	
 	
 	// Update Member

@@ -25,12 +25,15 @@ public class MemberService {
 		newMember.setIsDeleted(false);
 		memberRep.save(newMember);	
 		
-		// For Family collection
-		Family thisFamily = familyRep.findOne(newMember.getFamily());
-		List<String> thisFamilyMembers = thisFamily.getMembers();
-		thisFamilyMembers.add(newMember.getId());
-		thisFamily.setMembers(thisFamilyMembers);
-		familyRep.save(thisFamily);		
+		// it's possible to add a member without a family associated, e.g. sing up for the first time using facebook/google+
+		if (newMember.getFamily() != null) {
+			// For Family collection
+			Family thisFamily = familyRep.findOne(newMember.getFamily());
+			List<String> thisFamilyMembers = thisFamily.getMembers();
+			thisFamilyMembers.add(newMember.getId());
+			thisFamily.setMembers(thisFamilyMembers);
+			familyRep.save(thisFamily);		
+		}
 	}	
 	
 	public void UpdateMember(String id, Member updatedMember) {
