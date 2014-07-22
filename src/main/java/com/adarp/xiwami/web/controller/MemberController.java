@@ -43,36 +43,44 @@ public class MemberController {
 		Member savedMember = memberService.AddMember(member.member);	
 		
 		Map<String, Member> responseBody = new HashMap<String, Member>();
-		responseBody.put("family", savedMember);
+		responseBody.put("member", savedMember);
 		
 		return responseBody;
 	}	
 	
 	// Update Member
 	@RequestMapping(value = "/members/{id}", method = RequestMethod.PUT, produces = "application/json")
-	public void UpdateMember(@PathVariable("id") String id, @RequestBody MemberSideload member) {		
-		StringBuilder sb = new StringBuilder();
-		sb.append("src/main/resources/assets/img/");
-		sb.append(id);
-		sb.append(".jpg");
+	public Map<String, Member> UpdateMember(@PathVariable("id") String id, @RequestBody MemberSideload member) {		
+		String rawImage = member.member.getImageData();
+		
+		if (rawImage != null) {
+			StringBuilder sb = new StringBuilder();
+			sb.append("src/main/resources/assets/img/");
+			sb.append(id);
+			sb.append(".jpg");
+				
+			File file = new File(sb.toString());
+			file.deleteOnExit();
+				
 			
-		File file = new File(sb.toString());
-		file.deleteOnExit();
-			
-		String raw = member.member.getImageData();
-		raw = raw.substring(23);
-			
-		BaseEncoding baseEncoding = BaseEncoding.base64();
-		byte[] bytes = baseEncoding.decode(raw);
-			
-		try {
-			Files.write(bytes, file);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}			
-	
-		memberService.UpdateMember(id, member.member);	
+			rawImage = rawImage.substring(23);
+				
+			BaseEncoding baseEncoding = BaseEncoding.base64();
+			byte[] bytes = baseEncoding.decode(rawImage);
+				
+			try {
+				Files.write(bytes, file);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}				
+		}
+		
+		Member savedMember = memberService.UpdateMember(id, member.member);
+		Map<String, Member> responseBody = new HashMap<String, Member>();
+		responseBody.put("member", savedMember);
+		
+		return responseBody;		
 	}
 	
 	// Delete Member

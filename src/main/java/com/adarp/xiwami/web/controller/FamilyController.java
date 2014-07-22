@@ -74,8 +74,12 @@ public class FamilyController {
 	
 	// Update Family
 	@RequestMapping(value = "/families/{id}", method = RequestMethod.PUT, produces = "application/json")
-	public void UpdateFamily(@PathVariable("id") String id, @RequestBody FamilySideload updatedFamily) {
-		familyService.UpdateFamily(id, updatedFamily.family);
+	public Map<String, Family> UpdateFamily(@PathVariable("id") String id, @RequestBody FamilySideload updatedFamily) {
+		Family savedFamily = familyService.UpdateFamily(id, updatedFamily.family);
+		Map<String, Family> responseBody = new HashMap<String, Family>();
+		responseBody.put("family", savedFamily);
+		
+		return responseBody;		
 	}
 	
 	// Delete Family

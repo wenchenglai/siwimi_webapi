@@ -84,15 +84,20 @@ public class Member {
 
 	}
 
-	public void setBirthday(String birthday) {		
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd"); 
-		Date birthdayDate = new Date();
-		try {	 
-			birthdayDate = formatter.parse(birthday);
-		} catch (ParseException e) {
-			e.printStackTrace();
+	public void setBirthday(String birthday) {
+		if (birthday != null) {
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd"); 
+			Date birthdayDate = new Date();
+			try {	 
+				birthdayDate = formatter.parse(birthday);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			this.birthday = birthdayDate; 			
+		} else {
+			this.birthday = null;
 		}
-		this.birthday = birthdayDate; 
+
 	}
 
 	public List<String> getLanguages() {

@@ -133,10 +133,10 @@ public class FamilyService {
 		return familyRep.AddFamily(newFamily);
 	}
 	
-	public void UpdateFamily(String id,Family updatedFamily) {
+	public Family UpdateFamily(String id, Family updatedFamily) {
 		updatedFamily.setId(id);
-		familyRep.save(updatedFamily);
-		//familyRep.UpdateFamily(updatedFamily);
+		Family savedFamily = familyRep.save(updatedFamily);
+		return savedFamily;
 	}
 	
 	public void DeleteFamily(String id) {

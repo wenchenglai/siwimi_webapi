@@ -38,10 +38,11 @@ public class MemberService {
 		return member;
 	}	
 	
-	public void UpdateMember(String id, Member updatedMember) {
+	public Member UpdateMember(String id, Member updatedMember) {
 		updatedMember.setId(id);
 		updatedMember.setAvatarUrl(id + ".jpg");	
-		memberRep.save(updatedMember);
+		Member savedMember = memberRep.save(updatedMember);
+		return savedMember;
 	}
 	
 	
