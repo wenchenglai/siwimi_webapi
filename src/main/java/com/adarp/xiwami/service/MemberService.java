@@ -39,8 +39,7 @@ public class MemberService {
 	}	
 	
 	public Member UpdateMember(String id, Member updatedMember) {
-		updatedMember.setId(id);
-		updatedMember.setAvatarUrl(id + ".jpg");	
+		updatedMember.setId(id);	
 		Member savedMember = memberRep.save(updatedMember);
 		return savedMember;
 	}
@@ -69,6 +68,10 @@ public class MemberService {
 	public List<Member> FindMembers(String familyId) {
 		return memberRep.findByFamilyInAndIsDeletedIsFalse(familyId);
 	}
+
+	public Member FindByMemberId(String id) {
+		return memberRep.findOne(id);
+	}	
 	
 	public List<Member> FindMemberByFacebookId(String id) {
 		return memberRep.findByFacebookId(id);

@@ -37,6 +37,16 @@ public class MemberController {
 		return responseBody;
 	}	
 	
+	// Get Member by ID
+	@RequestMapping(value = "/members/{id}", method = RequestMethod.GET, produces = "application/json")
+	public Map<String, Member> FindByMemberId(@PathVariable("id") String id) {
+		Member member = memberService.FindByMemberId(id);
+		Map<String, Member> responseBody = new HashMap<String, Member>();
+		responseBody.put("member", member);
+		
+		return responseBody;
+	}	
+	
 	// Add New Member
 	@RequestMapping(value = "/members", method = RequestMethod.POST, produces = "application/json")
 	public Map<String, Member> AddMember(@RequestBody MemberSideload member) {
