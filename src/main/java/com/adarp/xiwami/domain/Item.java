@@ -5,33 +5,48 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection="Item")
 public class Item {
-	
+//    name: DS.attr('string'),
+//    description: DS.attr('string'),
+//    price: DS.attr('number'),
+//    size: DS.attr('string'),
+//    width: DS.attr('number'),
+//    length: DS.attr('number'),
+//    height: DS.attr('number'),
+//    fromAge: DS.attr('number'),
+//    toAge: DS.attr('number'),
+//    condition: DS.attr('string'),
+//    type: DS.attr('string'),
+//    status: DS.attr('string'),
+//    imageUrl: DS.attr('string'),
+//    isDeleted: DS.attr('boolean')
 	@Id
-	private String _id;
+	private String id;
 	
 	private String name;
 	private String description;
 	private String size;
-	private String width;
-	private String height;
-	private String fromAge;
-	private String toAge;
+	private float width;
+	private float length;
+	private float height;
+	private int fromAge;
+	private int toAge;
 	private String condition;
 	private String type;
 	private String status;
+	private float price;
 	private String imageUrl;
 	private String sellerId;
 	private String buyerId;
 	
 	//The default of the below field is set by backend
 	private Boolean isDeleted;
-	
-	public void set_Id(String id) {
-		this._id = id;
+
+	public String getId() {
+		return id;
 	}
 
-	public String get_Id() {
-		return _id.toString();
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public String getName() {
@@ -58,35 +73,43 @@ public class Item {
 		this.size = size;
 	}
 
-	public String getWidth() {
+	public float getWidth() {
 		return width;
 	}
 
-	public void setWidth(String width) {
+	public void setWidth(float width) {
 		this.width = width;
 	}
 
-	public String getHeight() {
+	public float getLength() {
+		return length;
+	}
+
+	public void setLength(float length) {
+		this.length = length;
+	}
+
+	public float getHeight() {
 		return height;
 	}
 
-	public void setHeight(String height) {
+	public void setHeight(float height) {
 		this.height = height;
 	}
 
-	public String getFromAge() {
+	public int getFromAge() {
 		return fromAge;
 	}
 
-	public void setFromAge(String fromAge) {
+	public void setFromAge(int fromAge) {
 		this.fromAge = fromAge;
 	}
 
-	public String getToAge() {
+	public int getToAge() {
 		return toAge;
 	}
 
-	public void setToAge(String toAge) {
+	public void setToAge(int toAge) {
 		this.toAge = toAge;
 	}
 
@@ -112,6 +135,14 @@ public class Item {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public float getPrice() {
+		return price;
+	}
+
+	public void setPrice(float price) {
+		this.price = price;
 	}
 
 	public String getImageUrl() {
@@ -145,4 +176,6 @@ public class Item {
 	public void setIsDeleted(Boolean isDeleted) {
 		this.isDeleted = isDeleted;
 	}
+	
+
 }

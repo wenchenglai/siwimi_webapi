@@ -22,13 +22,14 @@ public class ItemService {
 		return itemRep.findOne(id);
 	}
 	
-	public void AddItem(Item newItem) {
+	public Item AddItem(Item newItem) {
 		newItem.setIsDeleted(false);
 		itemRep.save(newItem);
+		return newItem;
 	}
 	
 	public void UpdateItem(String id, Item updatedItem) {
-		updatedItem.set_Id(id);
+		updatedItem.setId(id);
 		itemRep.save(updatedItem);
 	}
 	
