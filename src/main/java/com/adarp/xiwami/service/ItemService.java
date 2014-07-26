@@ -40,13 +40,18 @@ public class ItemService {
 			else
 				distance = new Distance(Double.parseDouble(parts[0]),Metrics.KILOMETERS);			
 			List<Family> geoFamilies = familyRep.findByLocationNearAndIsDeletedIsFalse(new Point(longitude,latitude),distance);
-			
-			// Retrieve id of the members of geoFamilies
-			List<String> geoMemberId = new ArrayList<String>();
+	
+			// Retrieve the id of geoFamilies
+			List<String> geoFamilyId = new ArrayList<String>();
 			for (Family family : geoFamilies) {
-				for (String memberId : family.getMembers()) {
-					geoMemberId.add(memberId);
-				}
+				geoFamilyId.add(family.getId());
+			}
+			
+			// Retrieve id of the geoMembers
+			List<Member> geoMembers = memberRep.findByFamilyInAndIsDeletedIsFalse(geoFamilyId);
+			List<String> geoMemberId = new ArrayList<String>();
+			for (Member member : geoMembers) {
+				geoMemberId.add(member.getId());
 			}
 					
 			return itemRep.findBySellerInAndNameDescriptionLikeIgnoreCaseAndIsDeletedIsFalse(geoMemberId, queryText);

@@ -143,18 +143,20 @@ public class FamilyService {
 	}
 	
 	public void DeleteFamily(String id) {
-		Family family = familyRep.findOne(id);
-		family.setIsDeleted(true);
-		familyRep.save(family);
 		
-		List<Member> memberList = memberRep.findByIdIn(family.getMembers());
+		//Delete members which belongs both "non-user" and this family
+		List<Member> memberList = memberRep.findByFamilyInAndIsDeletedIsFalse(id);
 		for (Member member:memberList) {
 			if ((member.getFacebookId()==null) && (member.getGoogleplusId()==null)) {
 				member.setIsDeleted(true);
 				memberRep.save(member);
-			}
-				
+			}				
 		}
+		
+		Family family = familyRep.findOne(id);
+		family.setIsDeleted(true);
+		familyRep.save(family);		
+		
 	}
 	
 }
