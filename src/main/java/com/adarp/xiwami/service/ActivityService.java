@@ -28,9 +28,9 @@ public class ActivityService {
 	@Autowired
 	private MemberRepository memberRep;
 	
-	public List<Activity> FindActivities(String creatorId,String type,Double longitude,Double latitude,String qsDistance,String queryText) {
-		if ((creatorId!=null) && (type!=null))
-			return activityRep.findByCreatorAndTypeAndIsDeletedIsFalse(creatorId, type);
+	public List<Activity> FindActivities(String creatorId,String status,Double longitude,Double latitude,String qsDistance,String queryText) {
+		if ((creatorId!=null) && (status!=null))
+			return activityRep.findByCreatorAndStatusAndIsDeletedIsFalse(creatorId, status);
 		else {
 			// Geo search in family collection				
 			String [] parts = qsDistance.split(" ");

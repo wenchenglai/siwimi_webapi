@@ -14,8 +14,11 @@ public class QuestionService {
 	@Autowired
 	QuestionRepository questionRep;
 	
-	public List<Question> FindQuestions(String queryText) {
-		return questionRep.findByQuestionTextLikeIgnoreCaseAndAnswersLikeIgnoreCaseAndIsDeletedIsFalse(queryText);
+	public List<Question> FindQuestions(String creatorId, String status, String queryText) {
+		if ((creatorId!=null) && (status!=null))
+			return questionRep.findByUserAndStatusAndIsDeletedIsFalse(creatorId, status);
+		else
+			return questionRep.findByQuestionTextLikeIgnoreCaseAndAnswersLikeIgnoreCaseAndIsDeletedIsFalse(queryText);
 	}
 	
 	public Question FindByQuestionId(String id) {

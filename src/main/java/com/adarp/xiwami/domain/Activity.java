@@ -1,5 +1,7 @@
 package com.adarp.xiwami.domain;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.springframework.data.annotation.Id;
@@ -17,10 +19,12 @@ public class Activity {
 	private Date fromTime;
 	private Date toTime;
 	private String location;
-	private String type;
 	private String url;
 	private String imageData;
 	private String imageUrl;
+	
+	//This field is only for front-end purpose
+	private String status = "Upcoming";
 	
 	//The default of the below field is set by backend
 	private Boolean isDeleted;
@@ -41,20 +45,60 @@ public class Activity {
 		this.description = description;
 	}
 	
-	public Date getFromTime() {
-		return fromTime;
+	public String getFromTime() {
+		if (this.fromTime != null) {
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
+			return formatter.format(this.fromTime);			
+		} else {
+			return null;
+		}
 	}
 
-	public void setFromTime(Date fromTime) {
-		this.fromTime = fromTime;
+	public void setFromTime(String fromTime) {
+		if (fromTime != null) {
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd"); 
+			Date fromTimeDate = new Date();
+			try {	 
+				fromTimeDate = formatter.parse(fromTime);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			this.fromTime = fromTimeDate;
+			
+			// This is for front-end only
+			Date today = new Date();
+			if (today.after(this.fromTime))
+				this.status = "Past";
+			else
+				this.status = "Upcoming";							
+		} else {
+			this.fromTime = null;
+			this.status = null;
+		}						
 	}
 
-	public Date getToTime() {
-		return toTime;
+	public String getToTime() {
+		if (this.toTime != null) {
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
+			return formatter.format(this.toTime);			
+		} else {
+			return null;
+		}
 	}
 
-	public void setToTime(Date toTime) {
-		this.toTime = toTime;
+	public void setToTime(String toTime) {
+		if (toTime != null) {
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd"); 
+			Date toTimeDate = new Date();
+			try {	 
+				toTimeDate = formatter.parse(toTime);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			this.toTime = toTimeDate; 			
+		} else {
+			this.toTime = null;
+		}
 	}
 
 	public String getLocation() {
@@ -105,12 +149,12 @@ public class Activity {
 		this.creator = creator;
 	}
 
-	public String getType() {
-		return type;
+	public String getStatus() {
+		return status;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	public String getUrl() {
