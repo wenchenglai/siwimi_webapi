@@ -1,7 +1,5 @@
 package com.adarp.xiwami.domain;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.springframework.data.annotation.Id;

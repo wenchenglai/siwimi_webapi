@@ -35,6 +35,7 @@ dependencies {
     //compile("org.springframework.boot:spring-boot-starter-actuator")
     // end::actuator[]
     testCompile("junit:junit")
+	compile("javax.mail:mail:1.4.5")
 }
 
 task wrapper(type: Wrapper) {
