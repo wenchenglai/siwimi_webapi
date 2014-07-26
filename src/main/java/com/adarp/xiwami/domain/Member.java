@@ -27,7 +27,7 @@ public class Member {
 	private boolean isUser;
 	private String facebookId;
 	private String googleplusId;
-	private List<Item> items = new ArrayList<Item>();
+	private List<String> items = new ArrayList<String>();
 	private String family;
 	private String imageData;
 	
@@ -155,14 +155,6 @@ public class Member {
 	public void setGoogleplusId(String googleplusId) {
 		this.googleplusId = googleplusId;
 	}		
-
-	public List<Item> getItems() {
-		return items;
-	}
-
-	public void setItems(List<Item> items) {
-		this.items = items;
-	}
 	
 	public String getFamily() {
 		return family;
@@ -186,5 +178,13 @@ public class Member {
 
 	public void setIsDeleted(boolean isDeleted) {
 		this.isDeleted = isDeleted;
+	}
+
+	public List<String> getItems() {
+		return items;
+	}
+
+	public void setItems(List<String> items) {
+		this.items = items;
 	}		
 }

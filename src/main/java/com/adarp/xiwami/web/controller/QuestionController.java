@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.adarp.xiwami.service.QuestionService;
 import com.adarp.xiwami.web.dto.QuestionSideload;
-import com.adarp.xiwami.domain.Item;
 import com.adarp.xiwami.domain.Question;
 
 @RestController
@@ -24,9 +24,10 @@ public class QuestionController {
 
 	// Get all questions
 	@RequestMapping(value = "/questions", method = RequestMethod.GET, produces = "application/json")
-	public Map<String,List<Question>> FindQuestions() {
+	public Map<String,List<Question>> FindQuestions(
+			@RequestParam(value="queryText", required=false) String queryText) {
 		Map<String,List<Question>> responseBody = new HashMap<String,List<Question>>();
-		List<Question> list = questionService.FindQuestions();
+		List<Question> list = questionService.FindQuestions(queryText);
 		responseBody.put("question", list);
 		return responseBody;
 	}
