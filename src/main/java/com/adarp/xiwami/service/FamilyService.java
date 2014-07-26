@@ -98,7 +98,7 @@ public class FamilyService {
 	}
 	
 	public Family FindByFamilyId(String id) {
-		return familyRep.findOne(id);
+		return familyRep.findByIdAndIsDeletedIsFalse(id);
 	}
 	
 	public Family AddFamily(Family newFamily) {
@@ -143,6 +143,15 @@ public class FamilyService {
 		Family family = familyRep.findOne(id);
 		family.setIsDeleted(true);
 		familyRep.save(family);
+		
+		List<Member> memberList = memberRep.findByIdIn(family.getMembers());
+		for (Member member:memberList) {
+			if ((member.getFacebookId()==null) && (member.getGoogleplusId()==null)) {
+				member.setIsDeleted(true);
+				memberRep.save(member);
+			}
+				
+		}
 	}
 	
 }

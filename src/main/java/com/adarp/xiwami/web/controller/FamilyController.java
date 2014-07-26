@@ -48,18 +48,23 @@ public class FamilyController {
 		
 		FamilySideload responseBody = new FamilySideload();
 		Family family = familyService.FindByFamilyId(id);
-		
-		List<Member> members = memberService.FindMembers(family.getId());
-		List<String> memberIds = new ArrayList<String>();
-		for (Member member : members) {
-			memberIds.add(member.getId());
+
+		if (family==null) {
+			return null;
+		} else {
+			List<Member> members = memberService.FindMembers(family.getId());
+			List<String> memberIds = new ArrayList<String>();
+			for (Member member : members) {
+				memberIds.add(member.getId());
+			}
+			family.setMembers(memberIds);
+			
+			responseBody.family = family;
+			responseBody.members = members;
+			
+			return responseBody;			
 		}
-		family.setMembers(memberIds);
-		
-		responseBody.family = family;
-		responseBody.members = members;
-		
-		return responseBody;
+
 	}
 	
 	// Add New Family
