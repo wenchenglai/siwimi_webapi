@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "Family")
@@ -18,6 +19,7 @@ public class Family {
 	private String description;	
 	
 	// This field is only for front-end use
+	@Transient
 	private List<String> members = new ArrayList<String>();
 	
 	//The defaults of the below fields are set by backend

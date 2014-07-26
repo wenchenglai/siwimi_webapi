@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection="Activity")
@@ -25,6 +26,7 @@ public class Activity {
 	private String type;
 	
 	//This field is only for front-end purpose
+	@Transient
 	private String status = "Upcoming";
 	
 	//The default of the below field is set by backend
