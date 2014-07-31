@@ -28,9 +28,9 @@ public class ItemService {
 		return newItem;
 	}
 	
-	public void UpdateItem(String id, Item updatedItem) {
+	public Item UpdateItem(String id, Item updatedItem) {
 		updatedItem.setId(id);
-		itemRep.save(updatedItem);
+		return itemRep.save(updatedItem);
 	}
 	
 	public void DeleteItem(String id) {

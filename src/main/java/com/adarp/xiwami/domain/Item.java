@@ -1,5 +1,7 @@
 package com.adarp.xiwami.domain;
 
+import java.util.Date;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -22,8 +24,10 @@ public class Item {
 	private String status;
 	private float price;
 	private String imageUrl;
-	private String sellerId;
-	private String buyerId;
+	private String imageData;
+	private String seller;
+	private String buyer;
+	private Date createdDate;
 	
 	//The default of the below field is set by backend
 	private Boolean isDeleted;
@@ -140,20 +144,28 @@ public class Item {
 		this.imageUrl = imageUrl;
 	}
 
-	public String getSellerId() {
-		return sellerId;
+	public String getImageData() {
+		return imageData;
 	}
 
-	public void setSellerId(String sellerId) {
-		this.sellerId = sellerId;
+	public void setImageData(String imageData) {
+		this.imageData = imageData;
 	}
 
-	public String getBuyerId() {
-		return buyerId;
+	public String getSeller() {
+		return seller;
 	}
 
-	public void setBuyerId(String buyerId) {
-		this.buyerId = buyerId;
+	public void setSeller(String seller) {
+		this.seller = seller;
+	}
+
+	public String getBuyer() {
+		return buyer;
+	}
+
+	public void setBuyer(String buyer) {
+		this.buyer = buyer;
 	}
 
 	public Boolean getIsDeleted() {
@@ -164,5 +176,11 @@ public class Item {
 		this.isDeleted = isDeleted;
 	}
 	
+	public Date getCreatedDate() {
+		return createdDate;
+	}
 
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
+	}	
 }

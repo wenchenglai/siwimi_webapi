@@ -45,13 +45,10 @@ public class FamilyController {
 	// Get Family by ID
 	@RequestMapping(value = "/families/{id}", method = RequestMethod.GET, produces = "application/json")
 	public FamilySideload FindByFamilyId(@PathVariable("id") String id) {
-		
 		FamilySideload responseBody = new FamilySideload();
 		Family family = familyService.FindByFamilyId(id);
 
-		if (family==null) {
-			return null;
-		} else {
+		if (family != null) {
 			List<Member> members = memberService.FindMembers(family.getId());
 			List<String> memberIds = new ArrayList<String>();
 			for (Member member : members) {
@@ -61,10 +58,8 @@ public class FamilyController {
 			
 			responseBody.family = family;
 			responseBody.members = members;
-			
-			return responseBody;			
 		}
-
+		return responseBody;
 	}
 	
 	// Add New Family
