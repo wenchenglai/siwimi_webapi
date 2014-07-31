@@ -41,8 +41,12 @@ public class ItemController {
 	
 	// Add New Item
 	@RequestMapping(value = "/items", method = RequestMethod.POST, produces = "application/json")
-	public void AddItem(@RequestBody ItemSideload newItem){
-		itemService.AddItem(newItem.item);	
+	public Map<String,Item> AddItem(@RequestBody ItemSideload newItem){
+		Item itemSaved = itemService.AddItem(newItem.item);	
+		
+		Map<String,Item> responseBody = new HashMap<String,Item>();
+		responseBody.put("item", itemSaved);
+		return responseBody;
 	}	
 	
 	// Update Item
