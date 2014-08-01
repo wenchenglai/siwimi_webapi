@@ -39,7 +39,6 @@ public class FamilyController {
 			@RequestParam(value="toAge", required=false) Integer toAge,
 			@RequestParam(value="languages[]", required=false) String[] languages) {
 		FamilySideloadList responseBody = new FamilySideloadList();
-		List<FamilySideload> list = new ArrayList<FamilySideload>();
 		List<Family> families = familyService.FindFamilies(longitude,latitude,qsDistance,fromAge,toAge,languages);
 		List<Member> members = new ArrayList<Member>();
 		if (families!=null) {

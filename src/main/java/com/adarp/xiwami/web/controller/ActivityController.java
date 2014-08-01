@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.adarp.xiwami.service.ActivityService;
@@ -21,9 +22,15 @@ public class ActivityController {
 	@Autowired
 	private ActivityService activityService;
 
-	// Get all activities
+	// Get activities by criteria
 	@RequestMapping(value = "/activities", method = RequestMethod.GET, produces = "application/json")
-	public Map<String,List<Activity>> FindActivities() {
+	public Map<String,List<Activity>> FindActivities(
+			@RequestParam(value="creator", required=false) String creatorId,
+			@RequestParam(value="type", required=false) String type,
+			@RequestParam(value="longitude", required=false) Double longitude,
+			@RequestParam(value="latitude", required=false) Double latitude,
+			@RequestParam(value="distance", required=false) String qsDistance, 
+			@RequestParam(value="queryText", required=false) String queryText) {
 		Map<String,List<Activity>> responseBody = new HashMap<String,List<Activity>>();
 		List<Activity> list = activityService.FindActivities();
 		responseBody.put("activity", list);
@@ -41,14 +48,23 @@ public class ActivityController {
 	
 	// Add New Activity
 	@RequestMapping(value = "/activities", method = RequestMethod.POST, produces = "application/json")
-	public void AddActivity(@RequestBody ActivitySideload newActivity) {
-		activityService.AddActivity(newActivity.activity);	
+	public Map<String, Activity> AddActivity(@RequestBody ActivitySideload newActivity) {
+		Activity savedActivity = activityService.AddActivity(newActivity.activity);
+		
+		Map<String, Activity> responseBody = new HashMap<String, Activity>();
+		responseBody.put("activity", savedActivity);
+		
+		return responseBody;		
 	}	
 	
 	// Update Activity
 	@RequestMapping(value = "/activities/{id}", method = RequestMethod.PUT, produces = "application/json")
-	public void UpdateActivity(@PathVariable("id") String id, @RequestBody ActivitySideload updatedActivity) {
-		activityService.UpdateActivity(id, updatedActivity.activity);
+	public Map<String, Activity> UpdateActivity(@PathVariable("id") String id, @RequestBody ActivitySideload updatedActivity) {
+		Activity savedActivity = activityService.UpdateActivity(id, updatedActivity.activity);
+		Map<String, Activity> responseBody = new HashMap<String, Activity>();
+		responseBody.put("activity", savedActivity);
+		
+		return responseBody;			
 	}
 	
 	// Delete Activity

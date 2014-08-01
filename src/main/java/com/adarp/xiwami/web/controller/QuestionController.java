@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.adarp.xiwami.service.QuestionService;
 import com.adarp.xiwami.web.dto.QuestionSideload;
+import com.adarp.xiwami.domain.Item;
 import com.adarp.xiwami.domain.Question;
 
 @RestController
@@ -41,14 +42,22 @@ public class QuestionController {
 	
 	// Add New Question
 	@RequestMapping(value = "/questions", method = RequestMethod.POST, produces = "application/json")
-	public void AddQuestion(@RequestBody QuestionSideload newQuestion) {
-		questionService.AddQuestion(newQuestion.question);	
+	public Map<String, Question> AddQuestion(@RequestBody QuestionSideload newQuestion) {
+		Question savedQuestion = questionService.AddQuestion(newQuestion.question);
+		
+		Map<String,Question> responseBody = new HashMap<String, Question>();
+		responseBody.put("question", savedQuestion);
+		return responseBody;			
 	}	
 	
 	// Update Question
 	@RequestMapping(value = "/questions/{id}", method = RequestMethod.PUT, produces = "application/json")
-	public void UpdateQuestion(@PathVariable("id") String id, @RequestBody QuestionSideload updatedQuestion){
-		questionService.UpdateQuestion(id, updatedQuestion.question);
+	public Map<String, Question> UpdateQuestion(@PathVariable("id") String id, @RequestBody QuestionSideload updatedQuestion){
+		Question savedQuestion = questionService.UpdateQuestion(id, updatedQuestion.question);
+		
+		Map<String,Question> responseBody = new HashMap<String, Question>();
+		responseBody.put("question", savedQuestion);
+		return responseBody;			
 	}
 	
 	// Delete Question

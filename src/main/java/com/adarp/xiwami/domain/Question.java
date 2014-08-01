@@ -1,5 +1,9 @@
 package com.adarp.xiwami.domain;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -7,45 +11,54 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Question {
 
 	@Id
-	private String _id;
+	private String id;
 	
-	private String userId;
-	private String question;
-	private String isAnswered;
+	private String user;
+	private String questionText;
+	private Date createdDate;
+	private List<String> answers = new ArrayList<String>();	
 	
 	//The default of the below field is set by backend
 	private Boolean isDeleted;
-	
-	public void set_Id(String id) {
-		this._id = id;
+
+	public String getId() {
+		return id;
 	}
 
-	public String get_Id() {
-		return _id.toString();
+	public void setId(String id) {
+		this.id = id;
 	}
-	
-	public String getUserId() {
-		return userId;
+
+	public String getUser() {
+		return user;
 	}
-	
-	public void setUserId(String userId) {
-		this.userId = userId;
+
+	public void setUser(String user) {
+		this.user = user;
 	}
-	
-	public String getQuestion() {
-		return question;
+
+	public String getQuestionText() {
+		return questionText;
 	}
-	
-	public void setQuestion(String question) {
-		this.question = question;
+
+	public void setQuestionText(String questionText) {
+		this.questionText = questionText;
 	}
-		
-	public String getIsAnswered() {
-		return isAnswered;
+
+	public Date getCreatedDate() {
+		return createdDate;
 	}
-	
-	public void setIsAnswered(String isAnswered) {
-		this.isAnswered = isAnswered;
+
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
+	}
+
+	public List<String> getAnswers() {
+		return answers;
+	}
+
+	public void setAnswers(List<String> answers) {
+		this.answers = answers;
 	}
 
 	public Boolean getIsDeleted() {
@@ -55,4 +68,6 @@ public class Question {
 	public void setIsDeleted(Boolean isDeleted) {
 		this.isDeleted = isDeleted;
 	}
+	
+
 }

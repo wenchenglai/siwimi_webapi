@@ -22,14 +22,14 @@ public class ActivityService {
 		return activityRep.findOne(id);
 	}
 	
-	public void AddActivity(Activity newActivity) {
+	public Activity AddActivity(Activity newActivity) {
 		newActivity.setIsDeleted(false);
-		activityRep.save(newActivity);
+		return activityRep.save(newActivity);
 	}
 	
-	public void UpdateActivity(String id, Activity updatedActivity) {
-		updatedActivity.set_Id(id);
-		activityRep.save(updatedActivity);
+	public Activity UpdateActivity(String id, Activity updatedActivity) {
+		updatedActivity.setId(id);
+		return activityRep.save(updatedActivity);
 	}
 	
 	public void DeleteActivity(String id) {

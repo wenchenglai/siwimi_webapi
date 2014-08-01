@@ -22,14 +22,14 @@ public class QuestionService {
 		return questionRep.findOne(id);
 	}
 	
-	public void AddQuestion(Question newQuestion) {
+	public Question AddQuestion(Question newQuestion) {
 		newQuestion.setIsDeleted(false);
-		questionRep.save(newQuestion);
+		return questionRep.save(newQuestion);
 	}
 	
-	public void UpdateQuestion(String id, Question updatedQuestion) {
-		updatedQuestion.set_Id(id);
-		questionRep.save(updatedQuestion);
+	public Question UpdateQuestion(String id, Question updatedQuestion) {
+		updatedQuestion.setId(id);
+		return questionRep.save(updatedQuestion);
 	}
 	
 	public void DeleteQuestion(String id) {
