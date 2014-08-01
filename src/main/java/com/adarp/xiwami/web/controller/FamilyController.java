@@ -30,16 +30,33 @@ public class FamilyController {
 
 	// Get all families
 	@RequestMapping(value = "/families", method = RequestMethod.GET, produces = "application/json")
-	public Map<String,List<Family>> FindFamilies(
+	public List<FamilySideload> FindFamilies(
 			@RequestParam(value="longitude", required=true) Double longitude,
 			@RequestParam(value="latitude", required=true) Double latitude,
 			@RequestParam(value="distance", required=true) String qsDistance, 
 			@RequestParam(value="fromAge", required=false) Integer fromAge,
 			@RequestParam(value="toAge", required=false) Integer toAge,
-			@RequestParam(value="languages[]", required=false) String[] languages) {			
-		Map<String,List<Family>> responseBody = new HashMap<String,List<Family>>();
-		responseBody.put("family", familyService.FindFamilies(longitude,latitude,qsDistance,fromAge,toAge,languages));
-		return responseBody;		
+			@RequestParam(value="languages[]", required=false) String[] languages) {				
+		List<FamilySideload> responseBody = new ArrayList<FamilySideload>();
+		List<Family> families = familyService.FindFamilies(longitude,latitude,qsDistance,fromAge,toAge,languages);
+		
+		if (families!=null) {
+			for (Family family:families) {
+				List<Member> members = memberService.FindMembers(family.getId());
+				List<String> memberIds = new ArrayList<String>();
+				for (Member member : members) {
+					memberIds.add(member.getId());
+				}
+				family.setMembers(memberIds);
+				
+				FamilySideload familySideload = new FamilySideload();
+				familySideload.family = family;
+				familySideload.members = members;
+				responseBody.add(familySideload);
+			}
+		}
+		
+		return responseBody;
 	}
 
 	// Get Family by ID
