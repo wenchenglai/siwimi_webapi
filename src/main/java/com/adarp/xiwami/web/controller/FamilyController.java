@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.adarp.xiwami.service.FamilyService;
 import com.adarp.xiwami.service.MemberService;
 import com.adarp.xiwami.web.dto.FamilySideload;
+import com.adarp.xiwami.web.dto.FamilySideloadList;
 import com.adarp.xiwami.domain.Family;
 import com.adarp.xiwami.domain.Member;
 
@@ -30,32 +31,30 @@ public class FamilyController {
 
 	// Get all families
 	@RequestMapping(value = "/families", method = RequestMethod.GET, produces = "application/json")
-	public List<FamilySideload> FindFamilies(
+	public  FamilySideloadList FindFamilies(
 			@RequestParam(value="longitude", required=true) Double longitude,
 			@RequestParam(value="latitude", required=true) Double latitude,
 			@RequestParam(value="distance", required=true) String qsDistance, 
 			@RequestParam(value="fromAge", required=false) Integer fromAge,
 			@RequestParam(value="toAge", required=false) Integer toAge,
-			@RequestParam(value="languages[]", required=false) String[] languages) {				
-		List<FamilySideload> responseBody = new ArrayList<FamilySideload>();
+			@RequestParam(value="languages[]", required=false) String[] languages) {
+		FamilySideloadList responseBody = new FamilySideloadList();
+		List<FamilySideload> list = new ArrayList<FamilySideload>();
 		List<Family> families = familyService.FindFamilies(longitude,latitude,qsDistance,fromAge,toAge,languages);
-		
+		List<Member> members = new ArrayList<Member>();
 		if (families!=null) {
 			for (Family family:families) {
-				List<Member> members = memberService.FindMembers(family.getId());
+				List<Member> membersPerFamily = memberService.FindMembers(family.getId());
 				List<String> memberIds = new ArrayList<String>();
-				for (Member member : members) {
+				for (Member member : membersPerFamily) {
 					memberIds.add(member.getId());
+					members.add(member);
 				}
 				family.setMembers(memberIds);
-				
-				FamilySideload familySideload = new FamilySideload();
-				familySideload.family = family;
-				familySideload.members = members;
-				responseBody.add(familySideload);
 			}
 		}
-		
+		responseBody.family = families;
+		responseBody.members = members;
 		return responseBody;
 	}
 
