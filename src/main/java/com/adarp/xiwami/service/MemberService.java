@@ -1,12 +1,10 @@
 package com.adarp.xiwami.service;
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.adarp.xiwami.domain.Family;
 import com.adarp.xiwami.domain.Member;
 import com.adarp.xiwami.repository.FamilyRepository;
 import com.adarp.xiwami.repository.MemberRepository;
@@ -20,21 +18,9 @@ public class MemberService {
 	@Autowired
 	private FamilyRepository familyRep;
 	
-	public Member AddMember(Member newMember){
-		// For Member collection
+	public Member AddMember(Member newMember){		
 		newMember.setIsDeleted(false);
 		Member member = memberRep.save(newMember);	
-		
-		// it's possible to add a member without a family associated, e.g. sing up for the first time using facebook/google+
-		if (newMember.getFamily() != null) {
-			// For Family collection
-			Family thisFamily = familyRep.findOne(newMember.getFamily());
-			List<String> thisFamilyMembers = thisFamily.getMembers();
-			thisFamilyMembers.add(newMember.getId());
-			thisFamily.setMembers(thisFamilyMembers);
-			familyRep.save(thisFamily);		
-		}
-		
 		return member;
 	}	
 	
@@ -50,19 +36,6 @@ public class MemberService {
 		Member member = memberRep.findOne(id);
 		member.setIsDeleted(true);
 		memberRep.save(member);
-		
-		// For Family collection
-		Family thisFamily = familyRep.findOne(member.getFamily());
-		List<String> thisFamilyMembers = thisFamily.getMembers();
-		Iterator<String> it = thisFamilyMembers.iterator();
-		while (it.hasNext()) {
-			if (it.next().equals(id)) {
-				it.remove();
-				break;
-			}
-		}
-		thisFamily.setMembers(thisFamilyMembers);
-		familyRep.save(thisFamily);
 	}
 	
 	public List<Member> FindMembers(String familyId) {

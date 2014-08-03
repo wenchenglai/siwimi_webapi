@@ -11,8 +11,10 @@ import org.springframework.stereotype.Service;
 
 import com.adarp.xiwami.domain.Activity;
 import com.adarp.xiwami.domain.Family;
+import com.adarp.xiwami.domain.Member;
 import com.adarp.xiwami.repository.ActivityRepository;
 import com.adarp.xiwami.repository.FamilyRepository;
+import com.adarp.xiwami.repository.MemberRepository;
 
 @Service
 public class ActivityService {
@@ -23,6 +25,8 @@ public class ActivityService {
 	@Autowired
 	private FamilyRepository familyRep;
 	
+	@Autowired
+	private MemberRepository memberRep;
 	
 	public List<Activity> FindActivities(String creatorId,String type,Double longitude,Double latitude,String qsDistance,String queryText) {
 		if ((creatorId!=null) && (type!=null))
@@ -37,13 +41,18 @@ public class ActivityService {
 				distance = new Distance(Double.parseDouble(parts[0]),Metrics.KILOMETERS);			
 			List<Family> geoFamilies = familyRep.findByLocationNearAndIsDeletedIsFalse(new Point(longitude,latitude),distance);
 			
-			// Retrieve id of the members of geoFamilies
-			List<String> geoMemberId = new ArrayList<String>();
+			// Retrieve the id of geoFamilies
+			List<String> geoFamilyId = new ArrayList<String>();
 			for (Family family : geoFamilies) {
-				for (String memberId : family.getMembers()) {
-					geoMemberId.add(memberId);
-				}
-			}		
+				geoFamilyId.add(family.getId());
+			}
+			
+			// Retrieve id of the geoMembers
+			List<Member> geoMembers = memberRep.findByFamilyInAndIsDeletedIsFalse(geoFamilyId);
+			List<String> geoMemberId = new ArrayList<String>();
+			for (Member member : geoMembers) {
+				geoMemberId.add(member.getId());
+			}	
 			
 			return activityRep.findByCreatorInAndTypeDescriptionLikeIgnoreCaseAndIsDeletedIsFalse(geoMemberId, queryText);			
 		}
