@@ -14,8 +14,8 @@ public class QuestionService {
 	@Autowired
 	QuestionRepository questionRep;
 	
-	public List<Question> FindQuestions() {
-		return questionRep.findAll();
+	public List<Question> FindQuestions(String queryText) {
+		return questionRep.findByQuestionTextLikeIgnoreCaseAndAnswersLikeIgnoreCaseAndIsDeletedIsFalse(queryText);
 	}
 	
 	public Question FindByQuestionId(String id) {

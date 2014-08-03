@@ -21,7 +21,7 @@ public class ItemController {
 
 	@Autowired
 	private ItemService itemService;
-
+	
 	// Get items by criteria
 	@RequestMapping(value = "/items", method = RequestMethod.GET, produces = "application/json")
 	public Map<String,List<Item>> FindItems(
@@ -32,7 +32,7 @@ public class ItemController {
 			@RequestParam(value="distance", required=false) String qsDistance, 
 			@RequestParam(value="queryText", required=false) String queryText) {
 		Map<String,List<Item>> responseBody = new HashMap<String,List<Item>>();
-		List<Item> list = itemService.FindItems();
+		List<Item> list = itemService.FindItems(sellerId,status,longitude,latitude,qsDistance,queryText);
 		responseBody.put("item", list);
 		return responseBody;
 	}
@@ -49,8 +49,7 @@ public class ItemController {
 	// Add New Item
 	@RequestMapping(value = "/items", method = RequestMethod.POST, produces = "application/json")
 	public Map<String,Item> AddItem(@RequestBody ItemSideload newItem){
-		Item savedItem = itemService.AddItem(newItem.item);	
-		
+		Item savedItem = itemService.AddItem(newItem.item);			
 		Map<String,Item> responseBody = new HashMap<String,Item>();
 		responseBody.put("item", savedItem);
 		return responseBody;

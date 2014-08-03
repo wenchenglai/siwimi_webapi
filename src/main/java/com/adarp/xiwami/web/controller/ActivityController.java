@@ -32,7 +32,7 @@ public class ActivityController {
 			@RequestParam(value="distance", required=false) String qsDistance, 
 			@RequestParam(value="queryText", required=false) String queryText) {
 		Map<String,List<Activity>> responseBody = new HashMap<String,List<Activity>>();
-		List<Activity> list = activityService.FindActivities();
+		List<Activity> list = activityService.FindActivities(creatorId,type,longitude,latitude,qsDistance,queryText);
 		responseBody.put("activity", list);
 		return responseBody;
 	}

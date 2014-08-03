@@ -129,6 +129,9 @@ public class FamilyService {
 		newFamily.setZipCode(thisZipCode.getZipCode());
 		newFamily.setLocation(location);
 		newFamily.setCityState(thisZipCode.getTownship()+", "+thisZipCode.getStateCode());
+		
+		// (This is a MUST) set members of the family object
+				
 		newFamily.setIsDeleted(false);
 		return familyRep.AddFamily(newFamily);
 	}
