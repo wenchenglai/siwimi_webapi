@@ -25,6 +25,8 @@ public class QuestionController {
 	// Get all questions
 	@RequestMapping(value = "/questions", method = RequestMethod.GET, produces = "application/json")
 	public Map<String,List<Question>> FindQuestions(
+			@RequestParam(value="creator", required=false) String creatorId,
+			@RequestParam(value="status", required=false) String status,			
 			@RequestParam(value="queryText", required=false) String queryText) {
 		Map<String,List<Question>> responseBody = new HashMap<String,List<Question>>();
 		List<Question> list = questionService.FindQuestions(queryText);
