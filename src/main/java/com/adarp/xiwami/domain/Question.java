@@ -21,7 +21,7 @@ public class Question {
 	private List<String> answers = new ArrayList<String>();	
 	
 	//This field is only for front-end purpose
-	private String status = "Opened";
+	private String status = "Open";
 	
 	//The default of the below field is set by backend
 	private Boolean isDeleted;
@@ -50,29 +50,37 @@ public class Question {
 		this.questionText = questionText;
 	}
 
-	public String getCreatedDate() {
-		if (this.createdDate != null) {
-			SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
-			return formatter.format(this.createdDate);			
-		} else {
-			return null;
-		}
+//	public String getCreatedDate() {
+//		if (this.createdDate != null) {
+//			SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
+//			return formatter.format(this.createdDate);			
+//		} else {
+//			return null;
+//		}
+//	}
+//
+//	public void setCreatedDate(String createdDate) {
+//		if (createdDate != null) {
+//			SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd"); 
+//			Date createdDateDate = new Date();
+//			try {	 
+//				createdDateDate = formatter.parse(createdDate);
+//			} catch (ParseException e) {
+//				e.printStackTrace();
+//			}
+//			this.createdDate = createdDateDate; 			
+//		} else {
+//			this.createdDate = null;
+//		}
+//	}	
+
+	public Date getCreatedDate() {
+		return createdDate;
 	}
 
-	public void setCreatedDate(String createdDate) {
-		if (createdDate != null) {
-			SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd"); 
-			Date createdDateDate = new Date();
-			try {	 
-				createdDateDate = formatter.parse(createdDate);
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-			this.createdDate = createdDateDate; 			
-		} else {
-			this.createdDate = null;
-		}
-	}	
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
+	}
 
 	public List<String> getAnswers() {
 		return answers;
@@ -84,7 +92,7 @@ public class Question {
 		if (this.answers.size()>0)
 			this.status = "Answered";
 		else
-			this.status = "Opened";
+			this.status = "Open";
 	}
 
 	public Boolean getIsDeleted() {
