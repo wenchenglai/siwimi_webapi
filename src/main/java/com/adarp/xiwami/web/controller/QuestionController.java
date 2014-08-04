@@ -29,7 +29,7 @@ public class QuestionController {
 			@RequestParam(value="status", required=false) String status,			
 			@RequestParam(value="queryText", required=false) String queryText) {
 		Map<String,List<Question>> responseBody = new HashMap<String,List<Question>>();
-		List<Question> list = questionService.FindQuestions(queryText);
+		List<Question> list = questionService.FindQuestions(creatorId,status,queryText);
 		responseBody.put("question", list);
 		return responseBody;
 	}

@@ -16,6 +16,8 @@ public class Family {
 	private String cityState;
 	private String familyName;
 	private String description;	
+	
+	// This field is only for front-end use
 	private List<String> members = new ArrayList<String>();
 	
 	//The defaults of the below fields are set by backend

@@ -8,6 +8,8 @@ import org.springframework.data.mongodb.repository.Query;
 import com.adarp.xiwami.domain.Question;
 
 public interface QuestionRepository extends MongoRepository<Question, String>, QuestionRepositoryCustom{
+	List<Question> findByUserAndStatusAndIsDeletedIsFalse(String creatorId,String status);
+	
 	@Query("{'$and':[ {'isDeleted' : false}, {'$or' : [{'questionText':{$regex : ?0, $options :'i'}}, {'answers' : {'$in' :[{$regex : ?0, $options :'i'}]}}] } ] }")
 	List<Question> findByQuestionTextLikeIgnoreCaseAndAnswersLikeIgnoreCaseAndIsDeletedIsFalse(String queryText);
 

@@ -97,7 +97,6 @@ public class Member {
 		} else {
 			this.birthday = null;
 		}
-
 	}
 
 	public List<String> getLanguages() {
