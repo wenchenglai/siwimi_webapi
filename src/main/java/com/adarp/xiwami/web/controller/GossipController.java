@@ -23,7 +23,7 @@ public class GossipController {
 	@RequestMapping(value = "/gossips", method = RequestMethod.GET, produces = "application/json")
 	public Map<String,List<Gossip>> FindGossips(
 			@RequestParam(value="status", required=false) String status,	
-			@RequestParam(value="user", required=false) String user,
+			@RequestParam(value="userId", required=false) String user,
 			@RequestParam(value="longitude", required=false) Double longitude,
 			@RequestParam(value="latitude", required=false) Double latitude) {
 		Map<String,List<Gossip>> responseBody = new HashMap<String,List<Gossip>>();

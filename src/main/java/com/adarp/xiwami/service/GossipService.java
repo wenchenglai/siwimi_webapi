@@ -28,9 +28,9 @@ public class GossipService {
 	@Autowired
 	private MemberRepository memberRep;
 	
-	public List<Gossip> FindGossips(String status, String user,Double longitude,Double latitude) {
+	public List<Gossip> FindGossips(String status, String userId, Double longitude,Double latitude) {
 		if (status.equalsIgnoreCase("my")) {
-			return gossipRep.findByUserAndIsDeletedIsFalse(user);
+			return gossipRep.findByUserAndIsDeletedIsFalse(userId);
 		} else {
 			List<Family> geoFamilies = familyRep.findByLocationNearAndIsDeletedIsFalse(new Point(longitude,latitude),new Distance(Double.valueOf(20.0),Metrics.MILES));
 			

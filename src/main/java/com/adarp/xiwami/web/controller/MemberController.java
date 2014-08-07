@@ -2,6 +2,7 @@ package com.adarp.xiwami.web.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,23 +18,37 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.common.io.BaseEncoding;
 import com.google.common.io.Files;
 import com.adarp.xiwami.web.dto.MemberSideload;
+import com.adarp.xiwami.web.dto.MemberSideloadList;
+import com.adarp.xiwami.domain.Family;
 import com.adarp.xiwami.domain.Member;
+import com.adarp.xiwami.service.FamilyService;
 import com.adarp.xiwami.service.MemberService;
 
 @RestController
 public class MemberController {
 	
 	@Autowired
-	private MemberService memberService;		
+	private MemberService memberService;
+	
+	@Autowired
+	private FamilyService familyService;	
 
 	// Get member(s)
+//	@RequestMapping(value = "/members", method = RequestMethod.GET, produces = "application/json")
+//	public Map<String, List<Member>> FindFamilies(	
 	@RequestMapping(value = "/members", method = RequestMethod.GET, produces = "application/json")
-	public Map<String, List<Member>> FindFamilies(
+	public MemberSideloadList FindFamilies(
 			@RequestParam(value="facebookId", required=false) String facebookId,
 			@RequestParam(value="googleplusId", required=false) String googleplusId) {			
-		Map<String, List<Member>> responseBody = new HashMap<String,List<Member>>();
+		//Map<String, List<Member>> responseBody = new HashMap<String,List<Member>>();
 		List<Member> list =  memberService.FindMemberByFacebookId(facebookId);
-		responseBody.put("member", list);
+		Family family = familyService.FindByFamilyId(list.get(0).getFamily());
+		List<Family> flist = new ArrayList<Family>();
+		flist.add(family);
+		
+		MemberSideloadList responseBody = new MemberSideloadList();
+		responseBody.member = list;
+		responseBody.family = flist;
 		return responseBody;
 	}	
 	
