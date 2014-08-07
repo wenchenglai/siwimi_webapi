@@ -1,12 +1,11 @@
 package com.adarp.xiwami.domain;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection="Question")
@@ -21,6 +20,7 @@ public class Question {
 	private List<String> answers = new ArrayList<String>();	
 	
 	//This field is only for front-end purpose
+	@Transient
 	private String status = "Open";
 	
 	//The default of the below field is set by backend
