@@ -6,7 +6,7 @@
   <artifactId>test</artifactId>
   <version>0.0.2</version>
   <inceptionYear>2014</inceptionYear>
-  <packaging>jar</packaging>
+  <packaging>war</packaging>
   <parent>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-parent</artifactId>
