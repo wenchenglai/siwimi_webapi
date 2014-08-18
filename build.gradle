@@ -14,10 +14,12 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
+apply plugin: 'maven'
+apply plugin: 'war'
 
-jar {
-    baseName = 'gs-spring-boot'
-    version =  '0.1.0'
+war {
+    baseName = 'xiwami_rest'
+    version =  '0.0.2'
 }
 
 repositories {
@@ -26,18 +28,33 @@ repositories {
 }
 
 dependencies {
-    compile("org.springframework.boot:spring-boot-starter-web")
-    compile("org.springframework.data:spring-data-mongodb")
-	compile("org.springframework.boot:spring-boot-starter-thymeleaf")
-	compile group: 'com.google.guava', name: 'guava', version: '17.0'
-	//compile group: 'commons-beanutils', name: 'commons-beanutils', version: '1.9.2'
-    // tag::actuator[]
-    //compile("org.springframework.boot:spring-boot-starter-actuator")
-    // end::actuator[]
-    testCompile("junit:junit")
-	compile("javax.mail:mail:1.4.5")
+    compile("org.springframework.boot:spring-boot-starter-web:1.1.5.RELEASE")
+    compile("org.springframework.data:spring-data-mongodb:1.5.2.RELEASE")
+    compile("org.springframework.boot:spring-boot-starter-thymeleaf:1.1.5.RELEASE")
+    compile group: 'com.google.guava', name: 'guava', version: '17.0'
+    testCompile("junit:junit:4.11")
+    compile("javax.mail:mail:1.4.5")
 }
 
 task wrapper(type: Wrapper) {
     gradleVersion = '1.11'
+}
+
+task createPom << {
+    pom {
+        project {
+            groupId 'com.adarp'
+            artifactId 'test'
+            version '0.0.2'
+
+            inceptionYear '2014'
+            licenses {
+                license {
+                    name 'The Apache Software License, Version 2.0'
+                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    distribution 'repo'
+                }
+            }
+        }
+    }.writeTo("pom.xml")
 }
