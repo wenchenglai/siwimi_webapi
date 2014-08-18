@@ -32,7 +32,7 @@ dependencies {
     compile("org.springframework.data:spring-data-mongodb:1.5.2.RELEASE")
     compile("org.springframework.boot:spring-boot-starter-thymeleaf:1.1.5.RELEASE")
     compile group: 'com.google.guava', name: 'guava', version: '17.0'
-    testCompile("junit:junit")
+    testCompile("junit:junit:4.11")
     compile("javax.mail:mail:1.4.5")
 }
 
