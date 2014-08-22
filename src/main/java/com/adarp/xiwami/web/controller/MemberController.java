@@ -1,7 +1,5 @@
 package com.adarp.xiwami.web.controller;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.google.common.io.BaseEncoding;
-import com.google.common.io.Files;
 import com.adarp.xiwami.web.dto.MemberSideload;
 import com.adarp.xiwami.web.dto.MemberSideloadList;
 import com.adarp.xiwami.domain.Family;
@@ -76,30 +72,30 @@ public class MemberController {
 	// Update Member
 	@RequestMapping(value = "/members/{id}", method = RequestMethod.PUT, produces = "application/json")
 	public Map<String, Member> UpdateMember(@PathVariable("id") String id, @RequestBody MemberSideload member) {		
-		String rawImage = member.member.getImageData();
+//		String rawImage = member.member.getImageData();
 		
-		if (rawImage != null) {
-			StringBuilder sb = new StringBuilder();
-			sb.append("src/main/resources/assets/img/");
-			sb.append(id);
-			sb.append(".jpg");
-				
-			File file = new File(sb.toString());
-			file.deleteOnExit();
-				
-			
-			rawImage = rawImage.substring(23);
-				
-			BaseEncoding baseEncoding = BaseEncoding.base64();
-			byte[] bytes = baseEncoding.decode(rawImage);
-				
-			try {
-				Files.write(bytes, file);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}				
-		}
+//		if (rawImage != null) {
+//			StringBuilder sb = new StringBuilder();
+//			sb.append("src/main/resources/assets/img/");
+//			sb.append(id);
+//			sb.append(".jpg");
+//				
+//			File file = new File(sb.toString());
+//			file.deleteOnExit();
+//				
+//			
+//			rawImage = rawImage.substring(23);
+//				
+//			BaseEncoding baseEncoding = BaseEncoding.base64();
+//			byte[] bytes = baseEncoding.decode(rawImage);
+//				
+//			try {
+//				Files.write(bytes, file);
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}				
+//		}
 		
 		Member savedMember = memberService.UpdateMember(id, member.member);
 		Map<String, Member> responseBody = new HashMap<String, Member>();
