@@ -44,8 +44,8 @@ task createPom << {
     pom {
         project {
             groupId 'com.adarp'
-            artifactId 'test'
-            version '0.0.2'
+            artifactId 'xiwamirest'
+            version '0.0.1'
 
             inceptionYear '2014'
             licenses {

@@ -1,4 +1,4 @@
-package com.adarp.xiwami.repository;
+ package com.adarp.xiwami.repository;
 
 import java.util.List;
 
