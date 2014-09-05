@@ -1,5 +1,7 @@
 package com.adarp.xiwami.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,4 +17,8 @@ public class SurveyService {
 	public Survey AddSurvey(Survey newSurvey) {
 		return surveyRep.save(newSurvey);
 	}	
+	
+	public List<Survey> viewSurvey() {
+		return surveyRep.findAll();
+	}
 }
