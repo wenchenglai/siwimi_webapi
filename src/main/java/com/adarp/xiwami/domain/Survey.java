@@ -1,5 +1,7 @@
 package com.adarp.xiwami.domain;
 
+import java.util.List;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -20,7 +22,30 @@ public class Survey {
 	private String a8;
 	private String a9;
 	private String a10;
+	private List<String> a11;
+	private String a12;
+	private String city;
+	private String state;
+	private String country;
 	
+	public String getCity() {
+		return city;
+	}
+	public void setCity(String city) {
+		this.city = city;
+	}
+	public String getState() {
+		return state;
+	}
+	public void setState(String state) {
+		this.state = state;
+	}
+	public String getCountry() {
+		return country;
+	}
+	public void setCountry(String country) {
+		this.country = country;
+	}
 	public String getId() {
 		return id;
 	}
@@ -93,10 +118,10 @@ public class Survey {
 	public void setA10(String a10) {
 		this.a10 = a10;
 	}
-	public String getA11() {
+	public List<String> getA11() {
 		return a11;
 	}
-	public void setA11(String a11) {
+	public void setA11(List<String> a11) {
 		this.a11 = a11;
 	}
 	public String getA12() {
@@ -105,13 +130,4 @@ public class Survey {
 	public void setA12(String a12) {
 		this.a12 = a12;
 	}
-	public String getA13() {
-		return a13;
-	}
-	public void setA13(String a13) {
-		this.a13 = a13;
-	}
-	private String a11;
-	private String a12;
-	private String a13;	
 }
