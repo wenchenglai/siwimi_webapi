@@ -1,7 +1,5 @@
 package com.adarp.xiwami.domain;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
