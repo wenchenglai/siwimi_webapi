@@ -3,26 +3,71 @@
 <head>
     <title>View surveys</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <style>
+		table, th, td {
+    		border: 1px solid black;
+		}    
+    
+    	thead {
+    		background-color: silver;
+    		font-weight: bold;
+    	}
+    
+    	th,td {
+    		padding: 15px;
+		}
+    </style>
 </head>
-<body>   
-	<ul th:each="survey:${surveys}">
-		<li th:text="${survey.email}"></li>
-		<li th:text="${survey.a1}"></li>
-		<li th:text="${survey.a2}"></li>
-		<li th:text="${survey.a3}"></li>
-		<li th:text="${survey.a4}"></li>
-		<li th:text="${survey.a5}"></li>
-		<li th:text="${survey.a6}"></li>
-		<li th:text="${survey.a7}"></li>
-		<li th:text="${survey.a8}"></li>
-		<li th:text="${survey.a9}"></li>
-		<li th:text="${survey.a10}"></li>
-		<li th:text="${survey.a11}"></li>
-		<li th:text="${survey.a12}"></li>
-		<li th:text="${survey.city}"></li>
-		<li th:text="${survey.state}"></li>
-		<li th:text="${survey.country}"></li>
-	</ul>
+<body>
+	<table>
+		<caption>Survey Results</caption>
+		<thead>
+			<tr>
+				<td>Email</td>
+				<td>Q1</td>
+				<td>Q2</td>
+				<td>Q3</td>
+				<td>Q4</td>
+				<td>Q5</td>
+				<td>Q6</td>
+				<td>Q7</td>
+				<td>Q8</td>
+				<td>Q9</td>
+				<td>Q10</td>
+				<td>Q11 (features)</td>
+				<td>Comment</td>
+				<td>City</td>
+				<td>State</td>
+				<td>Country</td>
+				<td>Actions</td>								
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="survey:${surveys}">
+				<td th:text="${survey.email}"></td>
+				<td th:text="${survey.a1}"></td>
+				<td th:text="${survey.a2}"></td>
+				<td th:text="${survey.a3}"></td>
+				<td th:text="${survey.a4}"></td>
+				<td th:text="${survey.a5}"></td>
+				<td th:text="${survey.a6}"></td>
+				<td th:text="${survey.a7}"></td>
+				<td th:text="${survey.a8}"></td>
+				<td th:text="${survey.a9}"></td>
+				<td th:text="${survey.a10}"></td>
+				<td th:text="${survey.a11}"></td>
+				<td th:text="${survey.a12}"></td>
+				<td th:text="${survey.city}"></td>
+				<td th:text="${survey.state}"></td>
+				<td th:text="${survey.country}"></td>
+				<td>
+					<button>Delete</button>
+					<button>Edit</button>
+				</td>				
+			</tr>
+		</tbody>
+	</table>
+
 	<br/>
 </body>
 </html>
