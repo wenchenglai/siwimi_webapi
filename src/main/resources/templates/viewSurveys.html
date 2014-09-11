@@ -61,7 +61,10 @@
 				<td th:text="${survey.state}"></td>
 				<td th:text="${survey.country}"></td>
 				<td>
-					<button>Delete</button>
+					<form th:action="@{/surveys/delete}" th:object="${survey}" method="post">
+            			<input type="hidden" id="id" name="id" th:if="*{id}" th:value="*{id}" />
+            			<button type="submit">Delete</button>
+        			</form>
 					<button>Edit</button>
 				</td>				
 			</tr>

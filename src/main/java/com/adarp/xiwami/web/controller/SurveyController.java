@@ -5,9 +5,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -38,5 +40,12 @@ public class SurveyController {
 		List<Survey> surveys = surveyService.viewSurvey();
 		model.addObject("surveys", surveys);
 		return model;		
+	}
+	
+	// Delete a survey
+	@RequestMapping(value = "/surveys/delete", method = RequestMethod.POST, produces = "application/json")
+	public ModelAndView DeleteSurvey(@RequestParam String id, Model model) {
+		surveyService.DeleteSurvey(id);
+		return new ModelAndView("redirect:/surveys");
 	}
 }

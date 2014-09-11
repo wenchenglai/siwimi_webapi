@@ -21,4 +21,8 @@ public class SurveyService {
 	public List<Survey> viewSurvey() {
 		return surveyRep.findAll();
 	}
+	
+	public void DeleteSurvey(String id) {
+		surveyRep.delete(id);		
+	}
 }
