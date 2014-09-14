@@ -19,6 +19,7 @@ public class Member {
 	private String firstName;
 	private String nickName;
 	private String email;
+	private String password;
 	private Date birthday;
 	private List<String> languages = new ArrayList<String>();
 	private String type;
@@ -73,6 +74,14 @@ public class Member {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}	
 
 	public String getBirthday() {
 		if (this.birthday != null) {
