@@ -38,14 +38,24 @@ public class MemberController {
 			@RequestParam(value="googleplusId", required=false) String googleplusId) {			
 		//Map<String, List<Member>> responseBody = new HashMap<String,List<Member>>();
 		List<Member> list =  memberService.FindMemberByFacebookId(facebookId);
-		Family family = familyService.FindByFamilyId(list.get(0).getFamily());
-		List<Family> flist = new ArrayList<Family>();
-		flist.add(family);
 		
-		MemberSideloadList responseBody = new MemberSideloadList();
-		responseBody.member = list;
-		responseBody.family = flist;
-		return responseBody;
+		if (list.size() > 0) {
+			Family family = familyService.FindByFamilyId(list.get(0).getFamily());
+			List<Family> flist = new ArrayList<Family>();
+			flist.add(family);
+			
+			MemberSideloadList responseBody = new MemberSideloadList();
+			responseBody.member = list;
+			responseBody.family = flist;
+			return responseBody;			
+		} else {
+			MemberSideloadList responseBody = new MemberSideloadList();
+			responseBody.member = new ArrayList<Member>();
+			responseBody.family = null;
+			return responseBody;	
+		}
+		
+
 	}	
 	
 	// Get Member by ID
