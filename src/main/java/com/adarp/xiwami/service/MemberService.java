@@ -19,9 +19,14 @@ public class MemberService {
 	private FamilyRepository familyRep;
 	
 	public Member AddMember(Member newMember){		
-		newMember.setIsDeleted(false);
-		Member member = memberRep.save(newMember);	
-		return member;
+		if (memberRep.findByEmailIgnoreCaseAndIsDeletedIsFalse(newMember.getEmail()).size()>0)
+			// make sure no one uses the same email twice to sign up 
+			return null;
+		else {
+			newMember.setIsDeleted(false);
+			Member member = memberRep.save(newMember);	
+			return member;	
+		}
 	}	
 	
 	public Member UpdateMember(String id, Member updatedMember) {

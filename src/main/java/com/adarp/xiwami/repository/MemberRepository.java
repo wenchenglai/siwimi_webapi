@@ -16,4 +16,6 @@ public interface MemberRepository extends MongoRepository<Member, String>, Membe
 	List<Member> findByFacebookId(String id);
 	List<Member> findByGoogleplusId(String id);
 	List<Member> findByIdIn(List<String> memberId);
+	List<Member> findByEmailIgnoreCaseAndIsDeletedIsFalse(String email);
+	Member findByEmailIgnoreCaseAndPasswordAndIsDeletedIsFalse(String email, String password);
 }

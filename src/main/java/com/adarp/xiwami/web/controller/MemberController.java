@@ -30,13 +30,11 @@ public class MemberController {
 	private FamilyService familyService;	
 
 	// Get member(s)
-//	@RequestMapping(value = "/members", method = RequestMethod.GET, produces = "application/json")
-//	public Map<String, List<Member>> FindFamilies(	
 	@RequestMapping(value = "/members", method = RequestMethod.GET, produces = "application/json")
 	public MemberSideloadList FindFamilies(
 			@RequestParam(value="facebookId", required=false) String facebookId,
 			@RequestParam(value="googleplusId", required=false) String googleplusId) {			
-		//Map<String, List<Member>> responseBody = new HashMap<String,List<Member>>();
+
 		List<Member> list =  memberService.FindMemberByFacebookId(facebookId);
 		
 		if (list.size() > 0) {
@@ -71,10 +69,12 @@ public class MemberController {
 	// Add New Member
 	@RequestMapping(value = "/members", method = RequestMethod.POST, produces = "application/json")
 	public Map<String, Member> AddMember(@RequestBody MemberSideload member) {
-		Member savedMember = memberService.AddMember(member.member);	
-		
+		Member savedMember = memberService.AddMember(member.member);			
 		Map<String, Member> responseBody = new HashMap<String, Member>();
-		responseBody.put("member", savedMember);
+		if (savedMember == null)
+			responseBody.put("error: duplicate email", savedMember);
+		else
+			responseBody.put("member", savedMember);
 		
 		return responseBody;
 	}	
@@ -82,30 +82,6 @@ public class MemberController {
 	// Update Member
 	@RequestMapping(value = "/members/{id}", method = RequestMethod.PUT, produces = "application/json")
 	public Map<String, Member> UpdateMember(@PathVariable("id") String id, @RequestBody MemberSideload member) {		
-//		String rawImage = member.member.getImageData();
-		
-//		if (rawImage != null) {
-//			StringBuilder sb = new StringBuilder();
-//			sb.append("src/main/resources/assets/img/");
-//			sb.append(id);
-//			sb.append(".jpg");
-//				
-//			File file = new File(sb.toString());
-//			file.deleteOnExit();
-//				
-//			
-//			rawImage = rawImage.substring(23);
-//				
-//			BaseEncoding baseEncoding = BaseEncoding.base64();
-//			byte[] bytes = baseEncoding.decode(rawImage);
-//				
-//			try {
-//				Files.write(bytes, file);
-//			} catch (IOException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}				
-//		}
 		
 		Member savedMember = memberService.UpdateMember(id, member.member);
 		Map<String, Member> responseBody = new HashMap<String, Member>();
