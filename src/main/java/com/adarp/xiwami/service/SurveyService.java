@@ -14,7 +14,7 @@ public class SurveyService {
 	@Autowired
 	SurveyRepository surveyRep;
 	
-	public Survey AddSurvey(Survey newSurvey) {
+	public Survey addSurvey(Survey newSurvey) {
 		return surveyRep.save(newSurvey);
 	}	
 	
@@ -22,7 +22,11 @@ public class SurveyService {
 		return surveyRep.findAll();
 	}
 	
-	public void DeleteSurvey(String id) {
+	public void deleteSurvey(String id) {
 		surveyRep.delete(id);		
+	}
+	
+	public void updateServey(Survey updatedSurvey) {
+		surveyRep.save(updatedSurvey);
 	}
 }

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,7 +26,7 @@ public class SurveyController {
 	// Add New Survey
 	@RequestMapping(value = "/surveys", method = RequestMethod.POST, produces = "application/json")
 	public Map<String, Survey> AddSurvey(@RequestBody Survey newSurvey) {
-		Survey savedSurvey = surveyService.AddSurvey(newSurvey);
+		Survey savedSurvey = surveyService.addSurvey(newSurvey);
 		
 		Map<String, Survey> responseBody = new HashMap<String, Survey>();
 		responseBody.put("survey", savedSurvey);
@@ -45,7 +46,14 @@ public class SurveyController {
 	// Delete a survey
 	@RequestMapping(value = "/surveys/delete", method = RequestMethod.POST, produces = "application/json")
 	public ModelAndView DeleteSurvey(@RequestParam String id, Model model) {
-		surveyService.DeleteSurvey(id);
+		surveyService.deleteSurvey(id);
+		return new ModelAndView("redirect:/surveys");
+	}
+	
+	// Update a survey
+	@RequestMapping(value = "/surveys/update", method = RequestMethod.POST, produces = "application/json")
+	public ModelAndView UpdateSurvey(@ModelAttribute(value="survey") Survey updatedSurvey) {		
+		surveyService.updateServey(updatedSurvey);
 		return new ModelAndView("redirect:/surveys");
 	}
 }

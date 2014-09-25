@@ -44,28 +44,47 @@
 		</thead>
 		<tbody>
 			<tr th:each="survey:${surveys}">
-				<td th:text="${survey.email}"></td>
-				<td th:text="${survey.a1}"></td>
-				<td th:text="${survey.a2}"></td>
-				<td th:text="${survey.a3}"></td>
-				<td th:text="${survey.a4}"></td>
-				<td th:text="${survey.a5}"></td>
-				<td th:text="${survey.a6}"></td>
-				<td th:text="${survey.a7}"></td>
-				<td th:text="${survey.a8}"></td>
-				<td th:text="${survey.a9}"></td>
-				<td th:text="${survey.a10}"></td>
-				<td th:text="${survey.a11}"></td>
-				<td th:text="${survey.a12}"></td>
-				<td th:text="${survey.city}"></td>
-				<td th:text="${survey.state}"></td>
-				<td th:text="${survey.country}"></td>
+				<td> <input type="text" size="15" id="email" name="email" th:value="${survey.email}"/> </td>
+				<td> <input type="text" size="7" id="a1" name="a1" th:value="${survey.a1}"/> </td>
+				<td> <input type="text" size="7" id="a2" name="a2" th:value="${survey.a2}"/> </td>
+				<td> <input type="text" size="7" id="a3" name="a3" th:value="${survey.a3}"/> </td>
+				<td> <input type="text" size="7" id="a4" name="a4" th:value="${survey.a4}"/> </td>
+				<td> <input type="text" size="7" id="a5" name="a5" th:value="${survey.a5}"/> </td>
+				<td> <input type="text" size="7" id="a6" name="a6" th:value="${survey.a6}"/> </td>
+				<td> <input type="text" size="7" id="a7" name="a7" th:value="${survey.a7}"/> </td>
+				<td> <input type="text" size="7" id="a8" name="a8" th:value="${survey.a8}"/> </td>
+				<td> <input type="text" size="7" id="a9" name="a9" th:value="${survey.a9}"/> </td>
+				<td> <input type="text" size="7" id="a10" name="a10" th:value="${survey.a10}"/> </td>
+				<td> <input type="text" size="7" id="a11" name="a11" th:value="${survey.a11}"/> </td>
+				<td> <input type="text" size="7" id="a12" name="a12" th:value="${survey.a12}"/> </td>
+				<td> <input type="text" size="7" id="city" name="city" th:value="${survey.city}"/> </td>
+				<td> <input type="text" size="7" id="state" name="state" th:value="${survey.state}"/> </td>
+				<td> <input type="text" size="7" id="country" name="country" th:value="${survey.country}"/> </td>
 				<td>
 					<form th:action="@{/surveys/delete}" th:object="${survey}" method="post">
             			<input type="hidden" id="id" name="id" th:if="*{id}" th:value="*{id}" />
             			<button type="submit">Delete</button>
         			</form>
-					<button>Edit</button>
+        			<form action="#" th:action="@{/surveys/update}" method="post">
+            			<input type="hidden" id="id" name="id" th:value="*{survey.id}" />
+            			<input type="hidden" id="email" name="email" th:value="*{survey.email}" />
+                      	<input type="hidden" id="a1" name="a1" th:value="*{survey.a1}" />  	
+            			<input type="hidden" id="a2" name="a2" th:value="*{survey.a2}" />
+                      	<input type="hidden" id="a3" name="a3" th:value="*{survey.a3}" /> 
+            			<input type="hidden" id="a4" name="a4" th:value="*{survey.a4}" />
+                      	<input type="hidden" id="a5" name="a5" th:value="*{survey.a5}" /> 
+            			<input type="hidden" id="a6" name="a6" th:value="*{survey.a6}" />
+                      	<input type="hidden" id="a7" name="a7" th:value="*{survey.a7}" /> 
+            			<input type="hidden" id="a8" name="a8" th:value="*{survey.a8}" />
+                      	<input type="hidden" id="a9" name="a9" th:value="*{survey.a9}" /> 
+            			<input type="hidden" id="a10" name="a10" th:value="*{survey.a10}" />
+                      	<input type="hidden" id="a11" name="a11" th:value="*{survey.a11}" /> 
+            			<input type="hidden" id="a12" name="a12" th:value="*{survey.a12}" />
+                      	<input type="hidden" id="city" name="city" th:value="*{survey.city}" />
+            			<input type="hidden" id="state" name="state" th:value="*{survey.state}" />
+                      	<input type="hidden" id="country" name="country" th:value="*{survey.country}" />                       	                      	                       	                      	                      	                      	                      	                      			
+            			<button type="submit">Edit</button>
+        			</form>
 				</td>				
 			</tr>
 		</tbody>
