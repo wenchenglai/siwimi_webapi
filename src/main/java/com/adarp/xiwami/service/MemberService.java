@@ -27,7 +27,14 @@ public class MemberService {
 			Member member = memberRep.save(newMember);	
 			return member;	
 		}
-	}	
+	}
+	
+	public Member AddMemberByFacebookId(Member newMember){
+		// TODO: Must check if facebookId exist or not
+		newMember.setIsDeleted(false);
+		Member member = memberRep.save(newMember);	
+		return member;	
+	}
 	
 	public Member UpdateMember(String id, Member updatedMember) {
 		updatedMember.setId(id);	

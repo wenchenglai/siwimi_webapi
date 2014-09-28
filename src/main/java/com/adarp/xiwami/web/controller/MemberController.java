@@ -29,9 +29,39 @@ public class MemberController {
 	@Autowired
 	private FamilyService familyService;	
 
-	// Get member(s)
+//	// Get member by facebookId or googleplusId - used when users login using third-party authentication system
+//	// OUTPUT: Must contain { members: [ list of member object] }
+//	@RequestMapping(value = "/members", method = RequestMethod.GET, produces = "application/json")
+//	public MemberSideloadList FindFamilies(
+//			@RequestParam(value="facebookId", required=false) String facebookId,
+//			@RequestParam(value="googleplusId", required=false) String googleplusId) {			
+//
+//		List<Member> list =  memberService.FindMemberByFacebookId(facebookId);
+//		
+//		if (list.size() > 0) {
+//			Family family = familyService.FindByFamilyId(list.get(0).getFamily());
+//			List<Family> flist = new ArrayList<Family>();
+//			flist.add(family);
+//			
+//			MemberSideloadList responseBody = new MemberSideloadList();
+//			responseBody.members = list;
+//			responseBody.families = flist;
+//			return responseBody;			
+//		} else {
+//			MemberSideloadList responseBody = new MemberSideloadList();
+//			responseBody.members = new ArrayList<Member>();
+//			responseBody.families = null;
+//			return responseBody;	
+//		}
+//		
+//
+//	}	
+	
+	// Possible scenarios:
+	// Scenario #1: Get member by facebookId or googleplusId - used when users login using third-party authentication system
+	// OUTPUT: Must contain { members: [ list of member object] }
 	@RequestMapping(value = "/members", method = RequestMethod.GET, produces = "application/json")
-	public MemberSideloadList FindFamilies(
+	public Map<String, List<Member>> FindFamilies(
 			@RequestParam(value="facebookId", required=false) String facebookId,
 			@RequestParam(value="googleplusId", required=false) String googleplusId) {			
 
@@ -42,19 +72,17 @@ public class MemberController {
 			List<Family> flist = new ArrayList<Family>();
 			flist.add(family);
 			
-			MemberSideloadList responseBody = new MemberSideloadList();
-			responseBody.member = list;
-			responseBody.family = flist;
+			Map<String, List<Member>> responseBody = new HashMap<String, List<Member>>();
+			responseBody.put("members", list);
 			return responseBody;			
 		} else {
-			MemberSideloadList responseBody = new MemberSideloadList();
-			responseBody.member = new ArrayList<Member>();
-			responseBody.family = null;
+			Map<String, List<Member>> responseBody = new HashMap<String, List<Member>>();
+			responseBody.put("members", list);
 			return responseBody;	
 		}
 		
 
-	}	
+	}		
 	
 	// Get Member by ID
 	@RequestMapping(value = "/members/{id}", method = RequestMethod.GET, produces = "application/json")
@@ -67,12 +95,25 @@ public class MemberController {
 	}	
 	
 	// Add New Member
+	// Possible scenarios:
+	// 1. Users register using email and password (input parameter member will contain ONLY email and password).
+	//    - must check if there is duplicate email exist before saving to database
+	// 2. Users register using facebook (input parameter member contains facebookId and some other additional field.  
+	//    - must check if the facebookId is duplicated or not, before saving it to the DB
+	//    - NO password is needed because facebook controls it
+	//
+	// OUTPUT: must be { member: null } OR { member: { member object }}
 	@RequestMapping(value = "/members", method = RequestMethod.POST, produces = "application/json")
 	public Map<String, Member> AddMember(@RequestBody MemberSideload member) {
-		Member savedMember = memberService.AddMember(member.member);			
+		Member savedMember = null;
+		if (member.member.getEmail() != null)
+			savedMember = memberService.AddMember(member.member);
+		else if (member.member.getFacebookId() != null)
+			savedMember = memberService.AddMemberByFacebookId(member.member);
+		
 		Map<String, Member> responseBody = new HashMap<String, Member>();
 		if (savedMember == null)
-			responseBody.put("error: duplicate email", savedMember);
+			responseBody.put("error: duplicate email or facebookId", savedMember);
 		else
 			responseBody.put("member", savedMember);
 		
