@@ -1,8 +1,8 @@
 package com.adarp.xiwami.web.controller;
 
-import java.util.ArrayList;
+//import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+//import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.adarp.xiwami.web.dto.MemberSideload;
-import com.adarp.xiwami.web.dto.MemberSideloadList;
-import com.adarp.xiwami.domain.Family;
+//import com.adarp.xiwami.web.dto.MemberSideloadList;
+//import com.adarp.xiwami.domain.Family;
 import com.adarp.xiwami.domain.Member;
 import com.adarp.xiwami.service.FamilyService;
 import com.adarp.xiwami.service.MemberService;
@@ -61,26 +61,29 @@ public class MemberController {
 	// Scenario #1: Get member by facebookId or googleplusId - used when users login using third-party authentication system
 	// OUTPUT: Must contain { members: [ list of member object] }
 	@RequestMapping(value = "/members", method = RequestMethod.GET, produces = "application/json")
-	public Map<String, List<Member>> FindFamilies(
+	public Map<String, Member> FindFacebookMembers(
 			@RequestParam(value="facebookId", required=false) String facebookId,
 			@RequestParam(value="googleplusId", required=false) String googleplusId) {			
 
-		List<Member> list =  memberService.FindMemberByFacebookId(facebookId);
-		
-		if (list.size() > 0) {
-			Family family = familyService.FindByFamilyId(list.get(0).getFamily());
-			List<Family> flist = new ArrayList<Family>();
-			flist.add(family);
+		Member facebookMember =  memberService.FindMemberByFacebookId(facebookId);
+		Map<String, Member> responseBody = new HashMap<String, Member>();
+		responseBody.put("members", facebookMember);
+		return responseBody;
+		/*
+		if (facebookMember!= null) {
+			//Family family = familyService.FindByFamilyId(list.get(0).getFamily());
+			//List<Family> flist = new ArrayList<Family>();
+			//flist.add(family);
 			
 			Map<String, List<Member>> responseBody = new HashMap<String, List<Member>>();
-			responseBody.put("members", list);
+			responseBody.put("members", facebookMember);
 			return responseBody;			
 		} else {
 			Map<String, List<Member>> responseBody = new HashMap<String, List<Member>>();
-			responseBody.put("members", list);
+			responseBody.put("members", facebookMember);
 			return responseBody;	
 		}
-		
+		*/
 
 	}		
 	
@@ -88,6 +91,10 @@ public class MemberController {
 	@RequestMapping(value = "/members/{id}", method = RequestMethod.GET, produces = "application/json")
 	public Map<String, Member> FindByMemberId(@PathVariable("id") String id) {
 		Member member = memberService.FindByMemberId(id);
+		if (member == null) {
+			member = memberService.FindMemberByFacebookId(id);
+		}
+		
 		Map<String, Member> responseBody = new HashMap<String, Member>();
 		responseBody.put("member", member);
 		

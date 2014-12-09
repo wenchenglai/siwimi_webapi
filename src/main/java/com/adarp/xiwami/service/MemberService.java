@@ -58,11 +58,11 @@ public class MemberService {
 		return memberRep.findOne(id);
 	}	
 	
-	public List<Member> FindMemberByFacebookId(String id) {
+	public Member FindMemberByFacebookId(String id) {
 		return memberRep.findByFacebookId(id);
 	}
 	
-	public List<Member> FindMemberByGoogleplusId(String id) {
+	public Member FindMemberByGoogleplusId(String id) {
 		return memberRep.findByGoogleplusId(id);
 	}
 }
