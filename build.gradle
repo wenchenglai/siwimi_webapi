@@ -4,7 +4,7 @@ buildscript {
 	}
 	repositories {
 		// NOTE: You should declare only repositories that you need here
-		mavenLocal()
+		//mavenLocal()
 		mavenCentral()
 		maven { url "http://repo.spring.io/release" }
 		maven { url "http://repo.spring.io/milestone" }
@@ -22,13 +22,15 @@ apply plugin: 'spring-boot'
 apply plugin: 'maven'
 apply plugin: 'war'
 
+sourceSets.test.java.srcDirs = ["src/test"]
+
 war {
     baseName = 'xiwami_rest'
     version =  '0.0.2'
 }
 
 repositories {
-	mavenLocal()
+	//mavenLocal()
 	mavenCentral()
 	maven { url "http://repo.spring.io/release" }
 	maven { url "http://repo.spring.io/milestone" }
