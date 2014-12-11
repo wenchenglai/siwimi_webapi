@@ -1,5 +1,6 @@
 package com.adarp.xiwami.web.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,8 +33,15 @@ public class ActivityController {
 			@RequestParam(value="distance", required=false) String qsDistance, 
 			@RequestParam(value="queryText", required=false) String queryText) {
 		Map<String,List<Activity>> responseBody = new HashMap<String,List<Activity>>();
-		List<Activity> list = activityService.FindActivities(creatorId,status,longitude,latitude,qsDistance,queryText);
-		responseBody.put("activity", list);
+		
+		List<Activity> list = null;
+		try {
+			list = activityService.FindActivities(creatorId,status,longitude,latitude,qsDistance,queryText);
+		} catch (Exception err) {
+			// we must return an empty array so Ember can pick up the json data format.  Return null will crash the ember client.
+			list = new ArrayList<Activity>();
+		}
+		responseBody.put("activities", list);
 		return responseBody;
 	}
 
