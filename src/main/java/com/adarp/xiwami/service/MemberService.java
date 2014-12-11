@@ -18,8 +18,9 @@ public class MemberService {
 	@Autowired
 	private FamilyRepository familyRep;
 	
-	public Member AddMember(Member newMember){		
-		if (memberRep.findByEmailIgnoreCaseAndIsDeletedIsFalse(newMember.getEmail()).size()>0)
+	public Member AddMember(Member newMember){
+		// 2014-12-11 A scenario would be that a new member is added by another user, so there is no email, no facebookId 
+		if (newMember.getEmail() != null && memberRep.findByEmailIgnoreCaseAndIsDeletedIsFalse(newMember.getEmail()).size()>0)
 			// make sure no one uses the same email twice to sign up 
 			return null;
 		else {

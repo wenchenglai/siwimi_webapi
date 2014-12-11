@@ -67,7 +67,7 @@ public class MemberController {
 
 		Member facebookMember =  memberService.FindMemberByFacebookId(facebookId);
 		Map<String, Member> responseBody = new HashMap<String, Member>();
-		responseBody.put("members", facebookMember);
+		responseBody.put("member", facebookMember);
 		return responseBody;
 		/*
 		if (facebookMember!= null) {
@@ -93,6 +93,7 @@ public class MemberController {
 		Member member = memberService.FindByMemberId(id);
 		if (member == null) {
 			member = memberService.FindMemberByFacebookId(id);
+			
 		}
 		
 		Map<String, Member> responseBody = new HashMap<String, Member>();
@@ -108,15 +109,18 @@ public class MemberController {
 	// 2. Users register using facebook (input parameter member contains facebookId and some other additional field.  
 	//    - must check if the facebookId is duplicated or not, before saving it to the DB
 	//    - NO password is needed because facebook controls it
-	//
+	// 3. User create an additional family member.  In this case, facebookId and email will be null, because it's not a user of this app, it's a member of a family
 	// OUTPUT: must be { member: null } OR { member: { member object }}
 	@RequestMapping(value = "/members", method = RequestMethod.POST, produces = "application/json")
 	public Map<String, Member> AddMember(@RequestBody MemberSideload member) {
 		Member savedMember = null;
-		if (member.member.getEmail() != null)
-			savedMember = memberService.AddMember(member.member);
-		else if (member.member.getFacebookId() != null)
+		
+		if (member.member.getFacebookId() != null)
 			savedMember = memberService.AddMemberByFacebookId(member.member);
+		else if (member.member.getEmail() != null)
+			savedMember = memberService.AddMember(member.member);
+		else
+			savedMember = memberService.AddMember(member.member);	
 		
 		Map<String, Member> responseBody = new HashMap<String, Member>();
 		if (savedMember == null)
