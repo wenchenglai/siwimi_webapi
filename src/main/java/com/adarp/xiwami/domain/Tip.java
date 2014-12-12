@@ -8,7 +8,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "Gossip")
-public class Gossip {
+public class Tip {
 
 	@Id
 	private String id;

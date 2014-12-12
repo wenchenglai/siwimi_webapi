@@ -10,17 +10,17 @@ import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Service;
 
 import com.adarp.xiwami.domain.Family;
-import com.adarp.xiwami.domain.Gossip;
+import com.adarp.xiwami.domain.Tip;
 import com.adarp.xiwami.domain.Member;
 import com.adarp.xiwami.repository.FamilyRepository;
-import com.adarp.xiwami.repository.GossipRepository;
+import com.adarp.xiwami.repository.TipRepository;
 import com.adarp.xiwami.repository.MemberRepository;
 
 @Service
-public class GossipService {
+public class TipService {
 
 	@Autowired
-	GossipRepository gossipRep;
+	TipRepository tipRep;
 	
 	@Autowired
 	private FamilyRepository familyRep;
@@ -28,9 +28,9 @@ public class GossipService {
 	@Autowired
 	private MemberRepository memberRep;
 	
-	public List<Gossip> FindGossips(String status, String userId, Double longitude,Double latitude) {
+	public List<Tip> FindGossips(String status, String userId, Double longitude,Double latitude) {
 		if (status.equalsIgnoreCase("my")) {
-			return gossipRep.findByUserAndIsDeletedIsFalse(userId);
+			return tipRep.findByUserAndIsDeletedIsFalse(userId);
 		} else {
 			List<Family> geoFamilies = familyRep.findByLocationNearAndIsDeletedIsFalse(new Point(longitude,latitude),new Distance(Double.valueOf(20.0),Metrics.MILES));
 			
@@ -47,7 +47,7 @@ public class GossipService {
 				geoMemberId.add(member.getId());
 			}
 			
-			return gossipRep.findByUserInAndIsDeletedIsFalse(geoMemberId);
+			return tipRep.findByUserInAndIsDeletedIsFalse(geoMemberId);
 						
 		}
 	}

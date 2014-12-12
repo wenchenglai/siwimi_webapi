@@ -10,25 +10,25 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.adarp.xiwami.domain.Gossip;
-import com.adarp.xiwami.service.GossipService;
+import com.adarp.xiwami.domain.Tip;
+import com.adarp.xiwami.service.TipService;
 
 @RestController
-public class GossipController {
+public class TipController {
 
 	@Autowired
-	private GossipService gossipService;
+	private TipService tipService;
 	
-	// Get all gossips
-	@RequestMapping(value = "/gossips", method = RequestMethod.GET, produces = "application/json")
-	public Map<String,List<Gossip>> FindGossips(
+	// Get all tips
+	@RequestMapping(value = "/tips", method = RequestMethod.GET, produces = "application/json")
+	public Map<String,List<Tip>> FindGossips(
 			@RequestParam(value="status", required=false) String status,	
 			@RequestParam(value="userId", required=false) String user,
 			@RequestParam(value="longitude", required=false) Double longitude,
 			@RequestParam(value="latitude", required=false) Double latitude) {
-		Map<String,List<Gossip>> responseBody = new HashMap<String,List<Gossip>>();
-		List<Gossip> list = gossipService.FindGossips(status,user,longitude,latitude);
-		responseBody.put("gossip", list);
+		Map<String,List<Tip>> responseBody = new HashMap<String,List<Tip>>();
+		List<Tip> list = tipService.FindGossips(status,user,longitude,latitude);
+		responseBody.put("tip", list);
 		return responseBody;
 	}
 	
