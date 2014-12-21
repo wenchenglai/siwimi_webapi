@@ -1,20 +1,14 @@
 package com.adarp.xiwami.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.geo.Distance;
-import org.springframework.data.geo.Metrics;
-import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Service;
 
 import com.adarp.xiwami.domain.Activity;
-import com.adarp.xiwami.domain.Family;
-import com.adarp.xiwami.domain.Member;
+import com.adarp.xiwami.domain.ZipCode;
 import com.adarp.xiwami.repository.ActivityRepository;
-import com.adarp.xiwami.repository.FamilyRepository;
-import com.adarp.xiwami.repository.MemberRepository;
+import com.adarp.xiwami.repository.ZipCodeRepository;
 
 @Service
 public class ActivityService {
@@ -22,41 +16,17 @@ public class ActivityService {
 	@Autowired
 	ActivityRepository activityRep;
 	
-	@Autowired
-	private FamilyRepository familyRep;
+	//@Autowired
+	//private FamilyRepository familyRep;
+	
+	//@Autowired
+	//private MemberRepository memberRep;
 	
 	@Autowired
-	private MemberRepository memberRep;
+	private ZipCodeRepository zipCodeRep;
 	
-	public List<Activity> FindActivities(String creatorId,String status,Double longitude,Double latitude,String qsDistance,String queryText) {
-		if ((creatorId!=null) && (status!=null)) {
-			return activityRep.findByCreatorAndStatusAndIsDeletedIsFalse(creatorId, status);
-		}
-		else {
-			// Geo search in family collection				
-			String [] parts = qsDistance.split(" ");
-			Distance distance;
-			if (parts[1].toLowerCase().contains("mile"))
-				distance = new Distance(Double.parseDouble(parts[0]),Metrics.MILES);
-			else
-				distance = new Distance(Double.parseDouble(parts[0]),Metrics.KILOMETERS);			
-			List<Family> geoFamilies = familyRep.findByLocationNearAndIsDeletedIsFalse(new Point(longitude,latitude),distance);
-			
-			// Retrieve the id of geoFamilies
-			List<String> geoFamilyId = new ArrayList<String>();
-			for (Family family : geoFamilies) {
-				geoFamilyId.add(family.getId());
-			}
-			
-			// Retrieve id of the geoMembers
-			List<Member> geoMembers = memberRep.findByFamilyInAndIsDeletedIsFalse(geoFamilyId);
-			List<String> geoMemberId = new ArrayList<String>();
-			for (Member member : geoMembers) {
-				geoMemberId.add(member.getId());
-			}	
-			
-			return activityRep.findByCreatorInAndTypeDescriptionLikeIgnoreCaseAndIsDeletedIsFalse(geoMemberId, queryText);			
-		}
+	public List<Activity> FindActivities(String creatorId,String status,Double longitude,Double latitude,String qsDistance,String queryText) {											
+		return activityRep.queryActivity(creatorId, status, longitude, latitude, qsDistance, queryText);
 	}
 	
 	public Activity FindByActivityId(String id){
@@ -64,8 +34,49 @@ public class ActivityService {
 	}
 	
 	public Activity AddActivity(Activity newActivity) {
+		
+		// lookup zipcode from the collection ZipCode;
+		ZipCode thisZipCode = new ZipCode();
+		
+		// if the zipCode is not provided by the user
+		if (newActivity.getZipCode()==null) {				
+			if (newActivity.getCityState()==null){
+				// if both zipcode and cityState are not completed, set default to 48105
+				thisZipCode = zipCodeRep.findByzipCode(48105);
+			} else {
+				String [] parts = newActivity.getCityState().split(",");
+				//String city = parts[0].replaceAll("\\s+", "");
+				//String stateCode = parts[1].replaceAll("\\s+", "");	
+				String city = parts[0].trim();
+				String stateCode = parts[1].trim();	
+				thisZipCode = zipCodeRep.findByTownshipLikeIgnoreCaseAndStateCodeLikeIgnoreCase(city, stateCode);				
+			}						
+		} else {
+			// if the zipCode is provided by the user:
+			// (1) ignore stateCity provided by the user, 
+			// (2) lookup zipcode from the collection ZipCode
+			// (3) please note that the type of zipcode is "int" in the mongoDB collection
+			thisZipCode = zipCodeRep.findByzipCode(Integer.parseInt(newActivity.getZipCode()));			
+		}
+		
+		// set longitude and latitude of the family object 
+		double[] location = {thisZipCode.getLongitude(), thisZipCode.getLatitude()};
+		newActivity.setZipCode(thisZipCode.getZipCode());
+		newActivity.setLocation(location);
+		newActivity.setCityState(thisZipCode.getTownship()+", "+thisZipCode.getStateCode());				
+		
 		newActivity.setIsDeleted(false);
-		return activityRep.save(newActivity);
+		
+		// fromTime must be ealier than toTime
+		if (newActivity.getFromTime().compareTo(newActivity.getToTime())>0) {
+			// if fromTime is after toTime --> fromTime = toTime
+			newActivity.setToTime(newActivity.getFromTime());
+		}
+		
+		// We cannot use activityRep.save()
+		// Because Spring repository does not provide geospatial indexing : db.location.ensureIndex( {location: "2d"} )
+		//return activityRep.save(newActivity);
+		return activityRep.saveActivity(newActivity);
 	}
 	
 	public Activity UpdateActivity(String id, Activity updatedActivity) {

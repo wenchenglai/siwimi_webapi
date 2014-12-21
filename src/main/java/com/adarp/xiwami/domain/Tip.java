@@ -1,23 +1,25 @@
 package com.adarp.xiwami.domain;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "Gossip")
+@Document(collection = "Tip")
 public class Tip {
 
 	@Id
 	private String id;
 
-	private String user;
-	private String gossipText;
+	private String creator;
+	private String title;
+	private String description;
+	private String url;
 	private Date createdDate;
-	private List<String> answers = new ArrayList<String>();
-
+	private Date expiredDate;
+	private int like;
+	private String type;
+	
 	// The default of the below field is set by backend
 	private Boolean isDeleted;
 
@@ -29,20 +31,60 @@ public class Tip {
 		this.id = id;
 	}
 
-	public String getUser() {
-		return user;
+	public String getCreator() {
+		return creator;
 	}
 
-	public void setUser(String user) {
-		this.user = user;
+	public void setCreator(String creator) {
+		this.creator = creator;
 	}
 
-	public String getGossipText() {
-		return gossipText;
+	public String getTitle() {
+		return title;
 	}
 
-	public void setGossipText(String gossipText) {
-		this.gossipText = gossipText;
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	public Date getExpiredDate() {
+		return expiredDate;
+	}
+
+	public void setExpiredDate(Date expiredDate) {
+		this.expiredDate = expiredDate;
+	}
+
+	public int getLike() {
+		return like;
+	}
+
+	public void setLike(int like) {
+		this.like = like;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	public Date getCreatedDate() {
@@ -53,13 +95,7 @@ public class Tip {
 		this.createdDate = createdDate;
 	}
 
-	public List<String> getAnswers() {
-		return answers;
-	}
 
-	public void setAnswers(List<String> answers) {
-		this.answers = answers;
-	}
 
 	public Boolean getIsDeleted() {
 		return isDeleted;
