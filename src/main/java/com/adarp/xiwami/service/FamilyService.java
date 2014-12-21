@@ -112,9 +112,11 @@ public class FamilyService {
 				thisZipCode = zipCodeRep.findByzipCode(48105);
 			} else {
 				String [] parts = newFamily.getCityState().split(",");
-				String city = parts[0].replaceAll("\\s+", "");
-				String stateCode = parts[1].replaceAll("\\s+", "");	
-				thisZipCode = zipCodeRep.findByTownshipAndStateCode(city, stateCode);				
+				//String city = parts[0].replaceAll("\\s+", "");
+				//String stateCode = parts[1].replaceAll("\\s+", "");
+				String city = parts[0].trim();
+				String stateCode = parts[1].trim();	
+				thisZipCode = zipCodeRep.findByTownshipLikeIgnoreCaseAndStateCodeLikeIgnoreCase(city, stateCode);				
 			}						
 		} else {
 			// if the zipCode is provided by the user:

@@ -17,7 +17,8 @@ public class Activity {
 	private String description;
 	private Date fromTime;
 	private Date toTime;
-	private String location;
+	private String cityState;
+	private String zipCode;
 	private String url;
 	private String imageData;
 	private String imageUrl;
@@ -29,6 +30,7 @@ public class Activity {
 	
 	//The default of the below field is set by backend
 	private Boolean isDeleted;
+	private double[] location;
 	
 	public Activity() {
 
@@ -41,7 +43,6 @@ public class Activity {
 				this.status = "Upcoming";							
 		} 
 	}
-
 	
 	public String getTitle() {
 		return title;
@@ -115,10 +116,7 @@ public class Activity {
 //		}
 //	}
 
-	public String getLocation() {
-		return location;
-	}
-	
+
 	public Date getFromTime() {
 		return fromTime;
 	}
@@ -141,10 +139,6 @@ public class Activity {
 
 	public void setImageData(String imageData) {
 		this.imageData = imageData;
-	}
-
-	public void setLocation(String location) {
-		this.location = location;
 	}
 
 	public String getImageUrl() {
@@ -201,5 +195,32 @@ public class Activity {
 
 	public void setType(String type) {
 		this.type = type;
-	}	
+	}
+
+	public String getCityState() {
+		return cityState;
+	}
+
+	public void setCityState(String cityState) {
+		this.cityState = cityState;
+	}
+
+	public double[] getLocation() {
+		return location;
+	}
+
+	public void setLocation(double[] location) {
+		this.location = location;
+	}
+
+	public String getZipCode() {
+		return zipCode;
+	}
+
+	public void setZipCode(String zipCode) {
+		if (Integer.parseInt(zipCode)<10000)
+			zipCode = "0"+zipCode;
+		this.zipCode = zipCode;
+	}
+	
 }
