@@ -62,8 +62,8 @@ public class MemberController {
 	// OUTPUT: Must contain { members: [ list of member object] }
 	@RequestMapping(value = "/members", method = RequestMethod.GET, produces = "application/json")
 	public Map<String, Member> FindFacebookMembers(
-			@RequestParam(value="facebookId", required=false) String facebookId,
-			@RequestParam(value="googleplusId", required=false) String googleplusId) {			
+			@RequestParam(value="facebookId", required=false) String facebookId) {
+			//@RequestParam(value="googleplusId", required=false) String googleplusId) {			
 
 		Member facebookMember =  memberService.FindMemberByFacebookId(facebookId);
 		Map<String, Member> responseBody = new HashMap<String, Member>();
@@ -96,7 +96,7 @@ public class MemberController {
 			
 		}
 		
-		Map<String, Member> responseBody = new HashMap<String, Member>();
+		Map<String, Member> responseBody = new HashMap<String, Member>();		
 		responseBody.put("member", member);
 		
 		return responseBody;

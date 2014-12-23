@@ -67,10 +67,10 @@ public class ItemService {
 		itemRep.save(newItem);
 		
 		//update items for the member
-		Member member = memberRep.findOne(newItem.getSeller());
-		List<String> memberItem = member.getItems();
-		memberItem.add(newItem.getId());
-		memberRep.save(member);
+//		Member member = memberRep.findOne(newItem.getSeller());
+//		List<String> memberItem = member.getItems();
+//		memberItem.add(newItem.getId());
+//		memberRep.save(member);
 		
 		return newItem;
 	}

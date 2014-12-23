@@ -25,12 +25,19 @@ public class Member {
 	private String type;
 	private String gender;
 	private String avatarUrl;
+	private String largePicture;
+	private String smallPicture;
+	private String family;	
 	private boolean isUser;
 	private String facebookId;
-	private String googleplusId;
-	private List<String> items = new ArrayList<String>();
-	private String family;
-	private String imageData;
+//	private List<String> feducation;
+	private String fhometown;
+	private String flink;
+	private String flocale;
+	private String flocation;
+	private int ftimezone;
+	
+//	private List<String> items = new ArrayList<String>();
 	
 	//The default of the below field is set by backend
 	private boolean isDeleted;
@@ -154,15 +161,7 @@ public class Member {
 
 	public void setFacebookId(String facebookId) {
 		this.facebookId = facebookId;
-	}
-	
-	public String getGoogleplusId() {
-		return googleplusId;
-	}
-
-	public void setGoogleplusId(String googleplusId) {
-		this.googleplusId = googleplusId;
-	}		
+	}	
 	
 	public String getFamily() {
 		return family;
@@ -170,14 +169,70 @@ public class Member {
 
 	public void setFamily(String familyId) {
 		this.family = familyId;
-	}	
-	
-	public String getImageData() {
-		return imageData;
 	}
 
-	public void setImage(String imageData) {
-		this.imageData = imageData;
+	public String getLargePicture() {
+		return largePicture;
+	}
+
+	public void setLargePicture(String largePicture) {
+		this.largePicture = largePicture;
+	}
+
+	public String getSmallPicture() {
+		return smallPicture;
+	}
+
+	public void setSmallPicture(String smallPicture) {
+		this.smallPicture = smallPicture;
+	}
+
+//	public List<String> getFeducation() {
+//		return feducation;
+//	}
+//
+//	public void setFeducation(List<String> feducation) {
+//		this.feducation = feducation;
+//	}
+
+	public String getFhometown() {
+		return fhometown;
+	}
+
+	public void setFhometown(String fhometown) {
+		this.fhometown = fhometown;
+	}
+
+	public String getFlink() {
+		return flink;
+	}
+
+	public void setFlink(String flink) {
+		this.flink = flink;
+	}
+
+	public String getFlocale() {
+		return flocale;
+	}
+
+	public void setFlocale(String flocale) {
+		this.flocale = flocale;
+	}
+
+	public String getFlocation() {
+		return flocation;
+	}
+
+	public void setFlocation(String flocation) {
+		this.flocation = flocation;
+	}
+
+	public int getFtimezone() {
+		return ftimezone;
+	}
+
+	public void setFtimezone(int ftimezone) {
+		this.ftimezone = ftimezone;
 	}
 
 	public boolean isIsDeleted() {
@@ -188,11 +243,11 @@ public class Member {
 		this.isDeleted = isDeleted;
 	}
 
-	public List<String> getItems() {
-		return items;
-	}
-
-	public void setItems(List<String> items) {
-		this.items = items;
-	}		
+//	public List<String> getItems() {
+//		return items;
+//	}
+//
+//	public void setItems(List<String> items) {
+//		this.items = items;
+//	}		
 }

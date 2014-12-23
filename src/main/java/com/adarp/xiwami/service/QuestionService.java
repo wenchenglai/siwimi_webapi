@@ -16,7 +16,7 @@ public class QuestionService {
 	
 	public List<Question> FindQuestions(String creatorId, String status, String queryText) {
 		if ((creatorId!=null) && (status!=null))
-			return questionRep.findByUserAndStatusAndIsDeletedIsFalse(creatorId, status);
+			return questionRep.findByCreatorAndStatusAndIsDeletedIsFalse(creatorId, status);
 		else
 			return questionRep.findByQuestionTextLikeIgnoreCaseAndAnswersLikeIgnoreCaseAndIsDeletedIsFalse(queryText);
 	}

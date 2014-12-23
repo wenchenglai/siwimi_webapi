@@ -63,7 +63,7 @@ public class MemberService {
 		return memberRep.findByFacebookId(id);
 	}
 	
-	public Member FindMemberByGoogleplusId(String id) {
-		return memberRep.findByGoogleplusId(id);
-	}
+//	public Member FindMemberByGoogleplusId(String id) {
+//		return memberRep.findByGoogleplusId(id);
+//	}
 }

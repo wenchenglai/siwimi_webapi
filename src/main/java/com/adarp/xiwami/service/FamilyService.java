@@ -149,7 +149,7 @@ public class FamilyService {
 		//Delete members which belongs both "non-user" and this family
 		List<Member> memberList = memberRep.findByFamilyInAndIsDeletedIsFalse(id);
 		for (Member member:memberList) {
-			if ((member.getFacebookId()==null) && (member.getGoogleplusId()==null)) {
+			if ((member.getFacebookId()==null)) {
 				member.setIsDeleted(true);
 				memberRep.save(member);
 			}				

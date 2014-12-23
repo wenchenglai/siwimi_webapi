@@ -14,13 +14,15 @@ public class Question {
 	@Id
 	private String id;
 	
-	private String user;
-	private String questionText;
+	private String creator;
+	private String title;
+	private String description;
 	private Date createdDate;
+	private boolean isSolved;
 	private List<String> answers = new ArrayList<String>();	
 	
 	//This field is only for front-end purpose
-	@Transient
+	//@Transient
 	private String status = "Open";
 	
 	//The default of the below field is set by backend
@@ -34,21 +36,29 @@ public class Question {
 		this.id = id;
 	}
 
-	public String getUser() {
-		return user;
+	public String getCreator() {
+		return creator;
 	}
 
-	public void setUser(String user) {
-		this.user = user;
+	public void setCreator(String creator) {
+		this.creator = creator;
 	}
 
-	public String getQuestionText() {
-		return questionText;
+	public String getTitle() {
+		return title;
 	}
 
-	public void setQuestionText(String questionText) {
-		this.questionText = questionText;
+	public void setTitle(String title) {
+		this.title = title;
 	}
+	
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}	
 
 //	public String getCreatedDate() {
 //		if (this.createdDate != null) {
@@ -81,6 +91,14 @@ public class Question {
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
 	}
+	
+	public boolean getIsSolved() {
+		return isSolved;
+	}
+
+	public void setIsSolved(boolean isSolved) {
+		this.isSolved = isSolved;
+	}	
 
 	public List<String> getAnswers() {
 		return answers;
