@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Dictionary;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -30,16 +31,16 @@ public class Member {
 	private String family;	
 	private boolean isUser;
 	private String facebookId;
-//	private List<String> feducation;
+	private String highSchool;
+	private String college;
 	private String fhometown;
 	private String flink;
 	private String flocale;
 	private String flocation;
 	private int ftimezone;
+	private String zipCode;
 	
-//	private List<String> items = new ArrayList<String>();
-	
-	//The default of the below field is set by backend
+	//The default of the below field is set by back end
 	private boolean isDeleted;
 	
 	public void setId(String id) {
@@ -187,14 +188,6 @@ public class Member {
 		this.smallPicture = smallPicture;
 	}
 
-//	public List<String> getFeducation() {
-//		return feducation;
-//	}
-//
-//	public void setFeducation(List<String> feducation) {
-//		this.feducation = feducation;
-//	}
-
 	public String getFhometown() {
 		return fhometown;
 	}
@@ -243,11 +236,27 @@ public class Member {
 		this.isDeleted = isDeleted;
 	}
 
-//	public List<String> getItems() {
-//		return items;
-//	}
-//
-//	public void setItems(List<String> items) {
-//		this.items = items;
-//	}		
+	public String getHighSchool() {
+		return highSchool;
+	}
+
+	public void setHighSchool(String highSchool) {
+		this.highSchool = highSchool;
+	}
+
+	public String getCollege() {
+		return college;
+	}
+
+	public void setCollege(String college) {
+		this.college = college;
+	}
+
+	public String getZipCode() {
+		return zipCode;
+	}
+
+	public void setZipCode(String zipCode) {
+		this.zipCode = zipCode;
+	}	
 }
