@@ -15,7 +15,7 @@ public class FamilyRepositoryImpl implements FamilyRepositoryCustom {
 	private MongoTemplate mongoTemplate;
 	
 	@Override
-	public Family AddFamily(Family newFamily){
+	public Family addFamily(Family newFamily){
 		mongoTemplate.indexOps(Family.class).ensureIndex(new GeospatialIndex("location"));
 		mongoTemplate.save(newFamily,"Family");
 		return newFamily;

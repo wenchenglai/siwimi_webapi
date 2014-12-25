@@ -18,7 +18,7 @@ public class MemberService {
 	@Autowired
 	private FamilyRepository familyRep;
 	
-	public Member AddMember(Member newMember){
+	public Member addMember(Member newMember){
 		// 2014-12-11 A scenario would be that a new member is added by another user, so there is no email, no facebookId 
 		if (newMember.getEmail() != null && memberRep.findByEmailIgnoreCaseAndIsDeletedIsFalse(newMember.getEmail()).size()>0)
 			// make sure no one uses the same email twice to sign up 
@@ -30,36 +30,36 @@ public class MemberService {
 		}
 	}
 	
-	public Member AddMemberByFacebookId(Member newMember){
+	public Member addMemberByFacebookId(Member newMember){
 		// TODO: Must check if facebookId exist or not
 		newMember.setIsDeleted(false);
 		Member member = memberRep.save(newMember);	
 		return member;	
 	}
 	
-	public Member UpdateMember(String id, Member updatedMember) {
+	public Member updateMember(String id, Member updatedMember) {
 		updatedMember.setId(id);	
 		Member savedMember = memberRep.save(updatedMember);
 		return savedMember;
 	}
 	
 	
-	public void DeleteMember(String id) {
+	public void deleteMember(String id) {
 		// For Member collection
 		Member member = memberRep.findOne(id);
 		member.setIsDeleted(true);
 		memberRep.save(member);
 	}
 	
-	public List<Member> FindMembers(String familyId) {
+	public List<Member> findMembers(String familyId) {
 		return memberRep.findByFamilyInAndIsDeletedIsFalse(familyId);
 	}
 
-	public Member FindByMemberId(String id) {
+	public Member findByMemberId(String id) {
 		return memberRep.findOne(id);
 	}	
 	
-	public Member FindMemberByFacebookId(String id) {
+	public Member findMemberByFacebookId(String id) {
 		return memberRep.findByFacebookId(id);
 	}
 	

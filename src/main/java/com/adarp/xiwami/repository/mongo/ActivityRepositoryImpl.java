@@ -31,12 +31,11 @@ public class ActivityRepositoryImpl implements ActivityRepositoryCustom {
 		}
 		
 		if (queryText != null) {
-			c = c.orOperator(Criteria.where("title").regex(queryText, "i"),
-					         Criteria.where("description").regex(queryText, "i"));
+			c = c.orOperator(Criteria.where("title").regex(queryText.trim(), "i"),
+					         Criteria.where("description").regex(queryText.trim(), "i"));
 		}
 		
-		if ((longitude != null) && (latitude != null) && (qsDistance!= null)) {
-			
+		if ((longitude != null) && (latitude != null) && (qsDistance!= null)) {			
 			double distance = 0.0;
 			String [] parts = qsDistance.split(" ");
 			if (parts[1].toLowerCase().contains("mile"))
@@ -58,19 +57,14 @@ public class ActivityRepositoryImpl implements ActivityRepositoryCustom {
 				c = c.andOperator(Criteria.where("fromTime").gt(now));
 			}			
 		}
-
-		Query queryActivity = new Query(c);
-		
-		return mongoTemplate.find(queryActivity, Activity.class, "Activity");
+	
+		return mongoTemplate.find(new Query(c), Activity.class, "Activity");
 	}
-	
-	
-	@Override
-	public Activity saveActivity(Activity newActivity) {
 		
+	@Override
+	public Activity saveActivity(Activity newActivity) {		
 		mongoTemplate.indexOps(Activity.class).ensureIndex(new GeospatialIndex("location"));
 		mongoTemplate.save(newActivity, "Activity");
 		return newActivity;
-	}
-	
+	}	
 }

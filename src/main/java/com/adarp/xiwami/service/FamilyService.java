@@ -33,7 +33,7 @@ public class FamilyService {
 	@Autowired
 	private ZipCodeRepository zipCodeRep;
 	
-	public List<Family> FindFamilies(Double longitude,Double latitude,String qsDistance,Integer fromAge,Integer toAge,String[] languages) {
+	public List<Family> findFamilies(Double longitude,Double latitude,String qsDistance,Integer fromAge,Integer toAge,String[] languages) {
 		// Geo search in family collection				
 		String [] parts = qsDistance.split(" ");
 		Distance distance;
@@ -97,55 +97,24 @@ public class FamilyService {
 		}		
 	}
 	
-	public Family FindByFamilyId(String id) {
+	public Family findByFamilyId(String id) {
 		return familyRep.findByIdAndIsDeletedIsFalse(id);
 	}
 	
-	public Family AddFamily(Family newFamily) {
-		// lookup zipcode from the collection ZipCode;
-		ZipCode thisZipCode = new ZipCode();
-		
-		// if the zipCode is not provided by the user
-		if (newFamily.getZipCode()==null) {				
-			if (newFamily.getCityState()==null){
-				// if both zipcode and cityState are not completed, set default to 48105
-				thisZipCode = zipCodeRep.findByzipCode(48105);
-			} else {
-				String [] parts = newFamily.getCityState().split(",");
-				//String city = parts[0].replaceAll("\\s+", "");
-				//String stateCode = parts[1].replaceAll("\\s+", "");
-				String city = parts[0].trim();
-				String stateCode = parts[1].trim();	
-				thisZipCode = zipCodeRep.findByTownshipLikeIgnoreCaseAndStateCodeLikeIgnoreCase(city, stateCode);				
-			}						
-		} else {
-			// if the zipCode is provided by the user:
-			// (1) ignore stateCity provided by the user, 
-			// (2) lookup zipcode from the collection ZipCode
-			// (3) please note that the type of zipcode is "int" in the mongoDB collection
-			thisZipCode = zipCodeRep.findByzipCode(Integer.parseInt(newFamily.getZipCode()));			
-		}
-		
-		// set longitude and latitude of the family object 
-		double[] location = {thisZipCode.getLongitude(), thisZipCode.getLatitude()};
-		newFamily.setZipCode(thisZipCode.getZipCode());
-		newFamily.setLocation(location);
-		newFamily.setCityState(thisZipCode.getTownship()+", "+thisZipCode.getStateCode());
-		
-		// (This is a MUST) set members of the family object
-				
+	public Family addFamily(Family newFamily) {				
 		newFamily.setIsDeleted(false);
-		return familyRep.AddFamily(newFamily);
+		newFamily = updateZipCode(newFamily);
+		return familyRep.addFamily(newFamily);
 	}
 	
-	public Family UpdateFamily(String id, Family updatedFamily) {
+	public Family updateFamily(String id, Family updatedFamily) {
 		updatedFamily.setId(id);
+		updatedFamily = updateZipCode(updatedFamily);
 		Family savedFamily = familyRep.save(updatedFamily);
 		return savedFamily;
 	}
 	
-	public void DeleteFamily(String id) {
-		
+	public void deleteFamily(String id) {		
 		//Delete members which belongs both "non-user" and this family
 		List<Member> memberList = memberRep.findByFamilyInAndIsDeletedIsFalse(id);
 		for (Member member:memberList) {
@@ -160,5 +129,36 @@ public class FamilyService {
 		familyRep.save(family);		
 		
 	}
-	
+	public Family updateZipCode(Family family) {
+		// lookup zipcode from the collection ZipCode;
+		ZipCode thisZipCode = new ZipCode();
+				
+		// if the zipCode is not provided by the user
+		if (family.getZipCode()==null) {				
+			if (family.getCityState()==null){
+				// if both zipcode and cityState are not completed, set default to 48105
+				thisZipCode = zipCodeRep.findByzipCode(48105);
+			} else {
+				String [] parts = family.getCityState().split(",");
+				String city = parts[0].trim();
+				String stateCode = parts[1].trim();	
+				thisZipCode = zipCodeRep.findByTownshipLikeIgnoreCaseAndStateCodeLikeIgnoreCase(city, stateCode);				
+			}						
+		} else {
+			/** if the zipCode is provided by the user:
+			   (1) ignore stateCity provided by the user, 
+			   (2) lookup zipcode from the collection ZipCode
+			   (3) please note that the type of zipcode is "int" in the mongoDB collection 
+			**/
+			thisZipCode = zipCodeRep.findByzipCode(Integer.parseInt(family.getZipCode()));			
+		}
+			
+		// set longitude and latitude of the family object 
+		double[] location = {thisZipCode.getLongitude(), thisZipCode.getLatitude()};
+		family.setZipCode(thisZipCode.getZipCode());
+		family.setLocation(location);
+		family.setCityState(thisZipCode.getTownship()+", "+thisZipCode.getStateCode());	
+		
+		return family;
+	}
 }

@@ -31,7 +31,7 @@ public class FamilyController {
 
 	// Get all families
 	@RequestMapping(value = "/families", method = RequestMethod.GET, produces = "application/json")
-	public  FamilySideloadList FindFamilies(
+	public  FamilySideloadList findFamilies(
 			@RequestParam(value="longitude", required=true) Double longitude,
 			@RequestParam(value="latitude", required=true) Double latitude,
 			@RequestParam(value="distance", required=true) String qsDistance, 
@@ -39,11 +39,11 @@ public class FamilyController {
 			@RequestParam(value="toAge", required=false) Integer toAge,
 			@RequestParam(value="languages[]", required=false) String[] languages) {
 		FamilySideloadList responseBody = new FamilySideloadList();
-		List<Family> families = familyService.FindFamilies(longitude,latitude,qsDistance,fromAge,toAge,languages);
+		List<Family> families = familyService.findFamilies(longitude,latitude,qsDistance,fromAge,toAge,languages);
 		List<Member> members = new ArrayList<Member>();
 		if (families!=null) {
 			for (Family family:families) {
-				List<Member> membersPerFamily = memberService.FindMembers(family.getId());
+				List<Member> membersPerFamily = memberService.findMembers(family.getId());
 				List<String> memberIds = new ArrayList<String>();
 				for (Member member : membersPerFamily) {
 					memberIds.add(member.getId());
@@ -59,12 +59,12 @@ public class FamilyController {
 
 	// Get Family by ID
 	@RequestMapping(value = "/families/{id}", method = RequestMethod.GET, produces = "application/json")
-	public FamilySideload FindByFamilyId(@PathVariable("id") String id) {
+	public FamilySideload findByFamilyId(@PathVariable("id") String id) {
 		FamilySideload responseBody = new FamilySideload();
-		Family family = familyService.FindByFamilyId(id);
+		Family family = familyService.findByFamilyId(id);
 
 		if (family != null) {
-			List<Member> members = memberService.FindMembers(family.getId());
+			List<Member> members = memberService.findMembers(family.getId());
 			List<String> memberIds = new ArrayList<String>();
 			for (Member member : members) {
 				memberIds.add(member.getId());
@@ -79,8 +79,8 @@ public class FamilyController {
 	
 	// Add New Family
 	@RequestMapping(value = "/families", method = RequestMethod.POST, produces = "application/json")
-	public Map<String, Family> AddFamily(@RequestBody FamilySideload newFamily) {
-		Family family = familyService.AddFamily(newFamily.family);
+	public Map<String, Family> addFamily(@RequestBody FamilySideload newFamily) {
+		Family family = familyService.addFamily(newFamily.family);
 		Map<String, Family> responseBody = new HashMap<String, Family>();
 		responseBody.put("family", family);
 		
@@ -89,8 +89,8 @@ public class FamilyController {
 	
 	// Update Family
 	@RequestMapping(value = "/families/{id}", method = RequestMethod.PUT, produces = "application/json")
-	public Map<String, Family> UpdateFamily(@PathVariable("id") String id, @RequestBody FamilySideload updatedFamily) {
-		Family savedFamily = familyService.UpdateFamily(id, updatedFamily.family);
+	public Map<String, Family> updateFamily(@PathVariable("id") String id, @RequestBody FamilySideload updatedFamily) {
+		Family savedFamily = familyService.updateFamily(id, updatedFamily.family);
 		Map<String, Family> responseBody = new HashMap<String, Family>();
 		responseBody.put("family", savedFamily);
 		
@@ -99,8 +99,7 @@ public class FamilyController {
 	
 	// Delete Family
 	@RequestMapping (value = "/families/{id}", method = RequestMethod.DELETE, produces = "application/json")
-	public void DeleteFamily(@PathVariable("id")String id) {
-		familyService.DeleteFamily(id);
-	}	
-	
+	public void deleteFamily(@PathVariable("id")String id) {
+		familyService.deleteFamily(id);
+	}		
 }

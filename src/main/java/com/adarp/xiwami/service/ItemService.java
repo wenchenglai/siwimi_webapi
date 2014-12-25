@@ -1,20 +1,14 @@
 package com.adarp.xiwami.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.geo.Distance;
-import org.springframework.data.geo.Metrics;
-import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Service;
 
-import com.adarp.xiwami.domain.Family;
 import com.adarp.xiwami.domain.Item;
-import com.adarp.xiwami.domain.Member;
-import com.adarp.xiwami.repository.FamilyRepository;
+import com.adarp.xiwami.domain.ZipCode;
 import com.adarp.xiwami.repository.ItemRepository;
-import com.adarp.xiwami.repository.MemberRepository;
+import com.adarp.xiwami.repository.ZipCodeRepository;
 
 @Service
 public class ItemService {
@@ -23,66 +17,65 @@ public class ItemService {
 	private ItemRepository itemRep;
 	
 	@Autowired
-	private MemberRepository memberRep;
+	private ZipCodeRepository zipCodeRep;
 	
-	@Autowired
-	private FamilyRepository familyRep;
-	
-	public List<Item> FindItems(String sellerId,String status,Double longitude,Double latitude,String qsDistance,String queryText) {
-		if ((sellerId!=null) && (status!=null))
-			return itemRep.findBySellerAndStatusAndIsDeletedIsFalse(sellerId, status);
-		else {
-			// Geo search in family collection				
-			String [] parts = qsDistance.split(" ");
-			Distance distance;
-			if (parts[1].toLowerCase().contains("mile"))
-				distance = new Distance(Double.parseDouble(parts[0]),Metrics.MILES);
-			else
-				distance = new Distance(Double.parseDouble(parts[0]),Metrics.KILOMETERS);			
-			List<Family> geoFamilies = familyRep.findByLocationNearAndIsDeletedIsFalse(new Point(longitude,latitude),distance);
-	
-			// Retrieve the id of geoFamilies
-			List<String> geoFamilyId = new ArrayList<String>();
-			for (Family family : geoFamilies) {
-				geoFamilyId.add(family.getId());
-			}
-			
-			// Retrieve id of the geoMembers
-			List<Member> geoMembers = memberRep.findByFamilyInAndIsDeletedIsFalse(geoFamilyId);
-			List<String> geoMemberId = new ArrayList<String>();
-			for (Member member : geoMembers) {
-				geoMemberId.add(member.getId());
-			}
-					
-			return itemRep.findBySellerInAndNameDescriptionLikeIgnoreCaseAndIsDeletedIsFalse(geoMemberId, queryText);
-		}
+	public List<Item> findItems(String sellerId,String status,Double longitude,Double latitude,String qsDistance,String queryText) {					
+			return itemRep.queryItem(sellerId,status, longitude,latitude,qsDistance,queryText);
 	}
 	
-	public Item FindByItemId(String id) {
+	public Item findByItemId(String id) {
 		return itemRep.findOne(id);
 	}
 	
-	public Item AddItem(Item newItem) {
+	public Item addItem(Item newItem) {
 		newItem.setIsDeleted(false);
-		itemRep.save(newItem);
-		
-		//update items for the member
-//		Member member = memberRep.findOne(newItem.getSeller());
-//		List<String> memberItem = member.getItems();
-//		memberItem.add(newItem.getId());
-//		memberRep.save(member);
-		
+		newItem = updateZipCode(newItem);
+		itemRep.saveItem(newItem);		
 		return newItem;
 	}
 	
-	public Item UpdateItem(String id, Item updatedItem) {
+	public Item updateItem(String id, Item updatedItem) {
 		updatedItem.setId(id);
-		return itemRep.save(updatedItem);
+		updatedItem = updateZipCode(updatedItem);
+		return itemRep.saveItem(updatedItem);
 	}
 	
-	public void DeleteItem(String id) {
+	public void deleteItem(String id) {
 		Item item = itemRep.findOne(id);
 		item.setIsDeleted(true);
-		itemRep.save(item);
+		itemRep.saveItem(item);
+	}
+	
+	public Item updateZipCode(Item item) {
+		// lookup zipcode from the collection ZipCode;
+		ZipCode thisZipCode = new ZipCode();
+				
+		// if the zipCode is not provided by the user
+		if (item.getZipCode()==null) {				
+			if (item.getCityState()==null){
+				// if both zipcode and cityState are not completed, set default to 48105
+				thisZipCode = zipCodeRep.findByzipCode(48105);
+			} else {
+				String [] parts = item.getCityState().split(",");
+				String city = parts[0].trim();
+				String stateCode = parts[1].trim();	
+				thisZipCode = zipCodeRep.findByTownshipLikeIgnoreCaseAndStateCodeLikeIgnoreCase(city, stateCode);				
+			}						
+		} else {
+			/** if the zipCode is provided by the user:
+			   (1) ignore stateCity provided by the user, 
+			   (2) lookup zipcode from the collection ZipCode
+			   (3) please note that the type of zipcode is "int" in the mongoDB collection 
+			**/
+			thisZipCode = zipCodeRep.findByzipCode(Integer.parseInt(item.getZipCode()));			
+		}
+			
+		// set longitude and latitude of the family object 
+		double[] location = {thisZipCode.getLongitude(), thisZipCode.getLatitude()};
+		item.setZipCode(thisZipCode.getZipCode());
+		item.setLocation(location);
+		item.setCityState(thisZipCode.getTownship()+", "+thisZipCode.getStateCode());	
+		
+		return item;
 	}
 }

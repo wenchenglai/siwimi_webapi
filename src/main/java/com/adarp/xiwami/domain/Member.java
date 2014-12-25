@@ -1,10 +1,7 @@
 package com.adarp.xiwami.domain;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Dictionary;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -91,7 +88,7 @@ public class Member {
 		this.password = password;
 	}	
 
-	public String getBirthday() {
+/*	public String getBirthday() {
 		if (this.birthday != null) {
 			SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
 			return formatter.format(this.birthday);			
@@ -114,10 +111,18 @@ public class Member {
 		} else {
 			this.birthday = null;
 		}
-	}
+	}*/
 
 	public List<String> getLanguages() {
 		return languages;
+	}
+
+	public Date getBirthday() {
+		return birthday;
+	}
+
+	public void setBirthday(Date birthday) {
+		this.birthday = birthday;
 	}
 
 	public void setLanguages (ArrayList<String> myLanguage) {	

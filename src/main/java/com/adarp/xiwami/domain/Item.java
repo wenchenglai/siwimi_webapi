@@ -1,7 +1,5 @@
 package com.adarp.xiwami.domain;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.springframework.data.annotation.Id;
@@ -13,8 +11,12 @@ public class Item {
 	@Id
 	private String id;
 	
+	private String seller;
+	private String buyer;
 	private String name;
 	private String description;
+	private String status;
+	private Date createdDate;
 	private String size;
 	private float width;
 	private float length;
@@ -23,14 +25,41 @@ public class Item {
 	private int toAge;
 	private String condition;
 	private String type;
-	private String status;
 	private float price;
 	private String imageUrl;
 	private String imageData;
-	private String seller;
-	private String buyer;
-	private Date createdDate;
 	
+	private String cityState;
+	private String zipCode;
+	private double[] location;
+	
+	
+	public String getCityState() {
+		return cityState;
+	}
+
+	public void setCityState(String cityState) {
+		this.cityState = cityState;
+	}
+
+	public String getZipCode() {
+		return zipCode;
+	}
+
+	public void setZipCode(String zipCode) {
+		if (Integer.parseInt(zipCode)<10000)
+			zipCode = "0"+zipCode;
+		this.zipCode = zipCode;
+	}
+
+	public double[] getLocation() {
+		return location;
+	}
+
+	public void setLocation(double[] location) {
+		this.location = location;
+	}
+
 	//The default of the below field is set by backend
 	private Boolean isDeleted;
 
@@ -178,27 +207,11 @@ public class Item {
 		this.isDeleted = isDeleted;
 	}
 	
-	public String getCreatedDate() {
-		if (this.createdDate != null) {
-			SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
-			return formatter.format(this.createdDate);			
-		} else {
-			return null;
-		}
+	public Date getCreatedDate() {
+		return createdDate;
 	}
 
-	public void setCreatedDate(String createdDate) {
-		if (createdDate != null) {
-			SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd"); 
-			Date createdDateDate = new Date();
-			try {	 
-				createdDateDate = formatter.parse(createdDate);
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-			this.createdDate = createdDateDate; 			
-		} else {
-			this.createdDate = null;
-		}
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
 	}	
 }
