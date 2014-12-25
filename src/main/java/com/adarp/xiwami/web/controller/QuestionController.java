@@ -1,5 +1,6 @@
 package com.adarp.xiwami.web.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,30 +25,37 @@ public class QuestionController {
 
 	// Get all questions
 	@RequestMapping(value = "/questions", method = RequestMethod.GET, produces = "application/json")
-	public Map<String,List<Question>> FindQuestions(
+	public Map<String,List<Question>> findQuestions(
 			@RequestParam(value="creator", required=false) String creatorId,
-			@RequestParam(value="status", required=false) String status,			
+			@RequestParam(value="longitude", required=false) Double longitude,
+			@RequestParam(value="latitude", required=false) Double latitude,
+			@RequestParam(value="distance", required=false) String qsDistance, 
 			@RequestParam(value="queryText", required=false) String queryText) {
 		Map<String,List<Question>> responseBody = new HashMap<String,List<Question>>();
-		List<Question> list = questionService.FindQuestions(creatorId,status,queryText);
-		responseBody.put("question", list);
+		List<Question> questionList = null;
+		try {
+			questionList = questionService.findQuestions(creatorId,longitude,latitude,qsDistance,queryText);
+		} catch (Exception err) {
+			// we must return an empty array so Ember can pick up the json data format.  Return null will crash the ember client.
+			questionList = new ArrayList<Question>();
+		}
+		responseBody.put("question", questionList);
 		return responseBody;
 	}
 
 	// Get Question by ID
 	@RequestMapping(value = "/questions/{id}", method = RequestMethod.GET, produces = "application/json")
-	public Map<String,Question> FindByQuestionId(@PathVariable("id") String id) {
+	public Map<String,Question> findByQuestionId(@PathVariable("id") String id) {
 		Map<String,Question> responseBody = new HashMap<String,Question>();			
-		Question question = questionService.FindByQuestionId(id);
+		Question question = questionService.findByQuestionId(id);
 		responseBody.put("question", question);
 		return responseBody;
 	}
 	
 	// Add New Question
 	@RequestMapping(value = "/questions", method = RequestMethod.POST, produces = "application/json")
-	public Map<String, Question> AddQuestion(@RequestBody QuestionSideload newQuestion) {
-		Question savedQuestion = questionService.AddQuestion(newQuestion.question);
-		
+	public Map<String, Question> addQuestion(@RequestBody QuestionSideload newQuestion) {
+		Question savedQuestion = questionService.addQuestion(newQuestion.question);		
 		Map<String,Question> responseBody = new HashMap<String, Question>();
 		responseBody.put("question", savedQuestion);
 		return responseBody;			
@@ -55,9 +63,8 @@ public class QuestionController {
 	
 	// Update Question
 	@RequestMapping(value = "/questions/{id}", method = RequestMethod.PUT, produces = "application/json")
-	public Map<String, Question> UpdateQuestion(@PathVariable("id") String id, @RequestBody QuestionSideload updatedQuestion){
-		Question savedQuestion = questionService.UpdateQuestion(id, updatedQuestion.question);
-		
+	public Map<String, Question> updateQuestion(@PathVariable("id") String id, @RequestBody QuestionSideload updatedQuestion){
+		Question savedQuestion = questionService.updateQuestion(id, updatedQuestion.question);		
 		Map<String,Question> responseBody = new HashMap<String, Question>();
 		responseBody.put("question", savedQuestion);
 		return responseBody;			
@@ -65,7 +72,7 @@ public class QuestionController {
 	
 	// Delete Question
 	@RequestMapping (value = "/questions/{id}", method = RequestMethod.DELETE, produces = "application/json")
-	public void DeleteQuestion(@PathVariable("id")String id) {
-		questionService.DeleteQuestion(id);
+	public void deleteQuestion(@PathVariable("id")String id) {
+		questionService.deleteQuestion(id);
 	}	
 }

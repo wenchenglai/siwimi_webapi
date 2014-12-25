@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection="Question")
@@ -21,9 +20,11 @@ public class Question {
 	private boolean isSolved;
 	private List<String> answers = new ArrayList<String>();	
 	
-	//This field is only for front-end purpose
-	//@Transient
 	private String status = "Open";
+	
+	private String cityState;
+	private String zipCode;
+	private double[] location;
 	
 	//The default of the below field is set by backend
 	private Boolean isDeleted;
@@ -60,30 +61,6 @@ public class Question {
 		this.description = description;
 	}	
 
-//	public String getCreatedDate() {
-//		if (this.createdDate != null) {
-//			SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
-//			return formatter.format(this.createdDate);			
-//		} else {
-//			return null;
-//		}
-//	}
-//
-//	public void setCreatedDate(String createdDate) {
-//		if (createdDate != null) {
-//			SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd"); 
-//			Date createdDateDate = new Date();
-//			try {	 
-//				createdDateDate = formatter.parse(createdDate);
-//			} catch (ParseException e) {
-//				e.printStackTrace();
-//			}
-//			this.createdDate = createdDateDate; 			
-//		} else {
-//			this.createdDate = null;
-//		}
-//	}	
-
 	public Date getCreatedDate() {
 		return createdDate;
 	}
@@ -94,6 +71,30 @@ public class Question {
 	
 	public boolean getIsSolved() {
 		return isSolved;
+	}
+
+	public String getCityState() {
+		return cityState;
+	}
+
+	public void setCityState(String cityState) {
+		this.cityState = cityState;
+	}
+
+	public String getZipCode() {
+		return zipCode;
+	}
+
+	public void setZipCode(String zipCode) {
+		this.zipCode = zipCode;
+	}
+
+	public double[] getLocation() {
+		return location;
+	}
+
+	public void setLocation(double[] location) {
+		this.location = location;
 	}
 
 	public void setIsSolved(boolean isSolved) {
@@ -127,7 +128,5 @@ public class Question {
 
 	public void setStatus(String status) {
 		this.status = status;
-	}
-	
-
+	}	
 }

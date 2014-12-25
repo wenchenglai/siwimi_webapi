@@ -34,15 +34,14 @@ public class ActivityController {
 			@RequestParam(value="queryText", required=false) String queryText) {
 		Map<String,List<Activity>> responseBody = new HashMap<String,List<Activity>>();
 			
-		List<Activity> list = null;
+		List<Activity> activityList = null;
 		try {
-			list = activityService.FindActivities(creatorId,status,longitude,latitude,qsDistance,queryText);
+			activityList = activityService.FindActivities(creatorId,status,longitude,latitude,qsDistance,queryText);
 		} catch (Exception err) {
 			// we must return an empty array so Ember can pick up the json data format.  Return null will crash the ember client.
-			list = new ArrayList<Activity>();
-
+			activityList = new ArrayList<Activity>();
 		}
-		responseBody.put("activities", list);
+		responseBody.put("activities", activityList);
 		return responseBody;
 	}
 

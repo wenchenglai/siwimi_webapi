@@ -25,7 +25,7 @@ public class SurveyController {
 	
 	// Add New Survey
 	@RequestMapping(value = "/surveys", method = RequestMethod.POST, produces = "application/json")
-	public Map<String, Survey> AddSurvey(@RequestBody Survey newSurvey) {
+	public Map<String, Survey> addSurvey(@RequestBody Survey newSurvey) {
 		Survey savedSurvey = surveyService.addSurvey(newSurvey);
 		
 		Map<String, Survey> responseBody = new HashMap<String, Survey>();
@@ -36,7 +36,7 @@ public class SurveyController {
 	
 	// View all Surveys
 	@RequestMapping(value = "/surveys", method = RequestMethod.GET, produces = "application/json")
-	public ModelAndView ViewSurvey() {
+	public ModelAndView viewSurvey() {
 		ModelAndView model = new ModelAndView("viewSurveys");
 		List<Survey> surveys = surveyService.viewSurvey();
 		model.addObject("surveys", surveys);
@@ -45,14 +45,14 @@ public class SurveyController {
 	
 	// Delete a survey
 	@RequestMapping(value = "/surveys/delete", method = RequestMethod.POST, produces = "application/json")
-	public ModelAndView DeleteSurvey(@RequestParam String id, Model model) {
+	public ModelAndView deleteSurvey(@RequestParam String id, Model model) {
 		surveyService.deleteSurvey(id);
 		return new ModelAndView("redirect:/surveys");
 	}
 	
 	// Update a survey
 	@RequestMapping(value = "/surveys/update", method = RequestMethod.POST, produces = "application/json")
-	public ModelAndView UpdateSurvey(@ModelAttribute(value="survey") Survey updatedSurvey) {		
+	public ModelAndView updateSurvey(@ModelAttribute(value="survey") Survey updatedSurvey) {		
 		surveyService.updateServey(updatedSurvey);
 		return new ModelAndView("redirect:/surveys");
 	}

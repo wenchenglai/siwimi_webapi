@@ -61,11 +61,11 @@ public class MemberController {
 	// Scenario #1: Get member by facebookId or googleplusId - used when users login using third-party authentication system
 	// OUTPUT: Must contain { members: [ list of member object] }
 	@RequestMapping(value = "/members", method = RequestMethod.GET, produces = "application/json")
-	public Map<String, Member> FindFacebookMembers(
+	public Map<String, Member> findFacebookMembers(
 			@RequestParam(value="facebookId", required=false) String facebookId) {
 			//@RequestParam(value="googleplusId", required=false) String googleplusId) {			
 
-		Member facebookMember =  memberService.FindMemberByFacebookId(facebookId);
+		Member facebookMember =  memberService.findMemberByFacebookId(facebookId);
 		Map<String, Member> responseBody = new HashMap<String, Member>();
 		responseBody.put("member", facebookMember);
 		return responseBody;
@@ -89,10 +89,10 @@ public class MemberController {
 	
 	// Get Member by ID
 	@RequestMapping(value = "/members/{id}", method = RequestMethod.GET, produces = "application/json")
-	public Map<String, Member> FindByMemberId(@PathVariable("id") String id) {
-		Member member = memberService.FindByMemberId(id);
+	public Map<String, Member> findByMemberId(@PathVariable("id") String id) {
+		Member member = memberService.findByMemberId(id);
 		if (member == null) {
-			member = memberService.FindMemberByFacebookId(id);
+			member = memberService.findMemberByFacebookId(id);
 			
 		}
 		
@@ -112,15 +112,15 @@ public class MemberController {
 	// 3. User create an additional family member.  In this case, facebookId and email will be null, because it's not a user of this app, it's a member of a family
 	// OUTPUT: must be { member: null } OR { member: { member object }}
 	@RequestMapping(value = "/members", method = RequestMethod.POST, produces = "application/json")
-	public Map<String, Member> AddMember(@RequestBody MemberSideload member) {
+	public Map<String, Member> addMember(@RequestBody MemberSideload member) {
 		Member savedMember = null;
 		
 		if (member.member.getFacebookId() != null)
-			savedMember = memberService.AddMemberByFacebookId(member.member);
+			savedMember = memberService.addMemberByFacebookId(member.member);
 		else if (member.member.getEmail() != null)
-			savedMember = memberService.AddMember(member.member);
+			savedMember = memberService.addMember(member.member);
 		else
-			savedMember = memberService.AddMember(member.member);	
+			savedMember = memberService.addMember(member.member);	
 		
 		Map<String, Member> responseBody = new HashMap<String, Member>();
 		if (savedMember == null)
@@ -133,9 +133,9 @@ public class MemberController {
 	
 	// Update Member
 	@RequestMapping(value = "/members/{id}", method = RequestMethod.PUT, produces = "application/json")
-	public Map<String, Member> UpdateMember(@PathVariable("id") String id, @RequestBody MemberSideload member) {		
+	public Map<String, Member> updateMember(@PathVariable("id") String id, @RequestBody MemberSideload member) {		
 		
-		Member savedMember = memberService.UpdateMember(id, member.member);
+		Member savedMember = memberService.updateMember(id, member.member);
 		Map<String, Member> responseBody = new HashMap<String, Member>();
 		responseBody.put("member", savedMember);
 		
@@ -144,7 +144,7 @@ public class MemberController {
 	
 	// Delete Member
 	@RequestMapping (value = "/members/{id}", method = RequestMethod.DELETE, produces = "application/json")
-	public void DeleteMember(@PathVariable("id")String id) {
-		memberService.DeleteMember(id);
+	public void deleteMember(@PathVariable("id")String id) {
+		memberService.deleteMember(id);
 	}	
 }

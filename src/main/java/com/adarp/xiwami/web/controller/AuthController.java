@@ -19,7 +19,7 @@ public class AuthController {
 	private AuthService authService;
 	
 	@RequestMapping(value = "/login", method = RequestMethod.POST, produces = "application/json")
-	public Map<String, Object> Login(@RequestBody Member member) {
+	public Map<String, Object> login(@RequestBody Member member) {
 		Member getMember = authService.getMember(member);
 		Map<String, Object> responseBody = new HashMap<String, Object>();		
 		if (getMember != null){

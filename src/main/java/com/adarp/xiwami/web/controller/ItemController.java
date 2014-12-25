@@ -1,5 +1,6 @@
 package com.adarp.xiwami.web.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +25,7 @@ public class ItemController {
 	
 	// Get items by criteria
 	@RequestMapping(value = "/items", method = RequestMethod.GET, produces = "application/json")
-	public Map<String,List<Item>> FindItems(
+	public Map<String,List<Item>> findItems(
 			@RequestParam(value="seller", required=false) String sellerId,
 			@RequestParam(value="status", required=false) String status,
 			@RequestParam(value="longitude", required=false) Double longitude,
@@ -32,24 +33,31 @@ public class ItemController {
 			@RequestParam(value="distance", required=false) String qsDistance, 
 			@RequestParam(value="queryText", required=false) String queryText) {
 		Map<String,List<Item>> responseBody = new HashMap<String,List<Item>>();
-		List<Item> list = itemService.FindItems(sellerId,status,longitude,latitude,qsDistance,queryText);
-		responseBody.put("item", list);
+		List<Item> itemList = null;
+		try {
+			itemList = itemService.findItems(sellerId,status,longitude,latitude,qsDistance,queryText);
+		} catch (Exception err) {
+			// we must return an empty array so Ember can pick up the json data format.  Return null will crash the ember client.
+			itemList = new ArrayList<Item>();
+
+		}
+		responseBody.put("item", itemList);
 		return responseBody;
 	}
 
 	// Get item by ID
 	@RequestMapping(value = "/items/{id}", method = RequestMethod.GET, produces = "application/json")
-	public Map<String,Item> FindByItemId(@PathVariable("id") String id) {		
+	public Map<String,Item> findByItemId(@PathVariable("id") String id) {		
 		Map<String,Item> responseBody = new HashMap<String,Item>();			
-		Item item = itemService.FindByItemId(id);
+		Item item = itemService.findByItemId(id);
 		responseBody.put("item", item);
 		return responseBody;
 	}
 	
 	// Add New Item
 	@RequestMapping(value = "/items", method = RequestMethod.POST, produces = "application/json")
-	public Map<String,Item> AddItem(@RequestBody ItemSideload newItem){
-		Item savedItem = itemService.AddItem(newItem.item);			
+	public Map<String,Item> addItem(@RequestBody ItemSideload newItem){
+		Item savedItem = itemService.addItem(newItem.item);			
 		Map<String,Item> responseBody = new HashMap<String,Item>();
 		responseBody.put("item", savedItem);
 		return responseBody;
@@ -57,8 +65,8 @@ public class ItemController {
 	
 	// Update Item
 	@RequestMapping(value = "/items/{id}", method = RequestMethod.PUT, produces = "application/json")
-	public Map<String,Item> UpdateItem(@PathVariable("id") String id, @RequestBody ItemSideload updatedItem) {
-		Item savedItem = itemService.UpdateItem(id,updatedItem.item);
+	public Map<String,Item> updateItem(@PathVariable("id") String id, @RequestBody ItemSideload updatedItem) {
+		Item savedItem = itemService.updateItem(id,updatedItem.item);
 		
 		Map<String,Item> responseBody = new HashMap<String,Item>();
 		responseBody.put("item", savedItem);
@@ -67,7 +75,7 @@ public class ItemController {
 	
 	// Delete Item
 	@RequestMapping (value = "/items/{id}", method = RequestMethod.DELETE, produces = "application/json")
-	public void DeleteItem(@PathVariable("id")String id) {
-		itemService.DeleteItem(id);
+	public void deleteItem(@PathVariable("id")String id) {
+		itemService.deleteItem(id);
 	}
 }

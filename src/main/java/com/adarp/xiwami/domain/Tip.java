@@ -20,6 +20,10 @@ public class Tip {
 	private int like;
 	private String type;
 	
+	private String cityState;
+	private String zipCode;
+	private double[] location;
+	
 	// The default of the below field is set by backend
 	private Boolean isDeleted;
 
@@ -95,13 +99,37 @@ public class Tip {
 		this.createdDate = createdDate;
 	}
 
-
-
 	public Boolean getIsDeleted() {
 		return isDeleted;
 	}
 
 	public void setIsDeleted(Boolean isDeleted) {
 		this.isDeleted = isDeleted;
+	}
+	
+	public String getCityState() {
+		return cityState;
+	}
+
+	public void setCityState(String cityState) {
+		this.cityState = cityState;
+	}
+
+	public double[] getLocation() {
+		return location;
+	}
+
+	public void setLocation(double[] location) {
+		this.location = location;
+	}
+
+	public String getZipCode() {
+		return zipCode;
+	}
+
+	public void setZipCode(String zipCode) {
+		if (Integer.parseInt(zipCode)<10000)
+			zipCode = "0"+zipCode;
+		this.zipCode = zipCode;
 	}
 }

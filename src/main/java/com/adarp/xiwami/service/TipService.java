@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.adarp.xiwami.domain.Tip;
+import com.adarp.xiwami.domain.ZipCode;
 import com.adarp.xiwami.repository.TipRepository;
+import com.adarp.xiwami.repository.ZipCodeRepository;
 
 @Service
 public class TipService {
@@ -14,44 +16,65 @@ public class TipService {
 	@Autowired
 	TipRepository tipRep;
 	
-	public List<Tip> FindByType(String type) {
-
-			return tipRep.findByTypeAndIsDeletedIsFalse(type);
-			/*
-			List<Family> geoFamilies = familyRep.findByLocationNearAndIsDeletedIsFalse(new Point(longitude,latitude),new Distance(Double.valueOf(20.0),Metrics.MILES));			
-			// Retrieve the id of geoFamilies
-			List<String> geoFamilyId = new ArrayList<String>();
-			for (Family family : geoFamilies) {
-				geoFamilyId.add(family.getId());
-			}			
-			// Retrieve id of the geoMembers
-			List<Member> geoMembers = memberRep.findByFamilyInAndIsDeletedIsFalse(geoFamilyId);
-			List<String> geoMemberId = new ArrayList<String>();
-			for (Member member : geoMembers) {
-				geoMemberId.add(member.getId());
-			}			
-			return tipRep.findByUserInAndIsDeletedIsFalse(geoMemberId);
-			*/			
-
+	@Autowired
+	private ZipCodeRepository zipCodeRep;
+	
+	public List<Tip> findTips(String type,Double longitude,Double latitude,String qsDistance,String queryText) {
+			return tipRep.queryTip(type,longitude,latitude,qsDistance,queryText);	
 	}
 	
-	public Tip FindByTipId(String id) {
+	public Tip findByTipId(String id) {
 		return tipRep.findOne(id);
 	}
 	
-	public Tip AddTip(Tip newTip) {
+	public Tip addTip(Tip newTip) {
 		newTip.setIsDeleted(false);
-		return tipRep.save(newTip);
+		newTip = updateZipCode(newTip);
+		return tipRep.saveTip(newTip);
 	}
 	
-	public Tip UpdateTip(String id, Tip updatedTip) {
+	public Tip updateTip(String id, Tip updatedTip) {
 		updatedTip.setId(id);
-		return tipRep.save(updatedTip);
+		updatedTip = updateZipCode(updatedTip);
+		return tipRep.saveTip(updatedTip);
 	}
 	
-	public void DeleteTip(String id) {
+	public void deleteTip(String id) {
 		Tip tip = tipRep.findOne(id);
 		tip.setIsDeleted(true);
-		tipRep.save(tip);
+		tipRep.saveTip(tip);
+	}
+	
+	public Tip updateZipCode(Tip tip) {
+		// lookup zipcode from the collection ZipCode;
+		ZipCode thisZipCode = new ZipCode();
+				
+		// if the zipCode is not provided by the user
+		if (tip.getZipCode()==null) {				
+			if (tip.getCityState()==null){
+				// if both zipcode and cityState are not completed, set default to 48105
+				thisZipCode = zipCodeRep.findByzipCode(48105);
+			} else {
+				String [] parts = tip.getCityState().split(",");
+				String city = parts[0].trim();
+				String stateCode = parts[1].trim();	
+				thisZipCode = zipCodeRep.findByTownshipLikeIgnoreCaseAndStateCodeLikeIgnoreCase(city, stateCode);				
+			}						
+		} else {
+			/** if the zipCode is provided by the user:
+			   (1) ignore stateCity provided by the user, 
+			   (2) lookup zipcode from the collection ZipCode
+			   (3) please note that the type of zipcode is "int" in the mongoDB collection 
+			**/
+			thisZipCode = zipCodeRep.findByzipCode(Integer.parseInt(tip.getZipCode()));			
+		}
+			
+		// set longitude and latitude of the family object 
+		double[] location = {thisZipCode.getLongitude(), thisZipCode.getLatitude()};
+		tip.setZipCode(thisZipCode.getZipCode());
+		tip.setLocation(location);
+		tip.setCityState(thisZipCode.getTownship()+", "+thisZipCode.getStateCode());	
+		
+		return tip;
 	}
 }

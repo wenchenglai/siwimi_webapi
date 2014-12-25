@@ -1,5 +1,6 @@
 package com.adarp.xiwami.web.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,9 +26,21 @@ public class TipController {
 	// Get tips by type
 	@RequestMapping(value = "/tips", method = RequestMethod.GET, produces = "application/json")
 	public Map<String,List<Tip>> FindTips(
-			@RequestParam(value="type", required=true) String type) {
+			@RequestParam(value="type", required=true) String type,			
+			@RequestParam(value="longitude", required=false) Double longitude,
+			@RequestParam(value="latitude", required=false) Double latitude,
+			@RequestParam(value="distance", required=false) String qsDistance, 
+			@RequestParam(value="queryText", required=false) String queryText) {
+		
 		Map<String,List<Tip>> responseBody = new HashMap<String,List<Tip>>();
-		List<Tip> tipList = tipService.FindByType(type);
+		List<Tip> tipList = null;
+		try {
+			tipList = tipService.findTips(type,longitude,latitude,qsDistance,queryText);
+		} catch (Exception err) {
+			// we must return an empty array so Ember can pick up the json data format.  Return null will crash the ember client.
+			tipList = new ArrayList<Tip>();
+
+		}
 		responseBody.put("tip", tipList);
 		return responseBody;
 	}
@@ -36,15 +49,15 @@ public class TipController {
 	@RequestMapping(value = "/tips/{id}", method = RequestMethod.GET, produces = "application/json")
 	public Map<String,Tip> FindByTipId(@PathVariable("id") String id) {		
 		Map<String,Tip> responseBody = new HashMap<String,Tip>();			
-		Tip tip = tipService.FindByTipId(id);
+		Tip tip = tipService.findByTipId(id);
 		responseBody.put("tip", tip);
 		return responseBody;
 	}
 	
 	// Add New tip
 	@RequestMapping(value = "/tips", method = RequestMethod.POST, produces = "application/json")
-	public Map<String,Tip> AddTip(@RequestBody TipSideload newTip){
-		Tip savedTip = tipService.AddTip(newTip.tip);			
+	public Map<String,Tip> addTip(@RequestBody TipSideload newTip){
+		Tip savedTip = tipService.addTip(newTip.tip);			
 		Map<String,Tip> responseBody = new HashMap<String,Tip>();
 		responseBody.put("tip", savedTip);
 		return responseBody;
@@ -52,8 +65,8 @@ public class TipController {
 	
 	// Update tip
 	@RequestMapping(value = "/tips/{id}", method = RequestMethod.PUT, produces = "application/json")
-	public Map<String,Tip> UpdateTip(@PathVariable("id") String id, @RequestBody TipSideload updatedTip) {
-		Tip savedTip = tipService.UpdateTip(id,updatedTip.tip);		
+	public Map<String,Tip> updateTip(@PathVariable("id") String id, @RequestBody TipSideload updatedTip) {
+		Tip savedTip = tipService.updateTip(id,updatedTip.tip);		
 		Map<String,Tip> responseBody = new HashMap<String,Tip>();
 		responseBody.put("tip", savedTip);
 		return responseBody;		
@@ -61,8 +74,7 @@ public class TipController {
 	
 	// Delete Item
 	@RequestMapping (value = "/tips/{id}", method = RequestMethod.DELETE, produces = "application/json")
-	public void DeleteTip(@PathVariable("id")String id) {
-		tipService.DeleteTip(id);
-	}
-	
+	public void deleteTip(@PathVariable("id")String id) {
+		tipService.deleteTip(id);
+	}	
 }
