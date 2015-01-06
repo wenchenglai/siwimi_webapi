@@ -28,6 +28,7 @@ public class Item {
 	private float price;
 	private String imageUrl;
 	private String imageData;
+	private int viewCount;
 	
 	private String cityState;
 	private String zipCode;
@@ -213,5 +214,13 @@ public class Item {
 
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
+	}
+
+	public int getViewCount() {
+		return viewCount;
+	}
+
+	public void setViewCount(int viewCount) {
+		this.viewCount = viewCount;
 	}	
 }

@@ -1,5 +1,6 @@
 package com.adarp.xiwami.repository.mongo;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +21,19 @@ public class TipRepositoryImpl implements TipRepositoryCustom{
 	private MongoTemplate mongoTemplate;
 	
 	@Override
-	public List<Tip> queryTip(String type,Double longitude,Double latitude,String qsDistance,String queryText) {				
+	public List<Tip> queryTip(String status, String type, Double longitude, Double latitude, String qsDistance, String queryText) {				
 		Criteria c = new Criteria();
 		c = Criteria.where("isDeleted").is(false);
 	
+		// status is transient, depends on expirationDate.  They are {all, active, expired}
+		if (status != null) {
+			Date now = new Date();
+			if (status == "active")
+				c = c.andOperator(Criteria.where("expiredDate").gt(now));
+			else if (status == "expired")
+				c = c.andOperator(Criteria.where("expiredDate").lt(now));
+		}
+		
 		if (type != null) {
 			c = c.andOperator(Criteria.where("type").is(type));
 		}

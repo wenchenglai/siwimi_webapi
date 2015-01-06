@@ -17,12 +17,16 @@ public class Activity {
 	private String description;
 	private Date fromTime;
 	private Date toTime;
-	private String cityState;
+	private String address;
+	private String city;
+	private String State;
 	private String zipCode;
 	private String url;
 	private String imageData;
 	private String imageUrl;
 	private String type;
+	private int like;
+	private int viewCount;
 	private double[] location;
 	
 	//This field is only for front-end purpose
@@ -139,14 +143,6 @@ public class Activity {
 		this.type = type;
 	}
 
-	public String getCityState() {
-		return cityState;
-	}
-
-	public void setCityState(String cityState) {
-		this.cityState = cityState;
-	}
-
 	public double[] getLocation() {
 		return location;
 	}
@@ -163,6 +159,46 @@ public class Activity {
 		if (Integer.parseInt(zipCode)<10000)
 			zipCode = "0"+zipCode;
 		this.zipCode = zipCode;
+	}
+
+	public int getLike() {
+		return like;
+	}
+
+	public void setLike(int like) {
+		this.like = like;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getState() {
+		return State;
+	}
+
+	public void setState(String state) {
+		State = state;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public int getViewCount() {
+		return viewCount;
+	}
+
+	public void setViewCount(int viewCount) {
+		this.viewCount = viewCount;
 	}
 	
 }

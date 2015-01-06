@@ -61,14 +61,13 @@ public class ActivityService {
 		ZipCode thisZipCode = new ZipCode();
 				
 		// if the zipCode is not provided by the user
-		if (activity.getZipCode()==null) {				
-			if (activity.getCityState()==null){
-				// if both zipcode and cityState are not completed, set default to 48105
+		if (activity.getZipCode() == null) {				
+			if (activity.getCity() == null || activity.getState() == null){
+				// if both zipcode and city, State are not completed, set default to 48105
 				thisZipCode = zipCodeRep.findByzipCode(48105);
 			} else {
-				String [] parts = activity.getCityState().split(",");
-				String city = parts[0].trim();
-				String stateCode = parts[1].trim();	
+				String city = activity.getCity();
+				String stateCode = activity.getState();
 				thisZipCode = zipCodeRep.findByTownshipLikeIgnoreCaseAndStateCodeLikeIgnoreCase(city, stateCode);				
 			}						
 		} else {
@@ -84,7 +83,8 @@ public class ActivityService {
 		double[] location = {thisZipCode.getLongitude(), thisZipCode.getLatitude()};
 		activity.setZipCode(thisZipCode.getZipCode());
 		activity.setLocation(location);
-		activity.setCityState(thisZipCode.getTownship()+", "+thisZipCode.getStateCode());
+		activity.setCity(thisZipCode.getTownship());
+		activity.setState(thisZipCode.getStateCode());
 		
 		return activity;
 	}

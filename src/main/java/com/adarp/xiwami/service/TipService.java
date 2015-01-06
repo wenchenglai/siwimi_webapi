@@ -19,8 +19,8 @@ public class TipService {
 	@Autowired
 	private ZipCodeRepository zipCodeRep;
 	
-	public List<Tip> findTips(String type,Double longitude,Double latitude,String qsDistance,String queryText) {
-			return tipRep.queryTip(type,longitude,latitude,qsDistance,queryText);	
+	public List<Tip> findTips(String status, String type, Double longitude, Double latitude, String qsDistance, String queryText) {
+		return tipRep.queryTip(status, type, longitude, latitude, qsDistance, queryText);	
 	}
 	
 	public Tip findByTipId(String id) {

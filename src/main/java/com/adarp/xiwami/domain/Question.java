@@ -21,6 +21,7 @@ public class Question {
 	private List<String> answers = new ArrayList<String>();	
 	
 	private String status = "Open";
+	private int viewCount;
 	
 	private String cityState;
 	private String zipCode;
@@ -128,5 +129,13 @@ public class Question {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public int getViewCount() {
+		return viewCount;
+	}
+
+	public void setViewCount(int viewCount) {
+		this.viewCount = viewCount;
 	}	
 }

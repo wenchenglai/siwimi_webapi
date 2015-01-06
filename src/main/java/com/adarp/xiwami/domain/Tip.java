@@ -19,6 +19,7 @@ public class Tip {
 	private Date expiredDate;
 	private int like;
 	private String type;
+	private int viewCount;
 	
 	private String cityState;
 	private String zipCode;
@@ -131,5 +132,13 @@ public class Tip {
 		if (Integer.parseInt(zipCode)<10000)
 			zipCode = "0"+zipCode;
 		this.zipCode = zipCode;
+	}
+
+	public int getViewCount() {
+		return viewCount;
+	}
+
+	public void setViewCount(int viewCount) {
+		this.viewCount = viewCount;
 	}
 }
