@@ -23,7 +23,7 @@ public class DiscussionController {
 	@Autowired
 	private DiscussionService discussionService;
 	
-	// Get tips by type
+	// Get discussions by type
 	@RequestMapping(value = "/discussions", method = RequestMethod.GET, produces = "application/json")
 	public Map<String, List<Discussion>> Find(
 			@RequestParam(value="creator", required=false) String creatorId,
@@ -45,7 +45,7 @@ public class DiscussionController {
 		return responseBody;
 	}
 	
-	// Get tip by ID
+	// Get discussions by ID
 	@RequestMapping(value = "/discussions/{id}", method = RequestMethod.GET, produces = "application/json")
 	public Map<String, Discussion> FindById(@PathVariable("id") String id) {		
 		Map<String, Discussion> responseBody = new HashMap<String, Discussion>();			
@@ -54,7 +54,7 @@ public class DiscussionController {
 		return responseBody;
 	}
 	
-	// Add New tip
+	// Add New discussions
 	@RequestMapping(value = "/discussions", method = RequestMethod.POST, produces = "application/json")
 	public Map<String, Discussion> add(@RequestBody DiscussionSideload newObj){
 		Discussion savedObj = discussionService.add(newObj.discussion);			

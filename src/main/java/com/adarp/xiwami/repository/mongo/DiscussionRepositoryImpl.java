@@ -1,5 +1,6 @@
 package com.adarp.xiwami.repository.mongo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,32 +20,35 @@ public class DiscussionRepositoryImpl implements DiscussionRepositoryCustom{
 	
 	@Override
 	public List<Discussion> query(String creatorId, String entityId, String entityType, String queryText) {				
-		Criteria c = new Criteria();
-		c = Criteria.where("isDeleted").is(false);
-	
+		
+		List<Criteria> criterias = new ArrayList<Criteria>();
+		
+		criterias.add(new Criteria().where("isDeleted").is(false));
+		
 		if (creatorId != null) {
-			c = c.andOperator(Criteria.where("creator").is(creatorId));
+			criterias.add(new Criteria().where("creator").is(creatorId));
 		}
 		
 		if (entityId != null) {
-			c = c.andOperator(Criteria.where("entity").is(entityId));
+			criterias.add(new Criteria().where("entity").is(entityId));
 		}			
 		
 		if (entityType != null) {
-			c = c.andOperator(Criteria.where("entityType").is(entityType));
+			criterias.add(new Criteria().where("entityType").is(entityType));
 		}
 		
 		if (queryText != null) {
-			c = c.orOperator(Criteria.where("description").regex(queryText.trim(), "i"));
-		}
+			criterias.add(new Criteria().where("description").regex(queryText.trim(), "i"));
+		}	
 		
+		Criteria c = new Criteria().andOperator(criterias.toArray(new Criteria[criterias.size()]));
 		return mongoTemplate.find(new Query(c), Discussion.class, "Discussion");
 	}
 		
-	@Override
-	public Discussion save(Discussion newObj) {
-		mongoTemplate.save(newObj, "Discussion");
-		return newObj;
-	}
+//	@Override
+//	public Discussion save(Discussion newObj) {
+//		mongoTemplate.save(newObj, "Discussion");
+//		return newObj;
+//	}
 }
 
