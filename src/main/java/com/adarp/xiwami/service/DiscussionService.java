@@ -33,7 +33,7 @@ public class DiscussionService {
 	}
 	
 	public Discussion add(Discussion newObj) {
-		newObj.setIsDeleted(false);
+		newObj.setIsDestroyed(false);
 		newObj.setViewCount(0);
 		return discussionRep.save(newObj);
 	}
@@ -45,7 +45,7 @@ public class DiscussionService {
 	
 	public void delete(String id) {
 		Discussion obj = discussionRep.findOne(id);
-		obj.setIsDeleted(true);
+		obj.setIsDestroyed(true);
 		discussionRep.save(obj);
 	}
 }

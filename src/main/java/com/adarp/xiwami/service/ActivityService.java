@@ -38,7 +38,7 @@ public class ActivityService {
 	}
 	
 	public Activity AddActivity(Activity newActivity) {			
-		newActivity.setIsDeleted(false);
+		newActivity.setIsDestroyed(false);
 		newActivity.setViewCount(0);
 		newActivity = updateZipCode(newActivity);
 		
@@ -62,7 +62,7 @@ public class ActivityService {
 	
 	public void DeleteActivity(String id) {
 		Activity activity = activityRep.findOne(id);
-		activity.setIsDeleted(true);
+		activity.setIsDestroyed(true);
 		activityRep.saveActivity(activity);
 	}
 	

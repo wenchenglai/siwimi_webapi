@@ -26,7 +26,7 @@ public class Tip {
 	private double[] location;
 	
 	// The default of the below field is set by backend
-	private Boolean isDeleted;
+	private Boolean isDestroyed;
 
 	public String getId() {
 		return id;
@@ -100,12 +100,12 @@ public class Tip {
 		this.createdDate = createdDate;
 	}
 
-	public Boolean getIsDeleted() {
-		return isDeleted;
+	public Boolean getIsDestroyed() {
+		return isDestroyed;
 	}
 
-	public void setIsDeleted(Boolean isDeleted) {
-		this.isDeleted = isDeleted;
+	public void setIsDestroyed(Boolean isDestroyed) {
+		this.isDestroyed = isDestroyed;
 	}
 	
 	public String getCityState() {

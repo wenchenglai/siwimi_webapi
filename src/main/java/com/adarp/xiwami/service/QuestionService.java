@@ -38,7 +38,7 @@ public class QuestionService {
 	}
 	
 	public Question addQuestion(Question newQuestion) {
-		newQuestion.setIsDeleted(false);
+		newQuestion.setIsDestroyed(false);
 		newQuestion.setViewCount(0);
 		newQuestion = updateZipCode(newQuestion);
 		return questionRep.saveQuestion(newQuestion);
@@ -52,7 +52,7 @@ public class QuestionService {
 	
 	public void deleteQuestion(String id) {
 		Question question = questionRep.findOne(id);
-		question.setIsDeleted(true);
+		question.setIsDestroyed(true);
 		questionRep.saveQuestion(question);
 	}
 	

@@ -40,7 +40,7 @@ public class Member {
 	private String zipCode;
 	
 	//The default of the below field is set by back end
-	private boolean isDeleted;
+	private boolean isDestroyed;
 	
 	public void setId(String id) {
 		this.id = id;
@@ -235,12 +235,12 @@ public class Member {
 		this.ftimezone = ftimezone;
 	}
 
-	public boolean isIsDeleted() {
-		return isDeleted;
+	public boolean getIsDestroyed() {
+		return isDestroyed;
 	}
 
-	public void setIsDeleted(boolean isDeleted) {
-		this.isDeleted = isDeleted;
+	public void setIsDestroyed(boolean isDestroyed) {
+		this.isDestroyed = isDestroyed;
 	}
 
 	public String getHighSchool() {

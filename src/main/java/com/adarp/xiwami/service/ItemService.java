@@ -38,7 +38,7 @@ public class ItemService {
 	}
 	
 	public Item addItem(Item newItem) {
-		newItem.setIsDeleted(false);
+		newItem.setIsDestroyed(false);
 		newItem.setViewCount(0);
 		newItem = updateZipCode(newItem);
 		itemRep.saveItem(newItem);		
@@ -53,7 +53,7 @@ public class ItemService {
 	
 	public void deleteItem(String id) {
 		Item item = itemRep.findOne(id);
-		item.setIsDeleted(true);
+		item.setIsDestroyed(true);
 		itemRep.saveItem(item);
 	}
 	

@@ -27,7 +27,7 @@ public class TipRepositoryImpl implements TipRepositoryCustom{
 
 		List<Criteria> criterias = new ArrayList<Criteria>();
 		
-		criterias.add(new Criteria().where("isDeleted").is(false));
+		criterias.add(new Criteria().where("isDestroyed").is(false));
 	
 		// status is transient, depends on expirationDate.  They are {all, active, expired}
 		if (status != null) {

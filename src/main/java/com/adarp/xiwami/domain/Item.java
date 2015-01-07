@@ -34,6 +34,8 @@ public class Item {
 	private String zipCode;
 	private double[] location;
 	
+	private Boolean isDestroyed; 
+	
 	
 	public String getCityState() {
 		return cityState;
@@ -60,9 +62,6 @@ public class Item {
 	public void setLocation(double[] location) {
 		this.location = location;
 	}
-
-	//The default of the below field is set by backend
-	private Boolean isDeleted;
 
 	public String getId() {
 		return id;
@@ -199,14 +198,6 @@ public class Item {
 	public void setBuyer(String buyer) {
 		this.buyer = buyer;
 	}
-
-	public Boolean getIsDeleted() {
-		return isDeleted;
-	}
-
-	public void setIsDeleted(Boolean isDeleted) {
-		this.isDeleted = isDeleted;
-	}
 	
 	public Date getCreatedDate() {
 		return createdDate;
@@ -222,5 +213,13 @@ public class Item {
 
 	public void setViewCount(int viewCount) {
 		this.viewCount = viewCount;
+	}
+
+	public Boolean getIsDestroyed() {
+		return isDestroyed;
+	}
+
+	public void setIsDestroyed(Boolean isDestroyed) {
+		this.isDestroyed = isDestroyed;
 	}	
 }

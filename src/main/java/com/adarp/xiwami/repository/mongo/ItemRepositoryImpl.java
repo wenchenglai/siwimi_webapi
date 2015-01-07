@@ -26,7 +26,7 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
 				
 		List<Criteria> criterias = new ArrayList<Criteria>();
 		
-		criterias.add(new Criteria().where("isDeleted").is(false));
+		criterias.add(new Criteria().where("isDestroyed").is(false));
 	
 		if (sellerId != null) {
 			criterias.add(new Criteria().where("seller").is(sellerId));

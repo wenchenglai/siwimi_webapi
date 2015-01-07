@@ -38,7 +38,7 @@ public class TipService {
 	}
 	
 	public Tip addTip(Tip newTip) {
-		newTip.setIsDeleted(false);
+		newTip.setIsDestroyed(false);
 		newTip.setViewCount(0);
 		newTip = updateZipCode(newTip);
 		return tipRep.saveTip(newTip);
@@ -52,7 +52,7 @@ public class TipService {
 	
 	public void deleteTip(String id) {
 		Tip tip = tipRep.findOne(id);
-		tip.setIsDeleted(true);
+		tip.setIsDestroyed(true);
 		tipRep.saveTip(tip);
 	}
 	

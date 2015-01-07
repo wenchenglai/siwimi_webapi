@@ -24,7 +24,7 @@ public class DiscussionRepositoryImpl implements DiscussionRepositoryCustom{
 		
 		List<Criteria> criterias = new ArrayList<Criteria>();
 		
-		criterias.add(new Criteria().where("isDeleted").is(false));
+		criterias.add(new Criteria().where("isDestroyed").is(false));
 		
 		if (creatorId != null) {
 			criterias.add(new Criteria().where("creator").is(creatorId));

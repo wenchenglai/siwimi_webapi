@@ -20,11 +20,11 @@ public class MemberService {
 	
 	public Member addMember(Member newMember){
 		// 2014-12-11 A scenario would be that a new member is added by another user, so there is no email, no facebookId 
-		if (newMember.getEmail() != null && memberRep.findByEmailIgnoreCaseAndIsDeletedIsFalse(newMember.getEmail()).size()>0)
+		if (newMember.getEmail() != null && memberRep.findByEmailIgnoreCaseAndIsDestroyedIsFalse(newMember.getEmail()).size()>0)
 			// make sure no one uses the same email twice to sign up 
 			return null;
 		else {
-			newMember.setIsDeleted(false);
+			newMember.setIsDestroyed(false);
 			Member member = memberRep.save(newMember);	
 			return member;	
 		}
@@ -32,7 +32,7 @@ public class MemberService {
 	
 	public Member addMemberByFacebookId(Member newMember){
 		// TODO: Must check if facebookId exist or not
-		newMember.setIsDeleted(false);
+		newMember.setIsDestroyed(false);
 		Member member = memberRep.save(newMember);	
 		return member;	
 	}
@@ -47,12 +47,12 @@ public class MemberService {
 	public void deleteMember(String id) {
 		// For Member collection
 		Member member = memberRep.findOne(id);
-		member.setIsDeleted(true);
+		member.setIsDestroyed(true);
 		memberRep.save(member);
 	}
 	
 	public List<Member> findMembers(String familyId) {
-		return memberRep.findByFamilyInAndIsDeletedIsFalse(familyId);
+		return memberRep.findByFamilyInAndIsDestroyedIsFalse(familyId);
 	}
 
 	public Member findByMemberId(String id) {

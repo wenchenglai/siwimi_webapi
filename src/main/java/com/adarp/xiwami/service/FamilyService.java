@@ -41,7 +41,7 @@ public class FamilyService {
 			distance = new Distance(Double.parseDouble(parts[0]),Metrics.MILES);
 		else
 			distance = new Distance(Double.parseDouble(parts[0]),Metrics.KILOMETERS);			
-		List<Family> geoFamilies = familyRep.findByLocationNearAndIsDeletedIsFalse(new Point(longitude,latitude),distance);
+		List<Family> geoFamilies = familyRep.findByLocationNearAndIsDestroyedIsFalse(new Point(longitude,latitude),distance);
 		
 		// Retrieve the id of geoFamilies
 		List<String> geoFamilyId = new ArrayList<String>();
@@ -75,7 +75,7 @@ public class FamilyService {
 			return geoFamilies;
 		else if (languages==null) {
 			// Query the qualified members from geoFamily.
-			List<Member> foundMember = memberRep.findByFamilyInAndBirthdayBetweenAndIsDeletedIsFalse(geoFamilyId, toDate, fromDate);
+			List<Member> foundMember = memberRep.findByFamilyInAndBirthdayBetweenAndIsDestroyedIsFalse(geoFamilyId, toDate, fromDate);
 			// Retrieve the familyId of the qualified members.
 			Set<String> foundFamilyId = new HashSet<String>();
 			for (Member member:foundMember) {
@@ -87,7 +87,7 @@ public class FamilyService {
 			// Convert String[] to List<String>
 			List<String> languageList = new ArrayList<String>(Arrays.asList(languages));
 			// Query the qualified members from geoFamily.
-			List<Member> foundMember = memberRep.findByFamilyInAndLanguagesInAndBirthdayBetweenAndIsDeletedIsFalse(geoFamilyId, languageList, toDate, fromDate);
+			List<Member> foundMember = memberRep.findByFamilyInAndLanguagesInAndBirthdayBetweenAndIsDestroyedIsFalse(geoFamilyId, languageList, toDate, fromDate);
 			// Retrieve the familyId of the qualified members.
 			Set<String> foundFamilyId = new HashSet<String>();
 			for (Member member:foundMember) {
@@ -98,11 +98,11 @@ public class FamilyService {
 	}
 	
 	public Family findByFamilyId(String id) {
-		return familyRep.findByIdAndIsDeletedIsFalse(id);
+		return familyRep.findByIdAndIsDestroyedIsFalse(id);
 	}
 	
 	public Family addFamily(Family newFamily) {				
-		newFamily.setIsDeleted(false);
+		newFamily.setIsDestroyed(false);
 		newFamily = updateZipCode(newFamily);
 		return familyRep.addFamily(newFamily);
 	}
@@ -116,16 +116,16 @@ public class FamilyService {
 	
 	public void deleteFamily(String id) {		
 		//Delete members which belongs both "non-user" and this family
-		List<Member> memberList = memberRep.findByFamilyInAndIsDeletedIsFalse(id);
+		List<Member> memberList = memberRep.findByFamilyInAndIsDestroyedIsFalse(id);
 		for (Member member:memberList) {
 			if ((member.getFacebookId()==null)) {
-				member.setIsDeleted(true);
+				member.setIsDestroyed(true);
 				memberRep.save(member);
 			}				
 		}
 		
 		Family family = familyRep.findOne(id);
-		family.setIsDeleted(true);
+		family.setIsDestroyed(true);
 		familyRep.save(family);		
 		
 	}

@@ -34,7 +34,7 @@ public class Activity {
 	private String status = "Upcoming";
 	
 	//The default of the below field is set by backend
-	private Boolean isDeleted;
+	private Boolean isDestroyed;
 	
 	public Activity() {
 		// this.status : this is for front-end only
@@ -95,12 +95,12 @@ public class Activity {
 		this.imageUrl = imageUrl;
 	}
 
-	public Boolean getIsDeleted() {
-		return isDeleted;
+	public Boolean getIsDestroyed() {
+		return isDestroyed;
 	}
 
-	public void setIsDeleted(Boolean isDeleted) {
-		this.isDeleted = isDeleted;
+	public void setIsDestroyed(Boolean isDestroyed) {
+		this.isDestroyed = isDestroyed;
 	}
 
 	public String getId() {
