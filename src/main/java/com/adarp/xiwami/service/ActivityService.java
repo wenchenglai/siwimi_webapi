@@ -19,17 +19,27 @@ public class ActivityService {
 	@Autowired
 	private ZipCodeRepository zipCodeRep;
 	
-	public List<Activity> FindActivities(String creatorId,String status,Double longitude,Double latitude,String qsDistance,String queryText) {											
-		return activityRep.queryActivity(creatorId, status, longitude, latitude, qsDistance, queryText);
+	public List<Activity> FindActivities(String creatorId,String status,Double longitude,Double latitude,String qsDistance,String queryText) {													
+		List<Activity> activityList = activityRep.queryActivity(creatorId, status, longitude, latitude, qsDistance, queryText);
+
+		// increment viewcount by 1, and save it to MongoDB
+		for (int i=0; i<activityList.size(); i++) {
+			Activity activity = activityList.get(i);
+			activity.setViewCount(activity.getViewCount()+1);
+			activityRep.saveActivity(activity);
+			activityList.set(i, activity);			
+		}
+		
+		return activityList;
 	}
 	
 	public Activity FindByActivityId(String id){
 		return activityRep.findOne(id);
 	}
 	
-	public Activity AddActivity(Activity newActivity) {
-			
+	public Activity AddActivity(Activity newActivity) {			
 		newActivity.setIsDeleted(false);
+		newActivity.setViewCount(0);
 		newActivity = updateZipCode(newActivity);
 		
 		// fromTime must be ealier than toTime

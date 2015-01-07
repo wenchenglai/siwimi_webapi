@@ -1,5 +1,6 @@
 package com.adarp.xiwami.repository.mongo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,23 +20,25 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
 	@Autowired
 	private MongoTemplate mongoTemplate;
 
+	@SuppressWarnings("static-access")
 	@Override
 	public List<Item> queryItem(String sellerId,String status,Double longitude,Double latitude,String qsDistance,String queryText) {
 				
-		Criteria c = new Criteria();
-		c = Criteria.where("isDeleted").is(false);
+		List<Criteria> criterias = new ArrayList<Criteria>();
+		
+		criterias.add(new Criteria().where("isDeleted").is(false));
 	
 		if (sellerId != null) {
-			c = c.andOperator(Criteria.where("seller").is(sellerId));
+			criterias.add(new Criteria().where("seller").is(sellerId));
 		}
 		
 		if (status != null) {
-			c = c.andOperator(Criteria.where("status").is(status));
+			criterias.add(new Criteria().where("status").is(status));
 		}
 		
 		if (queryText != null) {
-			c = c.orOperator(Criteria.where("name").regex(queryText.trim(), "i"),
-					         Criteria.where("description").regex(queryText.trim(), "i"));
+			criterias.add(new Criteria().orOperator(Criteria.where("name").regex(queryText.trim(), "i"),
+                                                    Criteria.where("description").regex(queryText.trim(), "i")));
 		}
 		
 		if ((longitude != null) && (latitude != null) && (qsDistance!= null)) {
@@ -47,9 +50,10 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
 			else	
 				distance = Double.parseDouble(parts[0])/6371;
 					
-			c = c.andOperator(Criteria.where("location").nearSphere(new Point(longitude,latitude)).maxDistance(distance));
+			criterias.add(new Criteria().where("location").nearSphere(new Point(longitude,latitude)).maxDistance(distance));
 		}
 		
+		Criteria c = new Criteria().andOperator(criterias.toArray(new Criteria[criterias.size()]));
 		return mongoTemplate.find(new Query(c), Item.class, "Item");
 	}
 		

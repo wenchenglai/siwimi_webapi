@@ -18,6 +18,7 @@ public class DiscussionRepositoryImpl implements DiscussionRepositoryCustom{
 	@Autowired
 	private MongoTemplate mongoTemplate;
 	
+	@SuppressWarnings("static-access")
 	@Override
 	public List<Discussion> query(String creatorId, String entityId, String entityType, String queryText) {				
 		
@@ -43,12 +44,6 @@ public class DiscussionRepositoryImpl implements DiscussionRepositoryCustom{
 		
 		Criteria c = new Criteria().andOperator(criterias.toArray(new Criteria[criterias.size()]));
 		return mongoTemplate.find(new Query(c), Discussion.class, "Discussion");
-	}
-		
-//	@Override
-//	public Discussion save(Discussion newObj) {
-//		mongoTemplate.save(newObj, "Discussion");
-//		return newObj;
-//	}
+	}		
 }
 

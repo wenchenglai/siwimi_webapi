@@ -20,7 +20,17 @@ public class TipService {
 	private ZipCodeRepository zipCodeRep;
 	
 	public List<Tip> findTips(String status, String type, Double longitude, Double latitude, String qsDistance, String queryText) {
-		return tipRep.queryTip(status, type, longitude, latitude, qsDistance, queryText);	
+		List<Tip> tipList = tipRep.queryTip(status, type, longitude, latitude, qsDistance, queryText);
+		
+		// increment viewcount by 1, and save it to MongoDB
+		for (int i=0; i<tipList.size(); i++) {
+			Tip tip = tipList.get(i);
+			tip.setViewCount(tip.getViewCount()+1);
+			tipRep.saveTip(tip);
+			tipList.set(i, tip);
+		}
+		
+		return tipList;
 	}
 	
 	public Tip findByTipId(String id) {
@@ -29,6 +39,7 @@ public class TipService {
 	
 	public Tip addTip(Tip newTip) {
 		newTip.setIsDeleted(false);
+		newTip.setViewCount(0);
 		newTip = updateZipCode(newTip);
 		return tipRep.saveTip(newTip);
 	}

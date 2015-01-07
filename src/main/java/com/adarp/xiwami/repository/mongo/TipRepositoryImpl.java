@@ -1,5 +1,6 @@
 package com.adarp.xiwami.repository.mongo;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -20,27 +21,30 @@ public class TipRepositoryImpl implements TipRepositoryCustom{
 	@Autowired
 	private MongoTemplate mongoTemplate;
 	
+	@SuppressWarnings("static-access")
 	@Override
 	public List<Tip> queryTip(String status, String type, Double longitude, Double latitude, String qsDistance, String queryText) {				
-		Criteria c = new Criteria();
-		c = Criteria.where("isDeleted").is(false);
+
+		List<Criteria> criterias = new ArrayList<Criteria>();
+		
+		criterias.add(new Criteria().where("isDeleted").is(false));
 	
 		// status is transient, depends on expirationDate.  They are {all, active, expired}
 		if (status != null) {
 			Date now = new Date();
-			if (status == "active")
-				c = c.andOperator(Criteria.where("expiredDate").gt(now));
-			else if (status == "expired")
-				c = c.andOperator(Criteria.where("expiredDate").lt(now));
+			if (status.equalsIgnoreCase("active"))
+				criterias.add(new Criteria().where("expiredDate").gt(now));
+			else if (status.equalsIgnoreCase("expired"))
+				criterias.add(new Criteria().where("expiredDate").lt(now));
 		}
 		
 		if (type != null) {
-			c = c.andOperator(Criteria.where("type").is(type));
+			criterias.add(new Criteria().where("type").is(type));
 		}
 		
 		if (queryText != null) {
-			c = c.orOperator(Criteria.where("title").regex(queryText.trim(), "i"),
-					         Criteria.where("description").regex(queryText.trim(), "i"));
+			criterias.add(new Criteria().orOperator(Criteria.where("title").regex(queryText.trim(), "i"),
+													Criteria.where("description").regex(queryText.trim(), "i")));
 		}
 		
 		if ((longitude != null) && (latitude != null) && (qsDistance!= null)) {			
@@ -51,9 +55,10 @@ public class TipRepositoryImpl implements TipRepositoryCustom{
 			else	
 				distance = Double.parseDouble(parts[0])/6371;
 					
-			c = c.andOperator(Criteria.where("location").nearSphere(new Point(longitude,latitude)).maxDistance(distance));
+			criterias.add(new Criteria().where("location").nearSphere(new Point(longitude,latitude)).maxDistance(distance));
 		}
 		
+		Criteria c = new Criteria().andOperator(criterias.toArray(new Criteria[criterias.size()]));
 		return mongoTemplate.find(new Query(c), Tip.class, "Tip");
 	}
 		

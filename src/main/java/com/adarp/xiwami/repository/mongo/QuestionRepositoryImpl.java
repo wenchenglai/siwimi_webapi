@@ -1,5 +1,6 @@
 package com.adarp.xiwami.repository.mongo;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -20,20 +21,22 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
 	@Autowired
 	private MongoTemplate mongoTemplate;
 
+	@SuppressWarnings("static-access")
 	@Override
 	public List<Question> queryQuestion(String creatorId,Double longitude,Double latitude,String qsDistance,String queryText) {
 				
-		Criteria c = new Criteria();
-		c = Criteria.where("isDeleted").is(false);
+		List<Criteria> criterias = new ArrayList<Criteria>();
+		
+		criterias.add(new Criteria().where("isDeleted").is(false));
 	
 		if (creatorId != null) {
-			c = c.andOperator(Criteria.where("creator").is(creatorId));
+			criterias.add(new Criteria().where("creator").is(creatorId));
 		}
 		
 		if (queryText != null) {
-			c = c.orOperator(Criteria.where("title").regex(queryText.trim(), "i"),
-					         Criteria.where("description").regex(queryText.trim(), "i"),
-					         Criteria.where("answers").in(Pattern.compile("(?)"+queryText.trim())));
+			criterias.add(new Criteria().orOperator(Criteria.where("title").regex(queryText.trim(), "i"),
+					                                Criteria.where("description").regex(queryText.trim(), "i"),
+                                                    Criteria.where("answers").in(Pattern.compile("(?)"+queryText.trim()))));
 		}
 		
 		if ((longitude != null) && (latitude != null) && (qsDistance!= null)) {
@@ -45,9 +48,10 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
 			else	
 				distance = Double.parseDouble(parts[0])/6371;
 					
-			c = c.andOperator(Criteria.where("location").nearSphere(new Point(longitude,latitude)).maxDistance(distance));
+			criterias.add(new Criteria().where("location").nearSphere(new Point(longitude,latitude)).maxDistance(distance));
 		}
 		
+		Criteria c = new Criteria().andOperator(criterias.toArray(new Criteria[criterias.size()]));
 		return mongoTemplate.find(new Query(c), Question.class, "Question");
 	}
 		
