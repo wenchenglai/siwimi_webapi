@@ -1,5 +1,6 @@
 package com.adarp.xiwami.repository.mongo;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -20,19 +21,21 @@ public class ActivityRepositoryImpl implements ActivityRepositoryCustom {
 	@Autowired
 	private MongoTemplate mongoTemplate;
 
+	@SuppressWarnings("static-access")
 	@Override
 	public List<Activity> queryActivity(String creatorId,String status,Double longitude,Double latitude,String qsDistance,String queryText) {
-				
-		Criteria c = new Criteria();
-		c = Criteria.where("isDeleted").is(false);
+			
+		List<Criteria> criterias = new ArrayList<Criteria>();
+		
+		criterias.add(new Criteria().where("isDeleted").is(false));
 	
 		if (creatorId != null) {
-			c = c.andOperator(Criteria.where("creator").is(creatorId));
+			criterias.add(new Criteria().where("creator").is(creatorId));
 		}
 		
 		if (queryText != null) {
-			c = c.orOperator(Criteria.where("title").regex(queryText.trim(), "i"),
-					         Criteria.where("description").regex(queryText.trim(), "i"));
+			criterias.add(new Criteria().orOperator(Criteria.where("title").regex(queryText.trim(), "i"),
+			                                        Criteria.where("description").regex(queryText.trim(), "i")));
 		}
 		
 		if ((longitude != null) && (latitude != null) && (qsDistance!= null)) {			
@@ -43,21 +46,22 @@ public class ActivityRepositoryImpl implements ActivityRepositoryCustom {
 			else	
 				distance = Double.parseDouble(parts[0])/6371;
 					
-			c = c.andOperator(Criteria.where("location").nearSphere(new Point(longitude,latitude)).maxDistance(distance));
+			criterias.add(new Criteria().where("location").nearSphere(new Point(longitude,latitude)).maxDistance(distance));
 		}
 		
 		if (status != null) {		
 			Date now = new Date();
 			if (status.equalsIgnoreCase("Past")) {
-				c = c.andOperator(Criteria.where("toTime").lt(now));				
+				criterias.add(new Criteria().where("toTime").lt(now));
 			} else if (status.equalsIgnoreCase("Ongoing")) {
-				c = c.andOperator(Criteria.where("fromTime").lte(now).andOperator(Criteria.where("toTime").gte(now)));
+				criterias.add(new Criteria().andOperator(Criteria.where("fromTime").lte(now),Criteria.where("toTime").gte(now)));
 			}
 			else if (status.equalsIgnoreCase("Upcoming")){
-				c = c.andOperator(Criteria.where("fromTime").gt(now));
+				criterias.add(new Criteria().where("fromTime").gt(now));
 			}			
 		}
 	
+		Criteria c = new Criteria().andOperator(criterias.toArray(new Criteria[criterias.size()]));
 		return mongoTemplate.find(new Query(c), Activity.class, "Activity");
 	}
 		

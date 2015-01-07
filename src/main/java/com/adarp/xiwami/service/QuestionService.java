@@ -20,7 +20,17 @@ public class QuestionService {
 	private ZipCodeRepository zipCodeRep;
 	
 	public List<Question> findQuestions(String creatorId, Double longitude, Double latitude, String qsDistance, String queryText) {
-		return questionRep.queryQuestion(creatorId, longitude,latitude,qsDistance,queryText);
+		List<Question> questionList = questionRep.queryQuestion(creatorId, longitude,latitude,qsDistance,queryText);
+		
+		// increment viewcount by 1, and save it to MongoDB
+		for (int i=0; i<questionList.size();i++) {
+			Question question = questionList.get(i);
+			question.setViewCount(question.getViewCount()+1);
+			questionRep.saveQuestion(question);
+			questionList.set(i, question);
+		}
+		
+		return questionList;
 	}
 	
 	public Question findByQuestionId(String id) {
@@ -29,6 +39,7 @@ public class QuestionService {
 	
 	public Question addQuestion(Question newQuestion) {
 		newQuestion.setIsDeleted(false);
+		newQuestion.setViewCount(0);
 		newQuestion = updateZipCode(newQuestion);
 		return questionRep.saveQuestion(newQuestion);
 	}

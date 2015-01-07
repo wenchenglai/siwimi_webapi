@@ -15,7 +15,17 @@ public class DiscussionService {
 	DiscussionRepository discussionRep;
 	
 	public List<Discussion> find(String creator, String entity, String entityType, String queryText) {
-		return discussionRep.query(creator, entity, entityType, queryText);	
+		List<Discussion> discussionList = discussionRep.query(creator, entity, entityType, queryText);
+		
+		// increment viewcount by 1, and save it to MongoDB
+		for (int i=0; i<discussionList.size(); i++) {
+			Discussion discussion = discussionList.get(i);
+			discussion.setViewCount(discussion.getViewCount()+1);
+			discussionRep.save(discussion);
+			discussionList.set(i, discussion);
+		}
+		
+		return discussionList;
 	}
 	
 	public Discussion findById(String id) {
@@ -24,6 +34,7 @@ public class DiscussionService {
 	
 	public Discussion add(Discussion newObj) {
 		newObj.setIsDeleted(false);
+		newObj.setViewCount(0);
 		return discussionRep.save(newObj);
 	}
 	

@@ -20,7 +20,17 @@ public class ItemService {
 	private ZipCodeRepository zipCodeRep;
 	
 	public List<Item> findItems(String sellerId,String status,Double longitude,Double latitude,String qsDistance,String queryText) {					
-			return itemRep.queryItem(sellerId,status, longitude,latitude,qsDistance,queryText);
+		List<Item> itemList = itemRep.queryItem(sellerId,status, longitude,latitude,qsDistance,queryText);
+		
+		// increment viewcount by 1, and save it to MongoDB
+		for (int i=0; i<itemList.size(); i++) {
+			Item item = itemList.get(i);
+			item.setViewCount(item.getViewCount()+1);
+			itemRep.saveItem(item);
+			itemList.set(i, item);
+		}
+		
+		return itemList;
 	}
 	
 	public Item findByItemId(String id) {
@@ -29,6 +39,7 @@ public class ItemService {
 	
 	public Item addItem(Item newItem) {
 		newItem.setIsDeleted(false);
+		newItem.setViewCount(0);
 		newItem = updateZipCode(newItem);
 		itemRep.saveItem(newItem);		
 		return newItem;
