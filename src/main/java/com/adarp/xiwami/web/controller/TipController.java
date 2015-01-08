@@ -74,7 +74,7 @@ public class TipController {
 		return responseBody;		
 	}
 	
-	// Delete Item
+	// Delete tip
 	@RequestMapping (value = "/tips/{id}", method = RequestMethod.DELETE, produces = "application/json")
 	public void deleteTip(@PathVariable("id")String id) {
 		tipService.deleteTip(id);
