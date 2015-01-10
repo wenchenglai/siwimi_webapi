@@ -1,7 +1,10 @@
 package com.adarp.xiwami.service;
 
+import java.io.IOException;
 import java.util.List;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -87,5 +90,18 @@ public class TipService {
 		tip.setCityState(thisZipCode.getTownship()+", "+thisZipCode.getStateCode());	
 		
 		return tip;
+	}
+	
+	public String urlContent(String url) {
+		String header = url;
+		Document doc = null;
+		try {
+			doc = Jsoup.connect(url).get();
+			header = doc.title();
+		} catch (IOException e) {
+			//e.printStackTrace();
+		} 
+				
+		return header;
 	}
 }
