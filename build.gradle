@@ -4,7 +4,6 @@ buildscript {
 	}
 	repositories {
 		// NOTE: You should declare only repositories that you need here
-		//mavenLocal()
 		mavenCentral()
 		maven { url "http://repo.spring.io/release" }
 		maven { url "http://repo.spring.io/milestone" }
@@ -30,7 +29,6 @@ war {
 }
 
 repositories {
-	//mavenLocal()
 	mavenCentral()
 	maven { url "http://repo.spring.io/release" }
 	maven { url "http://repo.spring.io/milestone" }
@@ -42,6 +40,7 @@ dependencies {
     compile("org.springframework.data:spring-data-mongodb")
     compile("org.springframework.boot:spring-boot-starter-thymeleaf")
     compile group: 'com.google.guava', name: 'guava', version: '17.0'
+    compile("org.jsoup:jsoup:1.8.1")
     testCompile("junit:junit:4.11")
     compile("javax.mail:mail:1.4.5")
     testCompile("org.springframework.boot:spring-boot-starter-test")

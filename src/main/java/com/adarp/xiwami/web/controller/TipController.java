@@ -79,4 +79,10 @@ public class TipController {
 	public void deleteTip(@PathVariable("id")String id) {
 		tipService.deleteTip(id);
 	}	
+	
+	// Get URL header
+	@RequestMapping(value = "/tips/findURL", method = RequestMethod.GET, produces = "application/json")
+	public String findURL(@RequestParam(value="url", required=false) String url) {
+		return tipService.urlContent(url);
+	}
 }
