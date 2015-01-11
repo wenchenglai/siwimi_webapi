@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.adarp.xiwami.domain.Tip;
 import com.adarp.xiwami.service.TipService;
 import com.adarp.xiwami.web.dto.TipSideload;
+import com.adarp.xiwami.web.dto.PreviewWebPage;
 
 @RestController
 public class TipController {
@@ -82,7 +83,9 @@ public class TipController {
 	
 	// Get URL header
 	@RequestMapping(value = "/tips/findURL", method = RequestMethod.GET, produces = "application/json")
-	public String findURL(@RequestParam(value="url", required=false) String url) {
-		return tipService.urlContent(url);
+	public PreviewWebPage findURL(@RequestParam(value="url", required=false) String url) {
+		PreviewWebPage obj = new PreviewWebPage();
+		obj.text = tipService.urlContent(url);
+		return obj;
 	}
 }

@@ -1,5 +1,6 @@
 package com.adarp.xiwami.domain;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import org.springframework.data.annotation.Id;
@@ -15,9 +16,9 @@ public class Discussion {
 	private String entity;
 	private String entityType;
 	private String description;
+	private ArrayList<Discussion> comments;
 	private Date createdDate;
-	private int star;
-	private int like;
+	private int likeCount;
 	private int viewCount;
 	
 	//The default of the below field is set by backend
@@ -71,20 +72,12 @@ public class Discussion {
 		this.entity = entity;
 	}
 
-	public int getStar() {
-		return star;
-	}
-
-	public void setStar(int star) {
-		this.star = star;
-	}
-
 	public int getLike() {
-		return like;
+		return likeCount;
 	}
 
 	public void setLike(int like) {
-		this.like = like;
+		this.likeCount = like;
 	}
 
 	public String getEntityType() {
@@ -101,5 +94,13 @@ public class Discussion {
 
 	public void setViewCount(int viewCount) {
 		this.viewCount = viewCount;
+	}
+
+	public ArrayList<Discussion> getComments() {
+		return comments;
+	}
+
+	public void setComments(ArrayList<Discussion> comments) {
+		this.comments = comments;
 	}
 }

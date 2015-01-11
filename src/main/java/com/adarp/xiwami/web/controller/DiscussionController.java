@@ -45,7 +45,7 @@ public class DiscussionController {
 		return responseBody;
 	}
 	
-	// Get discussions by ID
+	// Get by ID
 	@RequestMapping(value = "/discussions/{id}", method = RequestMethod.GET, produces = "application/json")
 	public Map<String, Discussion> FindById(@PathVariable("id") String id) {		
 		Map<String, Discussion> responseBody = new HashMap<String, Discussion>();			
@@ -54,7 +54,7 @@ public class DiscussionController {
 		return responseBody;
 	}
 	
-	// Add New discussions
+	// Add New
 	@RequestMapping(value = "/discussions", method = RequestMethod.POST, produces = "application/json")
 	public Map<String, Discussion> add(@RequestBody DiscussionSideload newObj){
 		Discussion savedObj = discussionService.add(newObj.discussion);			
