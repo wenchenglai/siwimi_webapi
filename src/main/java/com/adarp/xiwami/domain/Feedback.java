@@ -2,21 +2,22 @@ package com.adarp.xiwami.domain;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection="Discussion")
-public class Discussion {
+@Document(collection="Feedback")
+public class Feedback {
 
 	@Id
 	private String id;
 	
 	private String creator;
-	private String entity;
-	private String entityType;
+	private String parent;
+	private String parentType;
 	private String description;
-	private ArrayList<Discussion> comments;
+	private List<Feedback> comments = new ArrayList<Feedback>();
 	private Date createdDate;
 	private int likeCount;
 	private int viewCount;
@@ -64,30 +65,6 @@ public class Discussion {
 		this.isDestroyed = isDestroyed;
 	}
 
-	public String getEntity() {
-		return entity;
-	}
-
-	public void setEntity(String entity) {
-		this.entity = entity;
-	}
-
-	public int getLike() {
-		return likeCount;
-	}
-
-	public void setLike(int like) {
-		this.likeCount = like;
-	}
-
-	public String getEntityType() {
-		return entityType;
-	}
-
-	public void setEntityType(String entityType) {
-		this.entityType = entityType;
-	}
-
 	public int getViewCount() {
 		return viewCount;
 	}
@@ -96,11 +73,35 @@ public class Discussion {
 		this.viewCount = viewCount;
 	}
 
-	public ArrayList<Discussion> getComments() {
+	public String getParent() {
+		return parent;
+	}
+
+	public void setParent(String parent) {
+		this.parent = parent;
+	}
+
+	public String getParentType() {
+		return parentType;
+	}
+
+	public void setParentType(String parentType) {
+		this.parentType = parentType;
+	}
+
+	public int getLikeCount() {
+		return likeCount;
+	}
+
+	public void setLikeCount(int likeCount) {
+		this.likeCount = likeCount;
+	}
+
+	public List<Feedback> getComments() {
 		return comments;
 	}
 
-	public void setComments(ArrayList<Discussion> comments) {
+	public void setComments(List<Feedback> comments) {
 		this.comments = comments;
 	}
 }

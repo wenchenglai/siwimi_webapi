@@ -9,18 +9,18 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
-import com.adarp.xiwami.domain.Discussion;
-import com.adarp.xiwami.repository.DiscussionRepositoryCustom;
+import com.adarp.xiwami.domain.Feedback;
+import com.adarp.xiwami.repository.FeedbackRepositoryCustom;
 
 @Repository
-public class DiscussionRepositoryImpl implements DiscussionRepositoryCustom{
+public class FeedbackRepositoryImpl implements FeedbackRepositoryCustom{
 	
 	@Autowired
 	private MongoTemplate mongoTemplate;
 	
 	@SuppressWarnings("static-access")
 	@Override
-	public List<Discussion> query(String creatorId, String entityId, String entityType, String queryText) {				
+	public List<Feedback> query(String creatorId, String parentId, String parentType, String queryText) {				
 		
 		List<Criteria> criterias = new ArrayList<Criteria>();
 		
@@ -30,20 +30,21 @@ public class DiscussionRepositoryImpl implements DiscussionRepositoryCustom{
 			criterias.add(new Criteria().where("creator").is(creatorId));
 		}
 		
-		if (entityId != null) {
-			criterias.add(new Criteria().where("entity").is(entityId));
+		if (parentId != null) {
+			criterias.add(new Criteria().where("parent").is(parentId));
 		}			
 		
-		if (entityType != null) {
-			criterias.add(new Criteria().where("entityType").is(entityType));
+		if (parentType != null) {
+			criterias.add(new Criteria().where("parentType").is(parentType));
 		}
 		
 		if (queryText != null) {
-			criterias.add(new Criteria().where("description").regex(queryText.trim(), "i"));
+			criterias.add(new Criteria().orOperator(Criteria.where("description").regex(queryText.trim(), "i"),
+					                                Criteria.where("comments.description").regex(queryText.trim(), "i")));
 		}	
 		
 		Criteria c = new Criteria().andOperator(criterias.toArray(new Criteria[criterias.size()]));
-		return mongoTemplate.find(new Query(c), Discussion.class, "Discussion");
+		return mongoTemplate.find(new Query(c), Feedback.class, "Feedback");
 	}		
 }
 
