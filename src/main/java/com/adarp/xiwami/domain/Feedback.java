@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -25,6 +26,11 @@ public class Feedback {
 	//The default of the below field is set by backend
 	private Boolean isDestroyed;
 
+	// This is required by the front-end (ember) : it needs id for both Feedback and comment.
+	public Feedback() {
+		id = new ObjectId().toString();
+	}
+	
 	public String getId() {
 		return id;
 	}
