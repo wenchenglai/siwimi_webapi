@@ -2,8 +2,10 @@ package com.adarp.xiwami.web.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,20 +36,38 @@ public class FeedbackController {
 		
 		FeedbackSideloadList responseBody = new FeedbackSideloadList();
 		
-		List<Feedback> feedbacks = new ArrayList<Feedback>();
-		try {
-			feedbacks = feedbackService.find(creatorId, parentId, parentType, queryText);
-		} catch (Exception err) {
-			// we must return an empty array so Ember can pick up the json data format.  Return null will crash the ember client.
+		// idList could be either Feedback or Comment.
+		List<String> idList = new ArrayList<String>();
+		idList = feedbackService.find(creatorId, parentId, parentType, queryText);
+
+		Set <Feedback> feedbacks = new LinkedHashSet<Feedback>();
+		Set <Feedback> comments = new LinkedHashSet<Feedback>();
+		for (String id : idList) {
+			// feedback : Feedback or Comment from the document "Feedback".
+			Feedback feedback = feedbackService.findById(id);			
+			if (feedback.getParent()!=null && !feedback.getParent().isEmpty()) {
+				// feedback is comment ==> need to retreive its related Feedback & comments.				
+				Feedback parent = feedbackService.findById(feedback.getParent());
+				// export parent
+				feedbacks.add(parent);
+				// export comment
+				for (String commentId : feedback.getComments()) {
+					comments.add(feedbackService.findById(commentId));
+				}										
+			} else {
+				// feedback is Feedback
+
+				// export parent
+				feedbacks.add(feedback);
+				// export comment
+				for (String commentId : feedback.getComments()) {
+					comments.add(feedbackService.findById(commentId));
+				}	
+			}
 		}
 		
-		List <Feedback> comments = new ArrayList<Feedback>();
-		for (Feedback feedback : feedbacks) {
-			comments.addAll(feedback.getComments()); 
-		}
-		
-		responseBody.feedbacks = feedbacks;
-		responseBody.comments = comments;
+		responseBody.feedbacks = new ArrayList<Feedback>(feedbacks);
+		responseBody.comments = new ArrayList<Feedback>(comments);
 		
 		return responseBody;
 	}
