@@ -39,8 +39,7 @@ public class FeedbackRepositoryImpl implements FeedbackRepositoryCustom{
 		}
 		
 		if (queryText != null) {
-			criterias.add(new Criteria().orOperator(Criteria.where("description").regex(queryText.trim(), "i"),
-					                                Criteria.where("comments.description").regex(queryText.trim(), "i")));
+			criterias.add(new Criteria().where("description").regex(queryText.trim(), "i"));
 		}	
 		
 		Criteria c = new Criteria().andOperator(criterias.toArray(new Criteria[criterias.size()]));

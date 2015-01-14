@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -18,19 +17,14 @@ public class Feedback {
 	private String parent;
 	private String parentType;
 	private String description;
-	private List<Feedback> comments = new ArrayList<Feedback>();
 	private Date createdDate;
 	private int likeCount;
 	private int viewCount;
+	private List<String> comments = new ArrayList<String>();
 	
 	//The default of the below field is set by backend
 	private Boolean isDestroyed;
 
-	// This is required by the front-end (ember) : it needs id for both Feedback and comment.
-	public Feedback() {
-		id = new ObjectId().toString();
-	}
-	
 	public String getId() {
 		return id;
 	}
@@ -103,11 +97,32 @@ public class Feedback {
 		this.likeCount = likeCount;
 	}
 
-	public List<Feedback> getComments() {
+	public List<String> getComments() {
 		return comments;
 	}
 
-	public void setComments(List<Feedback> comments) {
+	public void setComments(List<String> comments) {
 		this.comments = comments;
+	}		
+	
+	@Override
+	public int hashCode() {
+	    return 17;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+	    if (obj == null)
+	        return false;
+	    if (getClass() != obj.getClass())
+	        return false;
+	    
+	    Feedback other = (Feedback) obj;
+	    if (!this.getId().equals(other.getId()))
+	          return false;
+	       
+	    return true;
 	}
 }
