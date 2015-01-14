@@ -45,13 +45,14 @@ public class FeedbackController {
 		for (String id : idList) {
 			// feedback : Feedback or Comment from the document "Feedback".
 			Feedback feedback = feedbackService.findById(id);			
-			if (feedback.getParent()!=null && !feedback.getParent().isEmpty()) {
-				// feedback is comment ==> need to retreive its related Feedback & comments.				
+			if (feedback.getParentType()==null) {
+				// feedback is comment ==> need to retreive its related Feedback & comments.			
+				
 				Feedback parent = feedbackService.findById(feedback.getParent());
 				// export parent
 				feedbacks.add(parent);
 				// export comment
-				for (String commentId : feedback.getComments()) {
+				for (String commentId : parent.getComments()) {
 					comments.add(feedbackService.findById(commentId));
 				}										
 			} else {
