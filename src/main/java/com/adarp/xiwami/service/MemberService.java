@@ -18,23 +18,31 @@ public class MemberService {
 	@Autowired
 	private FamilyRepository familyRep;
 	
-	public Member addMember(Member newMember){
-		// 2014-12-11 A scenario would be that a new member is added by another user, so there is no email, no facebookId 
-		if (newMember.getEmail() != null && memberRep.findByEmailIgnoreCaseAndIsDestroyedIsFalse(newMember.getEmail()).size()>0)
-			// make sure no one uses the same email twice to sign up 
+	/**
+	Add New Member
+	
+	Possible scenarios:
+	1. Users register using email and password (input parameter member will contain ONLY email and password).
+	   - must check if there is duplicate email exist before saving to database
+	2. Users register using facebook (input parameter member contains facebookId and some other additional field.  
+	   - must check if the facebookId is duplicated or not, before saving it to the DB
+	   - NO password is needed because facebook controls it
+	3. User create an additional family member.  In this case, facebookId and email will be null.
+	   Because it's not a user of this app, it's a member of a family
+	
+	OUTPUT: must be { member: null } OR { member: { member object }}
+	
+	**/
+	
+	public Member addMember(Member newMember){		
+		// If newMember is a duplicated member, don't save it.
+		if (memberRep.findDuplicated(newMember.getFacebookId(), newMember.getEmail())!=null) {
 			return null;
-		else {
+		} else {
 			newMember.setIsDestroyed(false);
 			Member member = memberRep.save(newMember);	
 			return member;	
 		}
-	}
-	
-	public Member addMemberByFacebookId(Member newMember){
-		// TODO: Must check if facebookId exist or not
-		newMember.setIsDestroyed(false);
-		Member member = memberRep.save(newMember);	
-		return member;	
 	}
 	
 	public Member updateMember(String id, Member updatedMember) {
@@ -56,12 +64,8 @@ public class MemberService {
 	}
 
 	public Member findByMemberId(String id) {
-		return memberRep.findOne(id);
+		return memberRep.findByid(id);
 	}	
-	
-	public Member findMemberByFacebookId(String id) {
-		return memberRep.findByFacebookId(id);
-	}
 	
 	public List<Member> find(String queryText) {
 		return memberRep.query(queryText);

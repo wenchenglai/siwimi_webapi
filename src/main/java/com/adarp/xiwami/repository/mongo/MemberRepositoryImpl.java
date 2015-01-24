@@ -40,4 +40,45 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
 				
 	}
 
+	@SuppressWarnings("static-access")
+	@Override
+	public Member findByid(String id) {
+		List<Criteria> criterias = new ArrayList<Criteria>();
+
+		criterias.add(new Criteria().where("isDestroyed").is(false));
+		criterias.add(new Criteria().orOperator(Criteria.where("id").is(id),Criteria.where("facebookId").is(id)));
+		Criteria c = new Criteria().andOperator(criterias.toArray(new Criteria[criterias.size()]));
+		
+		return mongoTemplate.findOne(new Query(c), Member.class, "Member");
+	}
+	
+	
+	@SuppressWarnings("static-access")
+	@Override
+	public Member findDuplicated(String facebookId, String email) {
+		
+		// If all input parameters are null, no need to query duplicated member
+		if (facebookId == null && email == null) {
+			return null;
+		} else {
+			List<Criteria> criterias = new ArrayList<Criteria>();
+
+			criterias.add(new Criteria().where("isDestroyed").is(false));
+		
+			if (facebookId != null) {
+				criterias.add(new Criteria().where("facebookId").is(facebookId));
+			}
+		
+			if (email != null) {
+				criterias.add(new Criteria().where("email").regex(email.trim(), "i"));
+			}
+		
+			Criteria c = new Criteria().andOperator(criterias.toArray(new Criteria[criterias.size()]));
+		
+			return mongoTemplate.findOne(new Query(c), Member.class, "Member");
+		}
+	}
+	
+	
+	
 }
