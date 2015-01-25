@@ -13,8 +13,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.adarp.xiwami.domain.Family;
+import com.adarp.xiwami.domain.Member;
 import com.adarp.xiwami.domain.Message;
+import com.adarp.xiwami.service.MemberService;
 import com.adarp.xiwami.service.MessageService;
+import com.adarp.xiwami.web.dto.MessageSideloadList;
 import com.adarp.xiwami.web.dto.MessageSideload;
 
 @RestController
@@ -23,26 +27,40 @@ public class MessageController {
 	@Autowired
 	private MessageService service;
 	
-	// Get discussions by type
+	@Autowired
+	private MemberService memberService;
+	
+	// Get by queryString
 	@RequestMapping(value = "/messages", method = RequestMethod.GET, produces = "application/json")
-	public Map<String, List<Message>> Find(
+	public  MessageSideloadList Find(
 			@RequestParam(value="from", required=false) String fromId,
 			@RequestParam(value="to", required=false) String toId,	
 			@RequestParam(value="fromStatus", required=false) String fromStatus,
 			@RequestParam(value="toStatus", required=false) String toStatus,			
 			@RequestParam(value="queryText", required=false) String queryText) {
 		
-		Map<String, List<Message>> responseBody = new HashMap<String, List<Message>>();
+		MessageSideloadList responseBody = new MessageSideloadList();
 		
-		List<Message> list = null;
+		List<Message> messages = null;
+		List<Member> members = new ArrayList<Member>();
 		try {
-			list = service.find(fromId, toId, fromStatus, toStatus, queryText);
+			messages = service.find(fromId, toId, fromStatus, toStatus, queryText);
+			
+			if (messages.size() > 0) {
+				Member fromMember = memberService.findByMemberId(messages.get(0).getFrom());
+				members.add(fromMember);
+				for (Message msg:messages) {
+					Member toMember = memberService.findByMemberId(msg.getTo());
+					members.add(toMember);
+				}
+			}			
+			
 		} catch (Exception err) {
 			// we must return an empty array so Ember can pick up the json data format.  Return null will crash the ember client.
-			list = new ArrayList<Message>();
-
+			messages = new ArrayList<Message>();
 		}
-		responseBody.put("messages", list);
+		responseBody.messages = messages;
+		responseBody.members = members;
 		return responseBody;
 	}
 	

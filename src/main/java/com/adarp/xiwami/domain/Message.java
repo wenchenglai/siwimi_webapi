@@ -18,7 +18,7 @@ public class Message {
 	private Date createdDate;
 	private String rootMessage; // an entity Id that points to the first message in a thread
 	private String fromStatus; // draft, sent
-	private String toStatus; // unread, read, trash
+	private String toStatus; // unread, read, trash, both (= unread, read)
 	
 	//The default of the below field is set by backend
 	private Boolean isDestroyed;

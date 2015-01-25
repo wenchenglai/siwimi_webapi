@@ -39,7 +39,13 @@ public class MessageRepositoryImpl implements MessageRepositoryCustom{
 		}
 		
 		if (toStatus != null) {
-			criterias.add(new Criteria().where("toStatus").is(toStatus));
+			String both = "both";
+			if (toStatus == both) {
+				criterias.add(new Criteria().where("toStatus").is("unread"));
+				criterias.add(new Criteria().where("toStatus").is("read"));
+			}
+			else
+				criterias.add(new Criteria().where("toStatus").is(toStatus));
 		}
 		
 		if (queryText != null) {
