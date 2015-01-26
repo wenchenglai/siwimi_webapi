@@ -40,9 +40,9 @@ public class MessageRepositoryImpl implements MessageRepositoryCustom{
 		
 		if (toStatus != null) {
 			String both = "both";
-			if (toStatus == both) {
-				criterias.add(new Criteria().where("toStatus").is("unread"));
-				criterias.add(new Criteria().where("toStatus").is("read"));
+			if (toStatus.equals(both)) {
+				criterias.add(new Criteria().orOperator(Criteria.where("toStatus").is("read"),
+                        Criteria.where("toStatus").is("unread")));
 			}
 			else
 				criterias.add(new Criteria().where("toStatus").is(toStatus));
