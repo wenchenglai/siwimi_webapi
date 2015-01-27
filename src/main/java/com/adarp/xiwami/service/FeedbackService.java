@@ -34,7 +34,7 @@ public class FeedbackService {
 	}
 	
 	public Feedback findById(String id) {
-		return feedbackRep.findOne(id);
+		return feedbackRep.findByIdAndIsDestroyedIsFalse(id);
 	}
 	
 	public Feedback add(Feedback newObj) {

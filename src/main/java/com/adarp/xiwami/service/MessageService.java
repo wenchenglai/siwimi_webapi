@@ -21,7 +21,7 @@ public class MessageService {
 	}
 	
 	public Message findById(String id) {
-		return repo.findOne(id);
+		return repo.findByIdAndIsDestroyedIsFalse(id);
 	}
 	
 	public Message add(Message newObj) {

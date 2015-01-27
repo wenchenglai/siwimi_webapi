@@ -37,7 +37,7 @@ public class TipService {
 	}
 	
 	public Tip findByTipId(String id) {
-		return tipRep.findOne(id);
+		return tipRep.findByIdAndIsDestroyedIsFalse(id);
 	}
 	
 	public Tip addTip(Tip newTip) {

@@ -13,7 +13,7 @@ public class AuthService {
 	private MemberRepository memberRep;
 	
 	public Member getMember(Member member) {
-		return memberRep.findByEmailIgnoreCaseAndPasswordAndIsDestroyedIsFalse(member.getEmail(), member.getPassword());		
+		return memberRep.LoginExistingMember(member.getEmail(), member.getPassword());		
 	}
 
 

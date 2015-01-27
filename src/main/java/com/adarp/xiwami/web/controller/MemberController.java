@@ -28,53 +28,36 @@ public class MemberController {
 
 	
 	/**
-	Scenario #1: Get member by queryText (firstname or lastname) 
-	OUTPUT: Must contain { members: [ list of member object] }
+	Scenario #1 : Get member by queryText (firstname or lastname) 
+	OUTPUT      : Must contain { members: [ list of member object] }
 	**/
 	@RequestMapping(value = "/members", method = RequestMethod.GET, produces = "application/json")
 	public Map<String, List<Member>> findMembers(
 			@RequestParam(value="queryText", required=false) String queryText) {			
-		List<Member> members = memberService.find(queryText);
+		List<Member> members = memberService.find(null,queryText);
 		Map<String, List<Member>> responseBody = new HashMap<String, List<Member>>();
 		responseBody.put("member", members);
 		return responseBody;
 	}		
 	
+	/**
+	 Find member either by database id or facebook id.
+	 **/
 	// Get Member by ID
 	@RequestMapping(value = "/members/{id}", method = RequestMethod.GET, produces = "application/json")
 	public Map<String, Member> findByMemberId(@PathVariable("id") String id) {
-		Member member = memberService.findByMemberId(id);
-		if (member == null) {
-			member = memberService.findMemberByFacebookId(id);
-			
-		}
-		
+		Member member = memberService.findByMemberId(id);	
 		Map<String, Member> responseBody = new HashMap<String, Member>();		
-		responseBody.put("member", member);
-		
+		responseBody.put("member", member);		
 		return responseBody;
 	}	
 	
-	// Add New Member
-	// Possible scenarios:
-	// 1. Users register using email and password (input parameter member will contain ONLY email and password).
-	//    - must check if there is duplicate email exist before saving to database
-	// 2. Users register using facebook (input parameter member contains facebookId and some other additional field.  
-	//    - must check if the facebookId is duplicated or not, before saving it to the DB
-	//    - NO password is needed because facebook controls it
-	// 3. User create an additional family member.  In this case, facebookId and email will be null, because it's not a user of this app, it's a member of a family
-	// OUTPUT: must be { member: null } OR { member: { member object }}
+	/**
+	Add New Member
+	**/
 	@RequestMapping(value = "/members", method = RequestMethod.POST, produces = "application/json")
 	public Map<String, Member> addMember(@RequestBody MemberSideload member) {
-		Member savedMember = null;
-		
-		if (member.member.getFacebookId() != null)
-			savedMember = memberService.addMemberByFacebookId(member.member);
-		else if (member.member.getEmail() != null)
-			savedMember = memberService.addMember(member.member);
-		else
-			savedMember = memberService.addMember(member.member);	
-		
+		Member savedMember = memberService.addMember(member.member);
 		Map<String, Member> responseBody = new HashMap<String, Member>();
 		if (savedMember == null)
 			responseBody.put("error: duplicate email or facebookId", savedMember);

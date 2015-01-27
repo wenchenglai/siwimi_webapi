@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.adarp.xiwami.domain.Family;
 import com.adarp.xiwami.domain.Member;
 import com.adarp.xiwami.domain.Message;
 import com.adarp.xiwami.service.MemberService;
