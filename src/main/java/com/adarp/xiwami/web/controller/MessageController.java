@@ -15,10 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.adarp.xiwami.domain.Member;
 import com.adarp.xiwami.domain.Message;
+import com.adarp.xiwami.domain.Tip;
 import com.adarp.xiwami.service.MemberService;
 import com.adarp.xiwami.service.MessageService;
 import com.adarp.xiwami.web.dto.MessageSideloadList;
 import com.adarp.xiwami.web.dto.MessageSideload;
+import com.adarp.xiwami.web.dto.TipSideload;
 
 @RestController
 public class MessageController {
@@ -81,6 +83,15 @@ public class MessageController {
 		Map<String, Message> responseBody = new HashMap<String, Message>();
 		responseBody.put("message", savedObj);
 		return responseBody;
+	}
+	
+	// Update
+	@RequestMapping(value = "/messages/{id}", method = RequestMethod.PUT, produces = "application/json")
+	public Map<String,Message> update(@PathVariable("id") String id, @RequestBody MessageSideload updatedObj) {
+		Message msg = service.update(id, updatedObj.message);		
+		Map<String,Message> responseBody = new HashMap<String,Message>();
+		responseBody.put("message", msg);
+		return responseBody;		
 	}	
 	
 	// Delete
