@@ -34,7 +34,7 @@ public class ItemService {
 	}
 	
 	public Item findByItemId(String id) {
-		return itemRep.findOne(id);
+		return itemRep.findByIdAndIsDestroyedIsFalse(id);
 	}
 	
 	public Item addItem(Item newItem) {

@@ -43,7 +43,7 @@ public class FamilyController {
 		List<Member> members = new ArrayList<Member>();
 		if (families!=null) {
 			for (Family family:families) {
-				List<Member> membersPerFamily = memberService.findMembers(family.getId());
+				List<Member> membersPerFamily = memberService.find(family.getId(),null);
 				List<String> memberIds = new ArrayList<String>();
 				for (Member member : membersPerFamily) {
 					memberIds.add(member.getId());
@@ -64,7 +64,7 @@ public class FamilyController {
 		Family family = familyService.findByFamilyId(id);
 
 		if (family != null) {
-			List<Member> members = memberService.findMembers(family.getId());
+			List<Member> members = memberService.find(family.getId(),null);
 			List<String> memberIds = new ArrayList<String>();
 			for (Member member : members) {
 				memberIds.add(member.getId());

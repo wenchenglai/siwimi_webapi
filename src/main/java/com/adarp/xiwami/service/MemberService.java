@@ -36,7 +36,7 @@ public class MemberService {
 	
 	public Member addMember(Member newMember){		
 		// If newMember is a duplicated member, don't save it.
-		if (memberRep.findDuplicated(newMember.getFacebookId(), newMember.getEmail())!=null) {
+		if (memberRep.findExistingMember(newMember.getFacebookId(), newMember.getEmail())!=null) {
 			return null;
 		} else {
 			newMember.setIsDestroyed(false);
@@ -50,8 +50,7 @@ public class MemberService {
 		Member savedMember = memberRep.save(updatedMember);
 		return savedMember;
 	}
-	
-	
+		
 	public void deleteMember(String id) {
 		// For Member collection
 		Member member = memberRep.findOne(id);
@@ -59,16 +58,12 @@ public class MemberService {
 		memberRep.save(member);
 	}
 	
-	public List<Member> findMembers(String familyId) {
-		return memberRep.findByFamilyInAndIsDestroyedIsFalse(familyId);
-	}
-
 	public Member findByMemberId(String id) {
 		return memberRep.findByid(id);
 	}	
 	
-	public List<Member> find(String queryText) {
-		return memberRep.query(queryText);
+	public List<Member> find(String familyId, String queryText) {
+		return memberRep.query(familyId, queryText);
 	}
 
 }

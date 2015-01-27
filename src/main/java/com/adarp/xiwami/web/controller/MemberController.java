@@ -34,7 +34,7 @@ public class MemberController {
 	@RequestMapping(value = "/members", method = RequestMethod.GET, produces = "application/json")
 	public Map<String, List<Member>> findMembers(
 			@RequestParam(value="queryText", required=false) String queryText) {			
-		List<Member> members = memberService.find(queryText);
+		List<Member> members = memberService.find(null,queryText);
 		Map<String, List<Member>> responseBody = new HashMap<String, List<Member>>();
 		responseBody.put("member", members);
 		return responseBody;

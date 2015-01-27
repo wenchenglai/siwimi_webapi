@@ -34,7 +34,7 @@ public class QuestionService {
 	}
 	
 	public Question findByQuestionId(String id) {
-		return questionRep.findOne(id);
+		return questionRep.findByIdAndIsDestroyedIsFalse(id);
 	}
 	
 	public Question addQuestion(Question newQuestion) {

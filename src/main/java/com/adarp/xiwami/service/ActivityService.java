@@ -34,7 +34,7 @@ public class ActivityService {
 	}
 	
 	public Activity FindByActivityId(String id){
-		return activityRep.findOne(id);
+		return activityRep.findByIdAndIsDestroyedIsFalse(id);
 	}
 	
 	public Activity AddActivity(Activity newActivity) {			
