@@ -50,8 +50,10 @@ public class MessageController {
 				Member fromMember = memberService.findByMemberId(messages.get(0).getFrom());
 				members.add(fromMember);
 				for (Message msg:messages) {
-					Member toMember = memberService.findByMemberId(msg.getTo());
-					members.add(toMember);
+					if (msg.getTo() != null) {
+						Member toMember = memberService.findByMemberId(msg.getTo());
+						members.add(toMember);
+					}
 				}
 			}			
 			
