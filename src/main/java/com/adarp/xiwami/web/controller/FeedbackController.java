@@ -28,7 +28,7 @@ public class FeedbackController {
 	
 	// Get all feedbacks
 	@RequestMapping(value = "/feedbacks", method = RequestMethod.GET, produces = "application/json")
-	public FeedbackSideloadList Find(
+	public FeedbackSideloadList find(
 			@RequestParam(value="creator", required=false) String creatorId,
 			@RequestParam(value="parent", required=false) String parentId,	
 			@RequestParam(value="parentType", required=false) String parentType,				
@@ -75,7 +75,7 @@ public class FeedbackController {
 	
 	// Get by ID
 	@RequestMapping(value = "/feedbacks/{id}", method = RequestMethod.GET, produces = "application/json")
-	public Map<String, Feedback> FindById(@PathVariable("id") String id) {		
+	public Map<String, Feedback> findById(@PathVariable("id") String id) {		
 		Map<String, Feedback> responseBody = new HashMap<String, Feedback>();			
 		Feedback obj = feedbackService.findById(id);
 		responseBody.put("feedback", obj);

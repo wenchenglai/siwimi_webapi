@@ -25,7 +25,7 @@ public class ActivityController {
 
 	// Get activities by criteria
 	@RequestMapping(value = "/activities", method = RequestMethod.GET, produces = "application/json")
-	public Map<String,List<Activity>> FindActivities(
+	public Map<String,List<Activity>> findActivities(
 			@RequestParam(value="creator", required=false) String creatorId,
 			@RequestParam(value="status", required=false) String status,
 			@RequestParam(value="longitude", required=false) Double longitude,
@@ -36,7 +36,7 @@ public class ActivityController {
 			
 		List<Activity> activityList = null;
 		try {
-			activityList = activityService.FindActivities(creatorId,status,longitude,latitude,qsDistance,queryText);
+			activityList = activityService.findActivities(creatorId,status,longitude,latitude,qsDistance,queryText);
 		} catch (Exception err) {
 			// we must return an empty array so Ember can pick up the json data format.  Return null will crash the ember client.
 			activityList = new ArrayList<Activity>();
@@ -47,17 +47,17 @@ public class ActivityController {
 
 	// Get activity by ID
 	@RequestMapping(value = "/activities/{id}", method = RequestMethod.GET, produces = "application/json")
-	public Map<String,Activity> FindByActivityId(@PathVariable("id") String id) {
+	public Map<String,Activity> findByActivityId(@PathVariable("id") String id) {
 		Map<String,Activity> responseBody = new HashMap<String,Activity>();			
-		Activity activity = activityService.FindByActivityId(id);
+		Activity activity = activityService.findByActivityId(id);
 		responseBody.put("activity", activity);
 		return responseBody;
 	}
 	
 	// Add New Activity
 	@RequestMapping(value = "/activities", method = RequestMethod.POST, produces = "application/json")
-	public Map<String, Activity> AddActivity(@RequestBody ActivitySideload newActivity) {
-		Activity savedActivity = activityService.AddActivity(newActivity.activity);
+	public Map<String, Activity> addActivity(@RequestBody ActivitySideload newActivity) {
+		Activity savedActivity = activityService.addActivity(newActivity.activity);
 		
 		Map<String, Activity> responseBody = new HashMap<String, Activity>();
 		responseBody.put("activity", savedActivity);
@@ -67,8 +67,8 @@ public class ActivityController {
 	
 	// Update Activity
 	@RequestMapping(value = "/activities/{id}", method = RequestMethod.PUT, produces = "application/json")
-	public Map<String, Activity> UpdateActivity(@PathVariable("id") String id, @RequestBody ActivitySideload updatedActivity) {
-		Activity savedActivity = activityService.UpdateActivity(id, updatedActivity.activity);
+	public Map<String, Activity> updateActivity(@PathVariable("id") String id, @RequestBody ActivitySideload updatedActivity) {
+		Activity savedActivity = activityService.updateActivity(id, updatedActivity.activity);
 		Map<String, Activity> responseBody = new HashMap<String, Activity>();
 		responseBody.put("activity", savedActivity);
 		
@@ -77,7 +77,7 @@ public class ActivityController {
 	
 	// Delete Activity
 	@RequestMapping (value = "/activities/{id}", method = RequestMethod.DELETE, produces = "application/json")
-	public void DeleteActivity(@PathVariable("id")String id) {
-		activityService.DeleteActivity(id);
+	public void deleteActivity(@PathVariable("id")String id) {
+		activityService.deleteActivity(id);
 	}	
 }

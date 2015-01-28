@@ -10,8 +10,8 @@ public class Follow {
 	@Id
 	private String id;
 
-	private String follower; // database Id
-	private String followee; // database Id
+	private String follower; // member Id
+	private String followee; // member Id
 	private Date createdDate;
 	private Boolean isDestroyed;
 	

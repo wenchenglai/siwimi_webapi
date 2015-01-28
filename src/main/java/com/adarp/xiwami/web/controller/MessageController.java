@@ -15,12 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.adarp.xiwami.domain.Member;
 import com.adarp.xiwami.domain.Message;
-import com.adarp.xiwami.domain.Tip;
 import com.adarp.xiwami.service.MemberService;
 import com.adarp.xiwami.service.MessageService;
 import com.adarp.xiwami.web.dto.MessageSideloadList;
 import com.adarp.xiwami.web.dto.MessageSideload;
-import com.adarp.xiwami.web.dto.TipSideload;
 
 @RestController
 public class MessageController {
@@ -33,7 +31,7 @@ public class MessageController {
 	
 	// Get by queryString
 	@RequestMapping(value = "/messages", method = RequestMethod.GET, produces = "application/json")
-	public  MessageSideloadList Find(
+	public  MessageSideloadList find(
 			@RequestParam(value="from", required=false) String fromId,
 			@RequestParam(value="to", required=false) String toId,	
 			@RequestParam(value="fromStatus", required=false) String fromStatus,
@@ -69,7 +67,7 @@ public class MessageController {
 	
 	// Get by ID
 	@RequestMapping(value = "/messages/{id}", method = RequestMethod.GET, produces = "application/json")
-	public Map<String, Message> FindById(@PathVariable("id") String id) {		
+	public Map<String, Message> findById(@PathVariable("id") String id) {		
 		Map<String, Message> responseBody = new HashMap<String, Message>();			
 		Message obj = service.findById(id);
 		responseBody.put("message", obj);
