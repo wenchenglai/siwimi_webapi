@@ -26,11 +26,11 @@ public class FollowRepositoryImpl implements FollowRepositoryCustom {
 		criterias.add(new Criteria().where("isDestroyed").is(false));
 	
 		if (follower != null) {
-			criterias.add(new Criteria().where("follower").is(follower));
+			criterias.add(new Criteria().where("follower").regex(follower.trim(), "i"));
 		}
 		
 		if (followee != null) {
-			criterias.add(new Criteria().where("followee").is(followee));
+			criterias.add(new Criteria().where("followee").regex(followee.trim(), "i"));
 		}
 		
 		Criteria c = new Criteria().andOperator(criterias.toArray(new Criteria[criterias.size()]));
