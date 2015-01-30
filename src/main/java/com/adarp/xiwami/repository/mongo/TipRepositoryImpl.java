@@ -29,7 +29,7 @@ public class TipRepositoryImpl implements TipRepositoryCustom{
 		
 		criterias.add(new Criteria().where("isDestroyed").is(false));
 	
-		// status is transient, depends on expirationDate.  They are {all, active, expired}
+		// status is transient, depends on expirationDate.  They are {all, popular, active, expired}
 		if (status != null) {
 			Date now = new Date();
 			if (status.equalsIgnoreCase("active"))

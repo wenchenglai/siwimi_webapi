@@ -17,7 +17,7 @@ public class Tip {
 	private String url;
 	private Date createdDate;
 	private Date expiredDate;
-	private int like;
+	private int like;  //TODO: is this still needed?
 	private String type;
 	private int viewCount;
 	
