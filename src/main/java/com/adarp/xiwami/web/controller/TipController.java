@@ -26,7 +26,7 @@ public class TipController {
 	
 	// Get tips by type
 	@RequestMapping(value = "/tips", method = RequestMethod.GET, produces = "application/json")
-	public Map<String,List<Tip>> FindTips(
+	public Map<String,List<Tip>> findTips(
 			@RequestParam(value="creator", required=false) String creatorId,
 			@RequestParam(value="status", required=false) String status,	
 			@RequestParam(value="type", required=false) String type,				
@@ -50,7 +50,7 @@ public class TipController {
 	
 	// Get tip by ID
 	@RequestMapping(value = "/tips/{id}", method = RequestMethod.GET, produces = "application/json")
-	public Map<String,Tip> FindByTipId(@PathVariable("id") String id) {		
+	public Map<String,Tip> findByTipId(@PathVariable("id") String id) {		
 		Map<String,Tip> responseBody = new HashMap<String,Tip>();			
 		Tip tip = tipService.findByTipId(id);
 		responseBody.put("tip", tip);

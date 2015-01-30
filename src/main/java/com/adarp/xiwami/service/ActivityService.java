@@ -19,7 +19,7 @@ public class ActivityService {
 	@Autowired
 	private ZipCodeRepository zipCodeRep;
 	
-	public List<Activity> FindActivities(String creatorId,String status,Double longitude,Double latitude,String qsDistance,String queryText) {													
+	public List<Activity> findActivities(String creatorId,String status,Double longitude,Double latitude,String qsDistance,String queryText) {													
 		List<Activity> activityList = activityRep.queryActivity(creatorId, status, longitude, latitude, qsDistance, queryText);
 
 		// increment viewcount by 1, and save it to MongoDB
@@ -33,11 +33,11 @@ public class ActivityService {
 		return activityList;
 	}
 	
-	public Activity FindByActivityId(String id){
+	public Activity findByActivityId(String id){
 		return activityRep.findByIdAndIsDestroyedIsFalse(id);
 	}
 	
-	public Activity AddActivity(Activity newActivity) {			
+	public Activity addActivity(Activity newActivity) {			
 		newActivity.setIsDestroyed(false);
 		newActivity.setViewCount(0);
 		newActivity = updateZipCode(newActivity);
@@ -54,13 +54,13 @@ public class ActivityService {
 		return activityRep.saveActivity(newActivity);
 	}
 	
-	public Activity UpdateActivity(String id, Activity updatedActivity) {
+	public Activity updateActivity(String id, Activity updatedActivity) {
 		updatedActivity.setId(id);
 		updatedActivity = updateZipCode(updatedActivity);
 		return activityRep.saveActivity(updatedActivity);
 	}
 	
-	public void DeleteActivity(String id) {
+	public void deleteActivity(String id) {
 		Activity activity = activityRep.findOne(id);
 		activity.setIsDestroyed(true);
 		activityRep.saveActivity(activity);
