@@ -31,6 +31,9 @@ public class Tip implements Comparable<Tip>{
 	@Transient
 	private int voteDown = 0;
 	
+	@Transient
+	private boolean isFavorite = false;
+	
 	// The default of the below field is set by backend
 	private Boolean isDestroyed;
 
