@@ -3,10 +3,11 @@ package com.adarp.xiwami.domain;
 import java.util.Date;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "Tip")
-public class Tip {
+public class Tip implements Comparable<Tip>{
 
 	@Id
 	private String id;
@@ -17,13 +18,18 @@ public class Tip {
 	private String url;
 	private Date createdDate;
 	private Date expiredDate;
-	private int like;  //TODO: is this still needed?
 	private String type;
 	private int viewCount;
 	
 	private String cityState;
 	private String zipCode;
 	private double[] location;
+	
+	@Transient
+	private int voteUp = 0;
+	
+	@Transient
+	private int voteDown = 0;
 	
 	// The default of the below field is set by backend
 	private Boolean isDestroyed;
@@ -74,14 +80,6 @@ public class Tip {
 
 	public void setExpiredDate(Date expiredDate) {
 		this.expiredDate = expiredDate;
-	}
-
-	public int getLike() {
-		return like;
-	}
-
-	public void setLike(int like) {
-		this.like = like;
 	}
 
 	public String getType() {
@@ -140,5 +138,27 @@ public class Tip {
 
 	public void setViewCount(int viewCount) {
 		this.viewCount = viewCount;
+	}
+
+	public int getVoteUp() {
+		return voteUp;
+	}
+
+	public void setVoteUp(int voteUp) {
+		this.voteUp = voteUp;
+	}
+
+	public int getVoteDown() {
+		return voteDown;
+	}
+
+	public void setVoteDown(int voteDown) {
+		this.voteDown = voteDown;
+	}
+	
+	@Override
+	public int compareTo(Tip compareTip) {
+		int compareVoteUp = ((Tip)compareTip).getVoteUp();
+		return compareVoteUp - this.voteUp;
 	}
 }

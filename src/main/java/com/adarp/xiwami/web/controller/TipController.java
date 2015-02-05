@@ -28,7 +28,7 @@ public class TipController {
 	@RequestMapping(value = "/tips", method = RequestMethod.GET, produces = "application/json")
 	public Map<String,List<Tip>> findTips(
 			@RequestParam(value="creator", required=false) String creatorId,
-			@RequestParam(value="status", required=false) String status,	// status is transient, depends on expirationDate.  They are {all, popular, active, expired}.  Popular depends on the up votes.
+			@RequestParam(value="status", required=false) String status,	// *** popular (by vote)*** status is transient, depends on expirationDate.  They are {all, popular, active, expired}.  Popular depends on the up votes.
 			@RequestParam(value="type", required=false) String type,		// type could be {all, deal, health, education, entertainment, misc}
 			@RequestParam(value="longitude", required=false) Double longitude,
 			@RequestParam(value="latitude", required=false) Double latitude,
