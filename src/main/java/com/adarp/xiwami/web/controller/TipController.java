@@ -28,7 +28,7 @@ public class TipController {
 	@RequestMapping(value = "/tips", method = RequestMethod.GET, produces = "application/json")
 	public Map<String,List<Tip>> findTips(
 			@RequestParam(value="creator", required=false) String creatorId,
-			@RequestParam(value="requester", required=false) String requesterId, // userId who is sending this query request			
+			@RequestParam(value="requester", required=true) String requesterId, // userId who is sending this query request			
 			@RequestParam(value="status", required=false) String status,	// *** popular (by vote)*** status is transient, depends on expirationDate.  They are {all, popular, active, expired}.  Popular depends on the up votes.
 			@RequestParam(value="type", required=false) String type,		// type could be {all, deal, health, education, entertainment, misc}
 			@RequestParam(value="longitude", required=false) Double longitude,
@@ -39,7 +39,7 @@ public class TipController {
 		Map<String,List<Tip>> responseBody = new HashMap<String,List<Tip>>();
 		List<Tip> tipList = null;
 		try {
-			tipList = tipService.findTips(status, type, longitude, latitude, qsDistance, queryText);
+			tipList = tipService.findTips(creatorId, requesterId, status, type, longitude, latitude, qsDistance, queryText);
 		} catch (Exception err) {
 			// we must return an empty array so Ember can pick up the json data format.  Return null will crash the ember client.
 			tipList = new ArrayList<Tip>();

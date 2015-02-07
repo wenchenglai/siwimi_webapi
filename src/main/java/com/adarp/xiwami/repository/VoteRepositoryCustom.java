@@ -1,5 +1,7 @@
 package com.adarp.xiwami.repository;
 
-public interface VoteRepositoryCustom {
+import com.adarp.xiwami.domain.Vote;
 
+public interface VoteRepositoryCustom {
+	Vote queryVote(String creator, String targetObject, String objectType);
 }

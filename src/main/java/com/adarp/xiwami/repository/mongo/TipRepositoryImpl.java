@@ -29,12 +29,19 @@ public class TipRepositoryImpl implements TipRepositoryCustom{
 	
 	@SuppressWarnings("static-access")
 	@Override
-	public List<Tip> queryTip(String status, String type, Double longitude, Double latitude, String qsDistance, String queryText) {				
+	public List<Tip> queryTip(String creatorId,
+			                  String status, String type, 
+			                  Double longitude, Double latitude, String qsDistance, 
+			                  String queryText) {				
 
 		List<Criteria> criterias = new ArrayList<Criteria>();
 		
 		criterias.add(new Criteria().where("isDestroyed").is(false));
-	
+
+		if (creatorId != null) {
+			criterias.add(new Criteria().where("creator").is(creatorId));
+		}
+		
 		if (type != null) {
 			criterias.add(new Criteria().where("type").is(type));
 		}
@@ -64,7 +71,6 @@ public class TipRepositoryImpl implements TipRepositoryCustom{
 				criterias.add(new Criteria().where("expiredDate").lt(new Date()));
 			}
 		}
-
 
 		Criteria c = new Criteria().andOperator(criterias.toArray(new Criteria[criterias.size()]));
 		// Retrieve the queried candidate Tips 

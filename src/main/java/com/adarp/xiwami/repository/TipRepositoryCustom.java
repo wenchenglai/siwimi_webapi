@@ -5,6 +5,9 @@ import java.util.List;
 import com.adarp.xiwami.domain.Tip;
 
 public interface TipRepositoryCustom {
-	List<Tip> queryTip(String status, String type, Double queryLongitude, Double queryLatitude, String qsDistance, String queryText);
+	List<Tip> queryTip(String creatorId,
+			           String status, String type, 
+			           Double queryLongitude, Double queryLatitude, String qsDistance, 
+			           String queryText);
 	Tip saveTip(Tip newTip);
 }
