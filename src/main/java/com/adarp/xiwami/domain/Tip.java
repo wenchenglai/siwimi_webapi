@@ -159,6 +159,14 @@ public class Tip implements Comparable<Tip>{
 		this.voteDown = voteDown;
 	}
 	
+	public boolean getIsFavorite() {
+		return isFavorite;
+	}
+
+	public void setIsFavorite(boolean isFavorite) {
+		this.isFavorite = isFavorite;
+	}
+
 	@Override
 	public int compareTo(Tip compareTip) {
 		int compareVoteUp = ((Tip)compareTip).getVoteUp();

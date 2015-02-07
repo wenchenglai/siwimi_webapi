@@ -18,14 +18,14 @@ public class VoteService {
 	
 	public Vote addVote(Vote newVote) {
 		// Trying to search if voter gave the same vote before.
-		Vote existingVote = voteRep.queryVote(newVote.getCreator(), newVote.getTargetObject(), newVote.getObjectType());
+		Vote existedVote = voteRep.queryVote(newVote.getCreator(), newVote.getTargetObject(), newVote.getObjectType());
 		
-		if ((existingVote != null) && (!existingVote.getVoteType().equalsIgnoreCase(newVote.getVoteType()))) {
+		if ((existedVote != null) && (!existedVote.getVoteType().equalsIgnoreCase(newVote.getVoteType()))) {
 			// Voter changes voteType : delete old vote, save new Vote
-			deleteVote(existingVote.getId());
+			deleteVote(existedVote.getId());
 			newVote.setIsDestroyed(false);
 			return voteRep.save(newVote);
-		} else if (existingVote == null) {
+		} else if (existedVote == null) {
 			// Voter never voted before : save new Vote
 			newVote.setIsDestroyed(false);
 			return voteRep.save(newVote);

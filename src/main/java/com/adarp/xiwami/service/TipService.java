@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.adarp.xiwami.domain.Tip;
 import com.adarp.xiwami.domain.ZipCode;
+import com.adarp.xiwami.repository.FavoriteRepository;
 import com.adarp.xiwami.repository.TipRepository;
 import com.adarp.xiwami.repository.ZipCodeRepository;
 
@@ -20,16 +21,29 @@ public class TipService {
 	TipRepository tipRep;
 	
 	@Autowired
+	FavoriteRepository favoriteRep;	
+	
+	@Autowired
 	private ZipCodeRepository zipCodeRep;
 	
-	public List<Tip> findTips(String status, String type, Double longitude, Double latitude, String qsDistance, String queryText) {
-		List<Tip> tipList = tipRep.queryTip(status, type, longitude, latitude, qsDistance, queryText);
+	public List<Tip> findTips(String creatorId, String requesterId,
+			                  String status, String type, 
+			                  Double longitude, Double latitude, String qsDistance, 
+			                  String queryText) {
 		
-		// increment viewcount by 1, and save it to MongoDB
+		List<Tip> tipList = tipRep.queryTip(creatorId, status, type, longitude, latitude, qsDistance, queryText);
+		
 		for (int i=0; i<tipList.size(); i++) {
+			// increment viewcount by 1, and save it to MongoDB
 			Tip tip = tipList.get(i);
 			tip.setViewCount(tip.getViewCount()+1);
 			tipRep.saveTip(tip);
+			
+			// Populate isFavorite
+			if (favoriteRep.queryFavorite(requesterId, tip.getId(), "tip") != null) {
+				tip.setIsFavorite(true);
+			}
+
 			tipList.set(i, tip);
 		}
 		
