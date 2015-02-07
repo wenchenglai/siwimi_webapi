@@ -17,8 +17,20 @@ public class VoteService {
 	}
 	
 	public Vote addVote(Vote newVote) {
-		newVote.setIsDestroyed(false);
-		return voteRep.save(newVote);
+		// Trying to search if voter gave the same vote before.
+		Vote existingVote = voteRep.queryVote(newVote.getCreator(), newVote.getTargetObject(), newVote.getObjectType());
+		
+		if ((existingVote != null) && (!existingVote.getVoteType().equalsIgnoreCase(newVote.getVoteType()))) {
+			// Voter changes voteType : delete old vote, save new Vote
+			deleteVote(existingVote.getId());
+			newVote.setIsDestroyed(false);
+			return voteRep.save(newVote);
+		} else if (existingVote == null) {
+			// Voter never voted before : save new Vote
+			newVote.setIsDestroyed(false);
+			return voteRep.save(newVote);
+		} else
+			return null;
 	}
 	
 	public Vote updateVote(String id, Vote updatedVote) {
