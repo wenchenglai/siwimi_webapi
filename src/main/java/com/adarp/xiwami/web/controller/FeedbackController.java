@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.adarp.xiwami.domain.Feedback;
+import com.adarp.xiwami.domain.Member;
 import com.adarp.xiwami.service.FeedbackService;
+import com.adarp.xiwami.service.MemberService;
 import com.adarp.xiwami.web.dto.FeedbackSideload;
 import com.adarp.xiwami.web.dto.FeedbackSideloadList;
 
@@ -25,6 +27,9 @@ public class FeedbackController {
 
 	@Autowired
 	private FeedbackService feedbackService;
+	
+	@Autowired
+	private MemberService memberService;
 	
 	// Get all feedbacks
 	@RequestMapping(value = "/feedbacks", method = RequestMethod.GET, produces = "application/json")
@@ -37,38 +42,38 @@ public class FeedbackController {
 		FeedbackSideloadList responseBody = new FeedbackSideloadList();
 		
 		// idList could be either Feedback or Comment.
-		List<String> idList = new ArrayList<String>();
-		idList = feedbackService.find(creatorId, parentId, parentType, queryText);
-
+		List<String> idList = feedbackService.find(creatorId, parentId, parentType, queryText);
+		
 		Set <Feedback> feedbacks = new LinkedHashSet<Feedback>();
 		Set <Feedback> comments = new LinkedHashSet<Feedback>();
+		List<Member> feedbacksMemebers = new ArrayList<Member>();
+		List<Member> CommentsMembers = new ArrayList<Member>();
 		for (String id : idList) {
 			// feedback : Feedback or Comment from the document "Feedback".
-			Feedback feedback = feedbackService.findById(id);			
-			if (feedback.getParentType()==null) {
-				// feedback is comment ==> need to retreive its related Feedback & comments.			
-				
-				Feedback parent = feedbackService.findById(feedback.getParent());
-				// export parent
-				feedbacks.add(parent);
-				// export comment
-				for (String commentId : parent.getComments()) {
-					comments.add(feedbackService.findById(commentId));
-				}										
-			} else {
-				// feedback is Feedback
-
-				// export parent
-				feedbacks.add(feedback);
+			Feedback feedback = feedbackService.findById(id);
+			// If feedback is comment ==> replace feeback with its parent.	
+			if (feedback.getParentType()==null) {		
+				feedback = feedbackService.findById(feedback.getParent());						
+			} 
+			// export parent
+			if (feedbacks.add(feedback)) {
+				// Populate member of parent
+				feedbacksMemebers.add(memberService.findByMemberId(feedback.getCreator()));
 				// export comment
 				for (String commentId : feedback.getComments()) {
-					comments.add(feedbackService.findById(commentId));
+					Feedback comment = feedbackService.findById(commentId);					
+					if(comments.add(comment)) {
+						// Populate member of comment
+						CommentsMembers.add(memberService.findByMemberId(comment.getCreator()));						
+					}
 				}	
 			}
 		}
 		
 		responseBody.feedbacks = new ArrayList<Feedback>(feedbacks);
 		responseBody.comments = new ArrayList<Feedback>(comments);
+		responseBody.feedbacksMemebers = feedbacksMemebers;
+		responseBody.CommentsMembers = CommentsMembers;
 		
 		return responseBody;
 	}
