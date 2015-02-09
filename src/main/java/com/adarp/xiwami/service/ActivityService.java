@@ -27,7 +27,7 @@ public class ActivityService {
 			Activity activity = activityList.get(i);
 			activity.setViewCount(activity.getViewCount()+1);
 			activityRep.saveActivity(activity);
-			activityList.set(i, activity);			
+			//activityList.set(i, activity);			
 		}
 		
 		return activityList;

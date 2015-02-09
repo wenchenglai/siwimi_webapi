@@ -2,7 +2,7 @@ package com.adarp.xiwami.web.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -42,43 +42,29 @@ public class FeedbackController {
 		FeedbackSideloadList responseBody = new FeedbackSideloadList();
 		
 		// idList could be either Feedback or Comment.
-		List<String> idList = feedbackService.find(creatorId, parentId, parentType, queryText);
+		List<Feedback> queryFeedbacks = feedbackService.find(creatorId, parentId, parentType, queryText);
 		
-		Set <Feedback> feedbacks = new LinkedHashSet<Feedback>();
-		Set <Feedback> comments = new LinkedHashSet<Feedback>();
-		List<Member> feedbacksMemebers = new ArrayList<Member>();
-		List<Member> CommentsMembers = new ArrayList<Member>();
-		for (String id : idList) {
-			// feedback : Feedback or Comment from the document "Feedback".
-			Feedback feedback = feedbackService.findById(id);
-			// If feedback is comment ==> replace feeback with its parent.	
-			if (feedback.getParentType()==null) {		
-				feedback = feedbackService.findById(feedback.getParent());						
-			} 
-			// export parent
-			if (feedbacks.add(feedback)) {
-				// Populate member of parent
-				feedbacksMemebers.add(memberService.findByMemberId(feedback.getCreator()));
-				// export comment
-				for (String commentId : feedback.getComments()) {
-					Feedback comment = feedbackService.findById(commentId);					
-					if(comments.add(comment)) {
-						// Populate member of comment
-						CommentsMembers.add(memberService.findByMemberId(comment.getCreator()));						
-					}
-				}	
+		/** Populate FeedbackSideloadList **/
+		Set <Feedback> feedbacks = new HashSet<Feedback>();
+		Set <Feedback> comments = new HashSet<Feedback>();
+		Map <String,Member> members = new HashMap<String,Member>();		
+		for (Feedback feedback : queryFeedbacks) {	
+			// populate feedbacks or comments
+			if (feedback.getParentType()==null) {
+				comments.add(feedback);
+			} else {
+				feedbacks.add(feedback);
 			}
+			// populate members
+			String key = feedback.getCreator();
+			if (!members.containsKey(key)) {
+				members.put(key, memberService.findByMemberId(key));
+			}	
 		}
-		
+
 		responseBody.feedbacks = new ArrayList<Feedback>(feedbacks);
-		responseBody.comments = new ArrayList<Feedback>(comments);
-		
-		List<Member> newList = new ArrayList<Member>(feedbacksMemebers);
-		newList.addAll(CommentsMembers);		
-		
-		responseBody.members = newList;
-//		responseBody.feedbacksMemebers = feedbacksMemebers;
-//		responseBody.CommentsMembers = CommentsMembers;
+		responseBody.comments = new ArrayList<Feedback>(comments);			
+		responseBody.members = new ArrayList<Member>(members.values());
 		
 		return responseBody;
 	}

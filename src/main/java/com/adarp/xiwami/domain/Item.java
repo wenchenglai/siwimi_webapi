@@ -222,4 +222,25 @@ public class Item {
 	public void setIsDestroyed(Boolean isDestroyed) {
 		this.isDestroyed = isDestroyed;
 	}	
+	
+	@Override
+	public int hashCode() {
+	    return id.hashCode();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+	    if (obj == null)
+	        return false;
+	    if (getClass() != obj.getClass())
+	        return false;
+	    
+	    Item other = (Item) obj;
+	    if (!this.getId().equals(other.getId()))
+	          return false;
+	       
+	    return true;
+	}
 }

@@ -130,4 +130,25 @@ public class Survey {
 	public void setA12(String a12) {
 		this.a12 = a12;
 	}
+	
+	@Override
+	public int hashCode() {
+	    return id.hashCode();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+	    if (obj == null)
+	        return false;
+	    if (getClass() != obj.getClass())
+	        return false;
+	    
+	    Survey other = (Survey) obj;
+	    if (!this.getId().equals(other.getId()))
+	          return false;
+	       
+	    return true;
+	}
 }

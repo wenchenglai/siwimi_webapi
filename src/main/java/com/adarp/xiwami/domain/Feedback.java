@@ -107,7 +107,7 @@ public class Feedback {
 	
 	@Override
 	public int hashCode() {
-	    return 17;
+	    return id.hashCode();
 	}
 	
 	@Override

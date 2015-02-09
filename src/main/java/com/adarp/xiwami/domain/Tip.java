@@ -174,4 +174,25 @@ public class Tip implements Comparable<Tip>{
 		int compareVoteUp = ((Tip)compareTip).getVoteUp();
 		return compareVoteUp - this.voteUp;
 	}
+	
+	@Override
+	public int hashCode() {
+	    return id.hashCode();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+	    if (obj == null)
+	        return false;
+	    if (getClass() != obj.getClass())
+	        return false;
+	    
+	    Tip other = (Tip) obj;
+	    if (!this.getId().equals(other.getId()))
+	          return false;
+	       
+	    return true;
+	}
 }
