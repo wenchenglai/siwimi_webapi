@@ -8,6 +8,7 @@ import com.adarp.xiwami.domain.Member;
 public class FeedbackSideloadList {
 	public List<Feedback> feedbacks;
 	public List<Feedback> comments;
-	public List<Member> feedbacksMemebers;
-	public List<Member> CommentsMembers;
+	public List<Member> members;
+//	public List<Member> feedbacksMemebers;
+//	public List<Member> CommentsMembers;
 }

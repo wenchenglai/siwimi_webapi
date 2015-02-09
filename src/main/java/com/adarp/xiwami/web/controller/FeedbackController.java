@@ -72,8 +72,13 @@ public class FeedbackController {
 		
 		responseBody.feedbacks = new ArrayList<Feedback>(feedbacks);
 		responseBody.comments = new ArrayList<Feedback>(comments);
-		responseBody.feedbacksMemebers = feedbacksMemebers;
-		responseBody.CommentsMembers = CommentsMembers;
+		
+		List<Member> newList = new ArrayList<Member>(feedbacksMemebers);
+		newList.addAll(CommentsMembers);		
+		
+		responseBody.members = newList;
+//		responseBody.feedbacksMemebers = feedbacksMemebers;
+//		responseBody.CommentsMembers = CommentsMembers;
 		
 		return responseBody;
 	}
