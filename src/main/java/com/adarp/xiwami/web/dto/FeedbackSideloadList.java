@@ -9,6 +9,4 @@ public class FeedbackSideloadList {
 	public List<Feedback> feedbacks;
 	public List<Feedback> comments;
 	public List<Member> members;
-//	public List<Member> feedbacksMemebers;
-//	public List<Member> CommentsMembers;
 }

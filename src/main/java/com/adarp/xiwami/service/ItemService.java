@@ -27,7 +27,7 @@ public class ItemService {
 			Item item = itemList.get(i);
 			item.setViewCount(item.getViewCount()+1);
 			itemRep.saveItem(item);
-			itemList.set(i, item);
+			//itemList.set(i, item);
 		}
 		
 		return itemList;

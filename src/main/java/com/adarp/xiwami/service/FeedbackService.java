@@ -17,20 +17,18 @@ public class FeedbackService {
 	@Autowired
 	FeedbackRepository feedbackRep;
 	
-	public List<String> find(String creator, String parentId, String parentType, String queryText) {
+	public List<Feedback> find(String creator, String parentId, String parentType, String queryText) {
 		List<Feedback> feedbacks = feedbackRep.query(creator, parentId, parentType, queryText);
 		
-		List<String> feedbackId = new ArrayList<String>();
 		for (int i=0; i<feedbacks.size(); i++) {
 			// increment viewcount by 1, and save it to MongoDB
 			Feedback feedback = feedbacks.get(i);
 			feedback.setViewCount(feedback.getViewCount()+1);
 			feedbackRep.save(feedback);
-			// Save feedback id into array
-			feedbackId.add(feedback.getId());
+			//feedbacks.set(i, feedback);
 		}
 		
-		return feedbackId;
+		return feedbacks;
 	}
 	
 	public Feedback findById(String id) {

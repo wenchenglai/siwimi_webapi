@@ -27,7 +27,7 @@ public class QuestionService {
 			Question question = questionList.get(i);
 			question.setViewCount(question.getViewCount()+1);
 			questionRep.saveQuestion(question);
-			questionList.set(i, question);
+			//questionList.set(i, question);
 		}
 		
 		return questionList;
