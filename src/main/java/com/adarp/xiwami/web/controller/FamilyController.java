@@ -88,18 +88,36 @@ public class FamilyController {
 	}	
 	
 	// Update Family
+	// 2015-02-14 When updating family, the sideloaded members must be present, else front end won't be able to load proper members
 	@RequestMapping(value = "/families/{id}", method = RequestMethod.PUT, produces = "application/json")
-	public Map<String, Family> updateFamily(@PathVariable("id") String id, @RequestBody FamilySideload updatedFamily) {
-		Family savedFamily = familyService.updateFamily(id, updatedFamily.family);
-		Map<String, Family> responseBody = new HashMap<String, Family>();
-		responseBody.put("family", savedFamily);
+	public FamilySideload updateFamily(@PathVariable("id") String id, @RequestBody FamilySideload updatedFamily) {
+		Family family = familyService.updateFamily(id, updatedFamily.family);
 		
-		return responseBody;		
+		FamilySideload responseBody = new FamilySideload();		
+		if (family != null) {
+			List<Member> members = memberService.find(family.getId(),null);
+			List<String> memberIds = new ArrayList<String>();
+			for (Member member : members) {
+				memberIds.add(member.getId());
+			}
+			family.setMembers(memberIds);
+			
+			responseBody.family = family;
+			responseBody.members = members;
+		}
+		return responseBody;	
 	}
-	
+
 	// Delete Family
+	// 2015-02-14 front end needs the deleted object to make sure the deletion is a success
 	@RequestMapping (value = "/families/{id}", method = RequestMethod.DELETE, produces = "application/json")
-	public void deleteFamily(@PathVariable("id")String id) {
+	public Map<String, Family> deleteFamily(@PathVariable("id")String id) {
 		familyService.deleteFamily(id);
-	}		
+		Family family = familyService.findByFamilyId(id);
+
+		Map<String, Family> responseBody = new HashMap<String, Family>();
+		responseBody.put("family", family);
+	
+		return responseBody;			
+	}	
 }
