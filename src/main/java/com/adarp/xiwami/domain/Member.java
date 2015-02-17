@@ -23,8 +23,7 @@ public class Member {
 	private String type;
 	private String gender;
 	private String avatarUrl;
-	private String largePicture;
-	private String smallPicture;
+	private String imageData;
 	private String family;	
 	private boolean isUser;
 	private String facebookId;
@@ -152,20 +151,12 @@ public class Member {
 		this.family = familyId;
 	}
 
-	public String getLargePicture() {
-		return largePicture;
+	public String getImageData() {
+		return imageData;
 	}
 
-	public void setLargePicture(String largePicture) {
-		this.largePicture = largePicture;
-	}
-
-	public String getSmallPicture() {
-		return smallPicture;
-	}
-
-	public void setSmallPicture(String smallPicture) {
-		this.smallPicture = smallPicture;
+	public void setImageData(String imageData) {
+		this.imageData = imageData;
 	}
 
 	public String getFhometown() {
