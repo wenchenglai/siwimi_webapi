@@ -22,14 +22,14 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
 
 	@SuppressWarnings("static-access")
 	@Override
-	public List<Item> queryItem(String sellerId,String status,Double longitude,Double latitude,String qsDistance,String queryText) {
+	public List<Item> queryItem(String creatorId, String status, Double longitude, Double latitude, String qsDistance, String queryText) {
 				
 		List<Criteria> criterias = new ArrayList<Criteria>();
 		
 		criterias.add(new Criteria().where("isDestroyed").is(false));
 	
-		if (sellerId != null) {
-			criterias.add(new Criteria().where("seller").is(sellerId));
+		if (creatorId != null) {
+			criterias.add(new Criteria().where("creator").is(creatorId));
 		}
 		
 		if (status != null) {

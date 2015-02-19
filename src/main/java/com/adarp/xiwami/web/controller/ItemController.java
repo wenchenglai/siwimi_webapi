@@ -26,16 +26,18 @@ public class ItemController {
 	// Get items by criteria
 	@RequestMapping(value = "/items", method = RequestMethod.GET, produces = "application/json")
 	public Map<String,List<Item>> findItems(
-			@RequestParam(value="seller", required=false) String sellerId,
+			@RequestParam(value="creator", required=false) String creatorId,
+			@RequestParam(value="requester", required=true) String requesterId, // userId who is sending this query request				
 			@RequestParam(value="status", required=false) String status,
 			@RequestParam(value="longitude", required=false) Double longitude,
 			@RequestParam(value="latitude", required=false) Double latitude,
 			@RequestParam(value="distance", required=false) String qsDistance, 
 			@RequestParam(value="queryText", required=false) String queryText) {
+		
 		Map<String,List<Item>> responseBody = new HashMap<String,List<Item>>();
 		List<Item> itemList = null;
 		try {
-			itemList = itemService.findItems(sellerId,status,longitude,latitude,qsDistance,queryText);
+			itemList = itemService.findItems(creatorId, status, longitude, latitude, qsDistance, queryText);
 		} catch (Exception err) {
 			// we must return an empty array so Ember can pick up the json data format.  Return null will crash the ember client.
 			itemList = new ArrayList<Item>();

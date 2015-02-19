@@ -19,8 +19,8 @@ public class ItemService {
 	@Autowired
 	private ZipCodeRepository zipCodeRep;
 	
-	public List<Item> findItems(String sellerId,String status,Double longitude,Double latitude,String qsDistance,String queryText) {					
-		List<Item> itemList = itemRep.queryItem(sellerId,status, longitude,latitude,qsDistance,queryText);
+	public List<Item> findItems(String creatorId, String status,Double longitude,Double latitude,String qsDistance,String queryText) {					
+		List<Item> itemList = itemRep.queryItem(creatorId, status, longitude,latitude,qsDistance,queryText);
 		
 		// increment viewcount by 1, and save it to MongoDB
 		for (int i=0; i<itemList.size(); i++) {

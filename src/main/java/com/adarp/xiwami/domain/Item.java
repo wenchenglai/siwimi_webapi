@@ -11,11 +11,11 @@ public class Item {
 	@Id
 	private String id;
 	
-	private String seller;
+	private String creator;
 	private String buyer;
-	private String name;
+	private String title;
 	private String description;
-	private String status;
+	private String status; // active, inactive, sold, swapped, gave away
 	private Date createdDate;
 	private String size;
 	private float width;
@@ -23,8 +23,8 @@ public class Item {
 	private float height;
 	private int fromAge;
 	private int toAge;
-	private String condition;
-	private String type;
+	private String condition; // new, used
+	private String type; // toy, cloth, book, furniture, other
 	private float price;
 	private String imageUrl;
 	private String imageData;
@@ -71,12 +71,12 @@ public class Item {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public String getTitle() {
+		return title;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	public String getDescription() {
@@ -183,12 +183,12 @@ public class Item {
 		this.imageData = imageData;
 	}
 
-	public String getSeller() {
-		return seller;
+	public String getCreator() {
+		return creator;
 	}
 
-	public void setSeller(String seller) {
-		this.seller = seller;
+	public void setCreator(String creator) {
+		this.creator = creator;
 	}
 
 	public String getBuyer() {
