@@ -43,7 +43,7 @@ public class ItemController {
 			itemList = new ArrayList<Item>();
 
 		}
-		responseBody.put("item", itemList);
+		responseBody.put("items", itemList);
 		return responseBody;
 	}
 
