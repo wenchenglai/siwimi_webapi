@@ -6,5 +6,5 @@ import com.adarp.xiwami.domain.Message;
 
 public interface MessageRepositoryCustom {
 	List<Message> query(String fromId, String toId, String fromStatus, String toStatus, String queryText);
-	Message save(Message newObj);
+	//Message save(Message newObj);
 }
