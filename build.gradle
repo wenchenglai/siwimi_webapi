@@ -24,8 +24,8 @@ apply plugin: 'war'
 sourceSets.test.java.srcDirs = ["src/test"]
 
 war {
-    baseName = 'xiwami_rest'
-    version =  '0.0.2'
+    baseName = 'xiwamirest'
+    version =  '0.0.1'
 }
 
 repositories {
