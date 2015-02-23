@@ -54,6 +54,7 @@ dependencies {
     testCompile("junit:junit:4.12")
     compile("javax.mail:mail:1.4.7")
     testCompile('org.springframework.boot:spring-boot-starter-test:1.2.1.RELEASE')
+    //compile('javax.servlet:javax.servlet-api:3.1.0')
 }
 
 task wrapper(type: Wrapper) {
