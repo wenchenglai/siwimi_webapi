@@ -36,14 +36,24 @@ repositories {
 }
 
 dependencies {
-    compile("org.springframework.boot:spring-boot-starter-web")
+    //compile("org.springframework.boot:spring-boot-starter-web")
+    //compile("org.springframework.data:spring-data-mongodb:1.6.1.RELEASE")
+    //compile("org.springframework.boot:spring-boot-starter-thymeleaf")
+    //compile group: 'com.google.guava', name: 'guava', version: '17.0'
+    //compile("org.jsoup:jsoup:1.8.1")
+    //testCompile("junit:junit:4.11")
+    //compile("javax.mail:mail:1.4.5")
+    //testCompile("org.springframework.boot:spring-boot-starter-test")
+    
+    compile('org.springframework.boot:spring-boot-starter-web:1.2.1.RELEASE')
     compile("org.springframework.data:spring-data-mongodb:1.6.1.RELEASE")
-    compile("org.springframework.boot:spring-boot-starter-thymeleaf")
-    compile group: 'com.google.guava', name: 'guava', version: '17.0'
+//    compile("org.springframework.boot:spring-boot-starter-thymeleaf")
+    //compile group: 'com.google.guava', name: 'guava', version: '17.0'
+    compile('com.google.guava:guava:18.0')
     compile("org.jsoup:jsoup:1.8.1")
-    testCompile("junit:junit:4.11")
-    compile("javax.mail:mail:1.4.5")
-    testCompile("org.springframework.boot:spring-boot-starter-test")
+    testCompile("junit:junit:4.12")
+    compile("javax.mail:mail:1.4.7")
+    testCompile('org.springframework.boot:spring-boot-starter-test:1.2.1.RELEASE')
 }
 
 task wrapper(type: Wrapper) {
