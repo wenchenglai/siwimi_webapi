@@ -42,7 +42,7 @@ dependencies {
     compile group: 'com.google.guava', name: 'guava', version: '17.0'
     compile("org.jsoup:jsoup:1.8.1")
     testCompile("junit:junit:4.11")
-    providedCompile("javax.mail:mail:1.4.5")
+    compile("javax.mail:mail:1.4.5")
     testCompile("org.springframework.boot:spring-boot-starter-test")
 }
 
