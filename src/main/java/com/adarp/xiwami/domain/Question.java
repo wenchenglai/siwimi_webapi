@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection="Question")
@@ -19,13 +20,21 @@ public class Question {
 	private Date createdDate;
 	private boolean isSolved;
 	private List<String> answers = new ArrayList<String>();	
-	
-	private String status = "Open";
+	private String status = "Open"; // Open, Closed
 	private int viewCount;
 	
 	private String cityState;
 	private String zipCode;
 	private double[] location;
+	
+	@Transient
+	private int voteUp = 0;
+	
+	@Transient
+	private int voteDown = 0;
+	
+	@Transient
+	private boolean isFavorite = false; // from requester's perspective
 	
 	//The default of the below field is set by backend
 	private Boolean isDestroyed;
