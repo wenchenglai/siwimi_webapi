@@ -57,11 +57,11 @@ public class MessageRepositoryImpl implements MessageRepositoryCustom{
 		return mongoTemplate.find(new Query(c), Message.class, "Message");
 	}
 	
-	@Override
-	public Message save(Message newObj) {
-		mongoTemplate.save(newObj, "Message");
-		return newObj;
-	}	
+//	@Override
+//	public Message save(Message newObj) {
+//		mongoTemplate.save(newObj, "Message");
+//		return newObj;
+//	}	
 }
 
 

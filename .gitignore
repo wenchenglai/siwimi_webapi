@@ -33,6 +33,11 @@ local.properties
 # TeXlipse plugin
 .texlipse
 
+# gradle wrapper
+gradlew
+gradlew.bat
+gradle/
+
 
 /target/
 /bin/
