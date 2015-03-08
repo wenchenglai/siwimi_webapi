@@ -30,28 +30,19 @@ public class Item {
 	private String imageData;
 	private int viewCount;
 	
-	private String cityState;
+	private String city;
+	private String state;
 	private String zipCode;
 	private double[] location;
 	
 	private Boolean isDestroyed; 
 	
 	
-	public String getCityState() {
-		return cityState;
-	}
-
-	public void setCityState(String cityState) {
-		this.cityState = cityState;
-	}
-
 	public String getZipCode() {
 		return zipCode;
 	}
 
 	public void setZipCode(String zipCode) {
-		if (Integer.parseInt(zipCode)<10000)
-			zipCode = "0"+zipCode;
 		this.zipCode = zipCode;
 	}
 
@@ -222,7 +213,23 @@ public class Item {
 	public void setIsDestroyed(Boolean isDestroyed) {
 		this.isDestroyed = isDestroyed;
 	}	
-	
+		
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
 	@Override
 	public int hashCode() {
 	    return id.hashCode();

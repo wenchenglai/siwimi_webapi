@@ -14,7 +14,8 @@ public class Family {
 	private String id;
 	
 	private String zipCode;
-	private String cityState;
+	private String city;
+	private String state;
 	private String familyName;
 	private String description;	
 	
@@ -39,17 +40,23 @@ public class Family {
 	}
 
 	public void setZipCode(String zipCode) {
-		if (Integer.parseInt(zipCode)<10000)
-			zipCode = "0"+zipCode;
 		this.zipCode = zipCode;
 	}
-	
-	public String getCityState() {
-		return cityState;
+		
+	public String getCity() {
+		return city;
 	}
 
-	public void setCityState(String cityState) {
-		this.cityState = cityState;
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
 	}
 
 	public String getFamilyName() {

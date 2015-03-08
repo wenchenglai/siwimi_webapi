@@ -55,13 +55,13 @@ public class TipService {
 	public Tip addTip(Tip newTip) {
 		newTip.setIsDestroyed(false);
 		newTip.setViewCount(0);
-		newTip = updateZipCode(newTip);
+		newTip = updateLocation(newTip);
 		return tipRep.saveTip(newTip);
 	}
 	
 	public Tip updateTip(String id, Tip updatedTip) {
 		updatedTip.setId(id);
-		updatedTip = updateZipCode(updatedTip);
+		updatedTip = updateLocation(updatedTip);
 		return tipRep.saveTip(updatedTip);
 	}
 	
@@ -71,26 +71,21 @@ public class TipService {
 		tipRep.saveTip(tip);
 	}
 	
-	public Tip updateZipCode(Tip tip) {
+	public Tip updateLocation(Tip tip) {
 		// lookup zipcode from the collection ZipCode;
 		ZipCode thisZipCode = new ZipCode();
 				
 		// if the zipCode is not provided by the user
-		if (tip.getZipCode()==null) {				
-			if (tip.getCityState()==null){
-				// if both zipcode and cityState are not completed, set default to 48105
-				thisZipCode = zipCodeRep.findByzipCode(48105);
-			} else {
-				String [] parts = tip.getCityState().split(",");
-				String city = parts[0].trim();
-				String stateCode = parts[1].trim();	
-				thisZipCode = zipCodeRep.findByTownshipLikeIgnoreCaseAndStateCodeLikeIgnoreCase(city, stateCode);				
-			}						
+		if (tip.getZipCode() == null) {				
+			// Front-end must provide City and State
+			String city = tip.getCity();
+			String state = tip.getState();
+			thisZipCode = zipCodeRep.findByTownshipLikeIgnoreCaseAndStateLikeIgnoreCase(city, state);									
 		} else {
-			/** if the zipCode is provided by the user:
-			   (1) ignore stateCity provided by the user, 
+			/** if the zipCode is provided by the the front-end:
+			   (1) ignore state/City provided by the front-end, 
 			   (2) lookup zipcode from the collection ZipCode
-			   (3) please note that the type of zipcode is "int" in the mongoDB collection 
+			   (3) The type of zipcode is "int" in the mongoDB collection 
 			**/
 			thisZipCode = zipCodeRep.findByzipCode(Integer.parseInt(tip.getZipCode()));			
 		}
@@ -99,7 +94,8 @@ public class TipService {
 		double[] location = {thisZipCode.getLongitude(), thisZipCode.getLatitude()};
 		tip.setZipCode(thisZipCode.getZipCode());
 		tip.setLocation(location);
-		tip.setCityState(thisZipCode.getTownship()+", "+thisZipCode.getStateCode());	
+		tip.setCity(thisZipCode.getTownship());
+		tip.setState(thisZipCode.getStateCode());	
 		
 		return tip;
 	}

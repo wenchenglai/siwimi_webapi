@@ -40,12 +40,14 @@ public class ActivityService {
 	public Activity addActivity(Activity newActivity) {			
 		newActivity.setIsDestroyed(false);
 		newActivity.setViewCount(0);
-		newActivity = updateZipCode(newActivity);
+		newActivity = updateLocation(newActivity);
 		
 		// fromTime must be ealier than toTime
-		if (newActivity.getFromTime().compareTo(newActivity.getToTime())>0) {
-			// if fromTime is after toTime --> fromTime = toTime
-			newActivity.setToTime(newActivity.getFromTime());
+		if ((newActivity.getFromTime()!=null) && (newActivity.getToTime()!=null) ) {
+			if (newActivity.getFromTime().compareTo(newActivity.getToTime())>0) {
+				// if fromTime is after toTime --> fromTime = toTime
+				newActivity.setToTime(newActivity.getFromTime());
+			}
 		}
 		
 		/** We cannot use activityRep.save()
@@ -56,7 +58,7 @@ public class ActivityService {
 	
 	public Activity updateActivity(String id, Activity updatedActivity) {
 		updatedActivity.setId(id);
-		updatedActivity = updateZipCode(updatedActivity);
+		updatedActivity = updateLocation(updatedActivity);
 		return activityRep.saveActivity(updatedActivity);
 	}
 	
@@ -66,25 +68,21 @@ public class ActivityService {
 		activityRep.saveActivity(activity);
 	}
 	
-	public Activity updateZipCode(Activity activity) {
+	public Activity updateLocation(Activity activity) {
 		// lookup zipcode from the collection ZipCode;
 		ZipCode thisZipCode = new ZipCode();
 				
 		// if the zipCode is not provided by the user
 		if (activity.getZipCode() == null) {				
-			if (activity.getCity() == null || activity.getState() == null){
-				// if both zipcode and city, State are not completed, set default to 48105
-				thisZipCode = zipCodeRep.findByzipCode(48105);
-			} else {
-				String city = activity.getCity();
-				String stateCode = activity.getState();
-				thisZipCode = zipCodeRep.findByTownshipLikeIgnoreCaseAndStateCodeLikeIgnoreCase(city, stateCode);				
-			}						
+			// Front-end must provide City and State
+			String city = activity.getCity();
+			String state = activity.getState();
+			thisZipCode = zipCodeRep.findByTownshipLikeIgnoreCaseAndStateLikeIgnoreCase(city, state);									
 		} else {
-			/** if the zipCode is provided by the user:
-			   (1) ignore stateCity provided by the user, 
+			/** if the zipCode is provided by the the front-end:
+			   (1) ignore state/City provided by the front-end, 
 			   (2) lookup zipcode from the collection ZipCode
-			   (3) please note that the type of zipcode is "int" in the mongoDB collection 
+			   (3) The type of zipcode is "int" in the mongoDB collection 
 			**/
 			thisZipCode = zipCodeRep.findByzipCode(Integer.parseInt(activity.getZipCode()));			
 		}

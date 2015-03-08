@@ -19,7 +19,7 @@ public class Activity {
 	private Date toTime;
 	private String address;
 	private String city;
-	private String State;
+	private String state;
 	private String zipCode;
 	private String url;
 	private String imageData;
@@ -156,8 +156,6 @@ public class Activity {
 	}
 
 	public void setZipCode(String zipCode) {
-		if (Integer.parseInt(zipCode)<10000)
-			zipCode = "0"+zipCode;
 		this.zipCode = zipCode;
 	}
 
@@ -178,11 +176,11 @@ public class Activity {
 	}
 
 	public String getState() {
-		return State;
+		return state;
 	}
 
 	public void setState(String state) {
-		State = state;
+		this.state = state;
 	}
 
 	public String getAddress() {
