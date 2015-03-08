@@ -21,7 +21,8 @@ public class Tip implements Comparable<Tip>{
 	private String type;
 	private int viewCount;
 	
-	private String cityState;
+	private String city;
+	private String state;
 	private String zipCode;
 	private double[] location;
 	
@@ -109,14 +110,6 @@ public class Tip implements Comparable<Tip>{
 		this.isDestroyed = isDestroyed;
 	}
 	
-	public String getCityState() {
-		return cityState;
-	}
-
-	public void setCityState(String cityState) {
-		this.cityState = cityState;
-	}
-
 	public double[] getLocation() {
 		return location;
 	}
@@ -130,10 +123,6 @@ public class Tip implements Comparable<Tip>{
 	}
 
 	public void setZipCode(String zipCode) {
-		if (zipCode != null) {
-			if (Integer.parseInt(zipCode)<10000)
-				zipCode = "0"+zipCode;
-		}
 		this.zipCode = zipCode;
 	}
 
@@ -167,6 +156,22 @@ public class Tip implements Comparable<Tip>{
 
 	public void setIsFavorite(boolean isFavorite) {
 		this.isFavorite = isFavorite;
+	}
+	
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
 	}
 
 	@Override

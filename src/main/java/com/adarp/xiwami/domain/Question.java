@@ -23,7 +23,8 @@ public class Question {
 	private String status = "Open"; // Open, Closed
 	private int viewCount;
 	
-	private String cityState;
+	private String city;
+	private String state;
 	private String zipCode;
 	private double[] location;
 	
@@ -83,14 +84,6 @@ public class Question {
 		return isSolved;
 	}
 
-	public String getCityState() {
-		return cityState;
-	}
-
-	public void setCityState(String cityState) {
-		this.cityState = cityState;
-	}
-
 	public String getZipCode() {
 		return zipCode;
 	}
@@ -147,7 +140,23 @@ public class Question {
 	public void setViewCount(int viewCount) {
 		this.viewCount = viewCount;
 	}	
-	
+		
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
 	@Override
 	public int hashCode() {
 	    return id.hashCode();
