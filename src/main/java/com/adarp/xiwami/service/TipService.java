@@ -26,7 +26,8 @@ public class TipService {
 	@Autowired
 	private ZipCodeRepository zipCodeRep;
 	
-	public List<Tip> findTips(String creatorId, String requesterId,
+	public List<Tip> findTips(String creatorId, 
+							  String requesterId,
 			                  String status, String type, 
 			                  Double longitude, Double latitude, String qsDistance, 
 			                  String queryText) {
