@@ -35,6 +35,9 @@ public class Member {
 	private String flocation;
 	private int ftimezone;
 	private String zipCode;
+	private String city;
+	private String state;
+	private double[] location;
 	
 	//The default of the below field is set by back end
 	private boolean isDestroyed;
@@ -230,6 +233,30 @@ public class Member {
 	public void setZipCode(String zipCode) {
 		this.zipCode = zipCode;
 	}	
+	
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+	
+	public double[] getLocation() {
+		return location;
+	}
+
+	public void setLocation(double[] location) {
+		this.location = location;
+	}
 	
 	@Override
 	public int hashCode() {
