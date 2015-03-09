@@ -33,6 +33,9 @@ public class Activity {
 	@Transient
 	private String status = "Upcoming";
 	
+	@Transient
+	private boolean isFavorite = false;
+	
 	//The default of the below field is set by backend
 	private Boolean isDestroyed;
 	
@@ -199,6 +202,14 @@ public class Activity {
 		this.viewCount = viewCount;
 	}
 	
+	public boolean getIsFavorite() {
+		return isFavorite;
+	}
+
+	public void setIsFavorite(boolean isFavorite) {
+		this.isFavorite = isFavorite;
+	}
+
 	@Override
 	public int hashCode() {
 	    return id.hashCode();

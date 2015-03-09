@@ -27,6 +27,7 @@ public class QuestionController {
 	@RequestMapping(value = "/questions", method = RequestMethod.GET, produces = "application/json")
 	public Map<String,List<Question>> findQuestions(
 			@RequestParam(value="creator", required=false) String creatorId,
+			@RequestParam(value="requester", required=false) String requesterId, // userId who is sending this query request
 			@RequestParam(value="longitude", required=false) Double longitude,
 			@RequestParam(value="latitude", required=false) Double latitude,
 			@RequestParam(value="distance", required=false) String qsDistance, 
@@ -34,7 +35,7 @@ public class QuestionController {
 		Map<String,List<Question>> responseBody = new HashMap<String,List<Question>>();
 		List<Question> questionList = null;
 		try {
-			questionList = questionService.findQuestions(creatorId,longitude,latitude,qsDistance,queryText);
+			questionList = questionService.findQuestions(creatorId,requesterId,longitude,latitude,qsDistance,queryText);
 		} catch (Exception err) {
 			// we must return an empty array so Ember can pick up the json data format.  Return null will crash the ember client.
 			questionList = new ArrayList<Question>();

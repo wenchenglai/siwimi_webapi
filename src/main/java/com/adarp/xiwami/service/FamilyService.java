@@ -73,7 +73,9 @@ public class FamilyService {
 			// Front-end must provide City and State
 			String city = family.getCity();
 			String state = family.getState();
-			thisZipCode = zipCodeRep.findByTownshipLikeIgnoreCaseAndStateLikeIgnoreCase(city, state);									
+			if ((city != null) && (state != null)) {
+				thisZipCode = zipCodeRep.findByTownshipLikeIgnoreCaseAndStateLikeIgnoreCase(city, state);		
+			}									
 		} else {
 			/** if the zipCode is provided by the the front-end:
 			   (1) ignore state/City provided by the front-end, 

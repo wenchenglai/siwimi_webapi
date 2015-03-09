@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.adarp.xiwami.domain.Item;
 import com.adarp.xiwami.domain.ZipCode;
+import com.adarp.xiwami.repository.FavoriteRepository;
 import com.adarp.xiwami.repository.ItemRepository;
 import com.adarp.xiwami.repository.ZipCodeRepository;
 
@@ -17,17 +18,29 @@ public class ItemService {
 	private ItemRepository itemRep;
 	
 	@Autowired
+	FavoriteRepository favoriteRep;	
+	
+	@Autowired
 	private ZipCodeRepository zipCodeRep;
 	
-	public List<Item> findItems(String creatorId, String status,Double longitude,Double latitude,String qsDistance,String queryText) {					
+	public List<Item> findItems(String creatorId, 
+								String requesterId,
+								String status,
+								Double longitude,Double latitude,String qsDistance,
+								String queryText) {					
 		List<Item> itemList = itemRep.queryItem(creatorId, status, longitude,latitude,qsDistance,queryText);
 		
 		// increment viewcount by 1, and save it to MongoDB
 		for (int i=0; i<itemList.size(); i++) {
 			Item item = itemList.get(i);
+			// Populate isFavorite
+			if (favoriteRep.queryFavorite(requesterId, item.getId(), "item") != null) {
+				item.setIsFavorite(true);
+			}
+			itemList.set(i, item);
+			// increment viewcount by 1, and save it to MongoDB
 			item.setViewCount(item.getViewCount()+1);
 			itemRep.saveItem(item);
-			//itemList.set(i, item);
 		}
 		
 		return itemList;
@@ -66,7 +79,9 @@ public class ItemService {
 			// Front-end must provide City and State
 			String city = item.getCity();
 			String state = item.getState();
-			thisZipCode = zipCodeRep.findByTownshipLikeIgnoreCaseAndStateLikeIgnoreCase(city, state);									
+			if ((city != null) && (state != null)) {
+				thisZipCode = zipCodeRep.findByTownshipLikeIgnoreCaseAndStateLikeIgnoreCase(city, state);		
+			}								
 		} else {
 			/** if the zipCode is provided by the the front-end:
 			   (1) ignore state/City provided by the front-end, 

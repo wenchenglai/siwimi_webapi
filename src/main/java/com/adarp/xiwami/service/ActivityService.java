@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.adarp.xiwami.domain.Activity;
 import com.adarp.xiwami.domain.ZipCode;
 import com.adarp.xiwami.repository.ActivityRepository;
+import com.adarp.xiwami.repository.FavoriteRepository;
 import com.adarp.xiwami.repository.ZipCodeRepository;
 
 @Service
@@ -17,17 +18,28 @@ public class ActivityService {
 	ActivityRepository activityRep;
 	
 	@Autowired
+	FavoriteRepository favoriteRep;	
+	
+	@Autowired
 	private ZipCodeRepository zipCodeRep;
 	
-	public List<Activity> findActivities(String creatorId,String status,Double longitude,Double latitude,String qsDistance,String queryText) {													
+	public List<Activity> findActivities(String creatorId,
+										 String requesterId,
+										 String status,Double longitude,Double latitude,String qsDistance,
+										 String queryText) {													
 		List<Activity> activityList = activityRep.queryActivity(creatorId, status, longitude, latitude, qsDistance, queryText);
 
 		// increment viewcount by 1, and save it to MongoDB
 		for (int i=0; i<activityList.size(); i++) {
 			Activity activity = activityList.get(i);
+			// Populate isFavorite
+			if (favoriteRep.queryFavorite(requesterId, activity.getId(), "activity") != null) {
+				activity.setIsFavorite(true);
+			}
+			activityList.set(i, activity);
+			// increment viewcount by 1, and save it to MongoDB
 			activity.setViewCount(activity.getViewCount()+1);
-			activityRep.saveActivity(activity);
-			//activityList.set(i, activity);			
+			activityRep.saveActivity(activity);		
 		}
 		
 		return activityList;
@@ -77,7 +89,9 @@ public class ActivityService {
 			// Front-end must provide City and State
 			String city = activity.getCity();
 			String state = activity.getState();
-			thisZipCode = zipCodeRep.findByTownshipLikeIgnoreCaseAndStateLikeIgnoreCase(city, state);									
+			if ((city != null) && (state != null)) {
+				thisZipCode = zipCodeRep.findByTownshipLikeIgnoreCaseAndStateLikeIgnoreCase(city, state);		
+			}								
 		} else {
 			/** if the zipCode is provided by the the front-end:
 			   (1) ignore state/City provided by the front-end, 

@@ -157,6 +157,14 @@ public class Question {
 		this.state = state;
 	}
 
+	public boolean getIsFavorite() {
+		return isFavorite;
+	}
+
+	public void setIsFavorite(boolean isFavorite) {
+		this.isFavorite = isFavorite;
+	}
+
 	@Override
 	public int hashCode() {
 	    return id.hashCode();
