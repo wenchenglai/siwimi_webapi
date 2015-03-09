@@ -3,6 +3,7 @@ package com.adarp.xiwami.domain;
 import java.util.Date;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection="Item")
@@ -37,6 +38,8 @@ public class Item {
 	
 	private Boolean isDestroyed; 
 	
+	@Transient
+	private boolean isFavorite = false;
 	
 	public String getZipCode() {
 		return zipCode;
@@ -228,6 +231,14 @@ public class Item {
 
 	public void setState(String state) {
 		this.state = state;
+	}
+	
+	public boolean getIsFavorite() {
+		return isFavorite;
+	}
+
+	public void setIsFavorite(boolean isFavorite) {
+		this.isFavorite = isFavorite;
 	}
 
 	@Override

@@ -27,6 +27,7 @@ public class ActivityController {
 	@RequestMapping(value = "/activities", method = RequestMethod.GET, produces = "application/json")
 	public Map<String,List<Activity>> findActivities(
 			@RequestParam(value="creator", required=false) String creatorId,
+			@RequestParam(value="requester", required=false) String requesterId, // userId who is sending this query request
 			@RequestParam(value="status", required=false) String status,
 			@RequestParam(value="longitude", required=false) Double longitude,
 			@RequestParam(value="latitude", required=false) Double latitude,
@@ -36,7 +37,7 @@ public class ActivityController {
 			
 		List<Activity> activityList = null;
 		try {
-			activityList = activityService.findActivities(creatorId,status,longitude,latitude,qsDistance,queryText);
+			activityList = activityService.findActivities(creatorId,requesterId,status,longitude,latitude,qsDistance,queryText);
 		} catch (Exception err) {
 			// we must return an empty array so Ember can pick up the json data format.  Return null will crash the ember client.
 			activityList = new ArrayList<Activity>();

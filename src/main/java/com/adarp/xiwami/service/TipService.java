@@ -26,7 +26,8 @@ public class TipService {
 	@Autowired
 	private ZipCodeRepository zipCodeRep;
 	
-	public List<Tip> findTips(String creatorId, String requesterId,
+	public List<Tip> findTips(String creatorId, 
+							  String requesterId,
 			                  String status, String type, 
 			                  Double longitude, Double latitude, String qsDistance, 
 			                  String queryText) {
@@ -80,7 +81,9 @@ public class TipService {
 			// Front-end must provide City and State
 			String city = tip.getCity();
 			String state = tip.getState();
-			thisZipCode = zipCodeRep.findByTownshipLikeIgnoreCaseAndStateLikeIgnoreCase(city, state);									
+			if ((city != null) && (state != null)) {
+				thisZipCode = zipCodeRep.findByTownshipLikeIgnoreCaseAndStateLikeIgnoreCase(city, state);		
+			}								
 		} else {
 			/** if the zipCode is provided by the the front-end:
 			   (1) ignore state/City provided by the front-end, 
