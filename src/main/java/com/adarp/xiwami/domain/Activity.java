@@ -28,6 +28,10 @@ public class Activity {
 	private int like;
 	private int viewCount;
 	private double[] location;
+	private int fromAge;
+	private int toAge;
+	private float price;	
+	private Date createdDate;
 	
 	//This field is only for front-end purpose
 	@Transient
@@ -39,6 +43,30 @@ public class Activity {
 	//The default of the below field is set by backend
 	private Boolean isDestroyed;
 	
+	public int getFromAge() {
+		return fromAge;
+	}
+
+	public void setFromAge(int fromAge) {
+		this.fromAge = fromAge;
+	}
+
+	public int getToAge() {
+		return toAge;
+	}
+
+	public void setToAge(int toAge) {
+		this.toAge = toAge;
+	}
+
+	public float getPrice() {
+		return price;
+	}
+
+	public void setPrice(float price) {
+		this.price = price;
+	}
+
 	public Activity() {
 		// this.status : this is for front-end only
 		if (this.fromTime != null) {
@@ -229,5 +257,13 @@ public class Activity {
 	          return false;
 	       
 	    return true;
+	}
+
+	public Date getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
 	}	
 }
