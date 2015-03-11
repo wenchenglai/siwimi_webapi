@@ -49,7 +49,7 @@ public class ActivityRepositoryImpl implements ActivityRepositoryCustom {
 			criterias.add(new Criteria().where("location").nearSphere(new Point(longitude,latitude)).maxDistance(distance));
 		}
 		
-		if (status != null) {		
+		if ((status != null) && (!status.equals("all"))) {		
 			Date now = new Date();
 			if (status.equalsIgnoreCase("Past")) {
 				criterias.add(new Criteria().where("toTime").lt(now));
@@ -61,7 +61,7 @@ public class ActivityRepositoryImpl implements ActivityRepositoryCustom {
 			}			
 		}
 	
-		if (type != null) {
+		if ((type != null) && (!type.equals("all"))) {	
 			criterias.add(new Criteria().where("type").is(type));
 		}
 		
