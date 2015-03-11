@@ -38,7 +38,7 @@ public class ActivityController {
 			
 		List<Activity> activityList = null;
 		try {
-			activityList = activityService.findActivities(creatorId,requesterId,status,type,longitude,latitude,qsDistance,queryText);
+			  activityList = activityService.findActivities(creatorId,requesterId,status,type,longitude,latitude,qsDistance,queryText);
 		} catch (Exception err) {
 			// we must return an empty array so Ember can pick up the json data format.  Return null will crash the ember client.
 			activityList = new ArrayList<Activity>();
