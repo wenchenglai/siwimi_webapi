@@ -90,7 +90,7 @@ public class FamilyService {
 		family.setZipCode(thisZipCode.getZipCode());
 		family.setLocation(location);
 		family.setCity(thisZipCode.getTownship());
-		family.setState(thisZipCode.getState());
+		family.setState(thisZipCode.getStateCode());
 		
 		return family;
 	}
