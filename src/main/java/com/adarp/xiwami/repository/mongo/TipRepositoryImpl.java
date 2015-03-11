@@ -42,7 +42,7 @@ public class TipRepositoryImpl implements TipRepositoryCustom{
 			criterias.add(new Criteria().where("creator").is(creatorId));
 		}
 		
-		if (type != null) {
+		if ((type != null) && (!type.equals("all"))) {	
 			criterias.add(new Criteria().where("type").is(type));
 		}
 		
@@ -62,7 +62,7 @@ public class TipRepositoryImpl implements TipRepositoryCustom{
 			criterias.add(new Criteria().where("location").nearSphere(new Point(longitude,latitude)).maxDistance(distance));
 		}
 		
-		if (status != null) {
+		if ((status != null) && (!status.equals("all"))) {	
 			if (status.equalsIgnoreCase("active")) {
 				criterias.add(new Criteria().where("expiredDate").gt(new Date()));
 			}

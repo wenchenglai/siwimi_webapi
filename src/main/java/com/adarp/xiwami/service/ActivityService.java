@@ -25,9 +25,11 @@ public class ActivityService {
 	
 	public List<Activity> findActivities(String creatorId,
 										 String requesterId,
-										 String status,Double longitude,Double latitude,String qsDistance,
+										 String status,
+										 String type,
+										 Double longitude,Double latitude,String qsDistance,
 										 String queryText) {													
-		List<Activity> activityList = activityRep.queryActivity(creatorId, status, longitude, latitude, qsDistance, queryText);
+		List<Activity> activityList = activityRep.queryActivity(creatorId, status, type, longitude, latitude, qsDistance, queryText);
 
 		// increment viewcount by 1, and save it to MongoDB
 		for (int i=0; i<activityList.size(); i++) {

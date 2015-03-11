@@ -29,6 +29,7 @@ public class ActivityController {
 			@RequestParam(value="creator", required=false) String creatorId,
 			@RequestParam(value="requester", required=false) String requesterId, // userId who is sending this query request
 			@RequestParam(value="status", required=false) String status,
+			@RequestParam(value="type", required=false) String type,
 			@RequestParam(value="longitude", required=false) Double longitude,
 			@RequestParam(value="latitude", required=false) Double latitude,
 			@RequestParam(value="distance", required=false) String qsDistance, 
@@ -37,7 +38,7 @@ public class ActivityController {
 			
 		List<Activity> activityList = null;
 		try {
-			activityList = activityService.findActivities(creatorId,requesterId,status,longitude,latitude,qsDistance,queryText);
+			  activityList = activityService.findActivities(creatorId,requesterId,status,type,longitude,latitude,qsDistance,queryText);
 		} catch (Exception err) {
 			// we must return an empty array so Ember can pick up the json data format.  Return null will crash the ember client.
 			activityList = new ArrayList<Activity>();
