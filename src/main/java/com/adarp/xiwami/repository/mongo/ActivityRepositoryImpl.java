@@ -23,7 +23,7 @@ public class ActivityRepositoryImpl implements ActivityRepositoryCustom {
 
 	@SuppressWarnings("static-access")
 	@Override
-	public List<Activity> queryActivity(String creatorId,String status,Double longitude,Double latitude,String qsDistance,String queryText) {
+	public List<Activity> queryActivity(String creatorId,String status,String type,Double longitude,Double latitude,String qsDistance,String queryText) {
 			
 		List<Criteria> criterias = new ArrayList<Criteria>();
 		
@@ -61,6 +61,10 @@ public class ActivityRepositoryImpl implements ActivityRepositoryCustom {
 			}			
 		}
 	
+		if (type != null) {
+			criterias.add(new Criteria().where("type").is(type));
+		}
+		
 		Criteria c = new Criteria().andOperator(criterias.toArray(new Criteria[criterias.size()]));
 		return mongoTemplate.find(new Query(c), Activity.class, "Activity");
 	}
