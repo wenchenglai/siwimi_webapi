@@ -133,11 +133,11 @@ public class TipRepositoryImpl implements TipRepositoryCustom{
 			Tip tip = tipCandidateList.get(i);
 			
 			if (upVoteResultMap.containsKey(tip.getId())) {
-				tip.setVoteUp(upVoteResultMap.get(tip.getId()).getCount());
+				tip.setVoteUpCount(upVoteResultMap.get(tip.getId()).getCount());
 			}
 			
 			if (downVoteResultMap.containsKey(tip.getId())) {
-				tip.setVoteDown(downVoteResultMap.get(tip.getId()).getCount());
+				tip.setVoteDownCount(downVoteResultMap.get(tip.getId()).getCount());
 			}
 				
 			tipCandidateList.set(i, tip);

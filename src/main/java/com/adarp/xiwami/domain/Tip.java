@@ -27,10 +27,10 @@ public class Tip implements Comparable<Tip>{
 	private double[] location;
 	
 	@Transient
-	private int voteUp = 0;
+	private int voteUpCount = 0;
 	
 	@Transient
-	private int voteDown = 0;
+	private int voteDownCount = 0;
 	
 	@Transient
 	private boolean isFavorite = false;
@@ -134,20 +134,20 @@ public class Tip implements Comparable<Tip>{
 		this.viewCount = viewCount;
 	}
 
-	public int getVoteUp() {
-		return voteUp;
+	public int getVoteUpCount() {
+		return voteUpCount;
 	}
 
-	public void setVoteUp(int voteUp) {
-		this.voteUp = voteUp;
+	public void setVoteUpCount(int voteUpCount) {
+		this.voteUpCount = voteUpCount;
 	}
 
-	public int getVoteDown() {
-		return voteDown;
+	public int getVoteDownCount() {
+		return voteDownCount;
 	}
 
-	public void setVoteDown(int voteDown) {
-		this.voteDown = voteDown;
+	public void setVoteDownCount(int voteDownCount) {
+		this.voteDownCount = voteDownCount;
 	}
 	
 	public boolean getIsFavorite() {
@@ -176,8 +176,8 @@ public class Tip implements Comparable<Tip>{
 
 	@Override
 	public int compareTo(Tip compareTip) {
-		int compareVoteUp = ((Tip)compareTip).getVoteUp();
-		return compareVoteUp - this.voteUp;
+		int compareVoteUp = ((Tip)compareTip).getVoteUpCount();
+		return compareVoteUp - this.voteUpCount;
 	}
 	
 	@Override

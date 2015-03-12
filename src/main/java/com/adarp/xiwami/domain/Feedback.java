@@ -20,6 +20,8 @@ public class Feedback {
 	private Date createdDate;
 	private int likeCount;
 	private int viewCount;
+	private String city;
+	private String state;	
 	private List<String> comments = new ArrayList<String>();
 	
 	//The default of the below field is set by backend
@@ -104,6 +106,22 @@ public class Feedback {
 	public void setComments(List<String> comments) {
 		this.comments = comments;
 	}		
+	
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}	
 	
 	@Override
 	public int hashCode() {
