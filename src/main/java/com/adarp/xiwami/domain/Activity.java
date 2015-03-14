@@ -186,7 +186,10 @@ public class Activity {
 		return zipCode;
 	}
 
+	// ZipCode stored in MongoDB could only have 4-digit
 	public void setZipCode(String zipCode) {
+		if (Integer.parseInt(zipCode)<10000)
+			zipCode = "0"+zipCode;
 		this.zipCode = zipCode;
 	}
 
@@ -238,6 +241,14 @@ public class Activity {
 		this.isFavorite = isFavorite;
 	}
 
+	public Date getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
+	}	
+	
 	@Override
 	public int hashCode() {
 	    return id.hashCode();
@@ -258,12 +269,4 @@ public class Activity {
 	       
 	    return true;
 	}
-
-	public Date getCreatedDate() {
-		return createdDate;
-	}
-
-	public void setCreatedDate(Date createdDate) {
-		this.createdDate = createdDate;
-	}	
 }

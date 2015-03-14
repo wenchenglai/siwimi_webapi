@@ -22,7 +22,8 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
 
 	@SuppressWarnings("static-access")
 	@Override
-	public List<Item> queryItem(String creatorId, String status, Double longitude, Double latitude, String qsDistance, String queryText) {
+	public List<Item> queryItem(String creatorId, String status, String type, String condition,
+			                    Double longitude, Double latitude, String qsDistance, String queryText) {
 				
 		List<Criteria> criterias = new ArrayList<Criteria>();
 		
@@ -32,8 +33,16 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
 			criterias.add(new Criteria().where("creator").is(creatorId));
 		}
 		
-		if (status != null) {
+		if ((status != null) && (!status.equals("all"))) {
 			criterias.add(new Criteria().where("status").is(status));
+		}
+		
+		if ((condition != null) && (!condition.equals("all"))) {
+			criterias.add(new Criteria().where("condition").is(condition));
+		}
+		
+		if ((type != null) && (!type.equals("all"))) {
+			criterias.add(new Criteria().where("type").is(type));
 		}
 		
 		if (queryText != null) {

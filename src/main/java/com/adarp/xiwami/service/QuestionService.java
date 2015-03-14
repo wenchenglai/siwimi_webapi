@@ -70,32 +70,16 @@ public class QuestionService {
 	
 	public Question updateLocation(Question question) {
 		// lookup zipcode from the collection ZipCode;
-			ZipCode thisZipCode = new ZipCode();
-						
-			// if the zipCode is not provided by the user
-			if (question.getZipCode() == null) {				
-				// Front-end must provide City and State
-				String city = question.getCity();
-				String state = question.getState();
-				if ((city != null) && (state != null)) {
-					thisZipCode = zipCodeRep.findByTownshipLikeIgnoreCaseAndStateLikeIgnoreCase(city, state);		
-				}								
-			} else {
-				/** if the zipCode is provided by the the front-end:
-				   (1) ignore state/City provided by the front-end, 
-				   (2) lookup zipcode from the collection ZipCode
-				   (3) The type of zipcode is "int" in the mongoDB collection 
-				**/
-				thisZipCode = zipCodeRep.findByzipCode(Integer.parseInt(question.getZipCode()));			
-			}
-			
-			// set longitude and latitude of the family object 
+		ZipCode thisZipCode = zipCodeRep.queryZipCode(question.getZipCode(), question.getCity(), question.getState());
+		// set longitude and latitude 
+		if (thisZipCode!=null) {
 			double[] location = {thisZipCode.getLongitude(), thisZipCode.getLatitude()};
 			question.setZipCode(thisZipCode.getZipCode());
 			question.setLocation(location);
 			question.setCity(thisZipCode.getTownship());
 			question.setState(thisZipCode.getStateCode());
-			
-			return question;
+		}
+
+		return question;
 	}
 }

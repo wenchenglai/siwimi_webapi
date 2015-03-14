@@ -66,32 +66,16 @@ public class FamilyService {
 	
 	public Family updateLocation(Family family) {
 		// lookup zipcode from the collection ZipCode;
-		ZipCode thisZipCode = new ZipCode();
-				
-		// if the zipCode is not provided by the user
-		if (family.getZipCode() == null) {				
-			// Front-end must provide City and State
-			String city = family.getCity();
-			String state = family.getState();
-			if ((city != null) && (state != null)) {
-				thisZipCode = zipCodeRep.findByTownshipLikeIgnoreCaseAndStateLikeIgnoreCase(city, state);		
-			}									
-		} else {
-			/** if the zipCode is provided by the the front-end:
-			   (1) ignore state/City provided by the front-end, 
-			   (2) lookup zipcode from the collection ZipCode
-			   (3) The type of zipcode is "int" in the mongoDB collection 
-			**/
-			thisZipCode = zipCodeRep.findByzipCode(Integer.parseInt(family.getZipCode()));			
+		ZipCode thisZipCode = zipCodeRep.queryZipCode(family.getZipCode(), family.getCity(), family.getState());
+		// set longitude and latitude 
+		if (thisZipCode!=null) {
+			double[] location = {thisZipCode.getLongitude(), thisZipCode.getLatitude()};
+			family.setZipCode(thisZipCode.getZipCode());
+			family.setLocation(location);
+			family.setCity(thisZipCode.getTownship());
+			family.setState(thisZipCode.getStateCode());
 		}
-			
-		// set longitude and latitude of the family object 
-		double[] location = {thisZipCode.getLongitude(), thisZipCode.getLatitude()};
-		family.setZipCode(thisZipCode.getZipCode());
-		family.setLocation(location);
-		family.setCity(thisZipCode.getTownship());
-		family.setState(thisZipCode.getStateCode());
-		
+
 		return family;
 	}
 }

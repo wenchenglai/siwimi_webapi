@@ -45,7 +45,10 @@ public class Item {
 		return zipCode;
 	}
 
+	// ZipCode stored in MongoDB could only have 4-digit
 	public void setZipCode(String zipCode) {
+		if (Integer.parseInt(zipCode)<10000)
+			zipCode = "0"+zipCode;
 		this.zipCode = zipCode;
 	}
 
