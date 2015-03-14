@@ -29,6 +29,8 @@ public class ItemController {
 			@RequestParam(value="creator", required=false) String creatorId,
 			@RequestParam(value="requester", required=false) String requesterId, // userId who is sending this query request				
 			@RequestParam(value="status", required=false) String status,
+			@RequestParam(value="type", required=false) String type,
+			@RequestParam(value="condition", required=false) String condition,
 			@RequestParam(value="longitude", required=false) Double longitude,
 			@RequestParam(value="latitude", required=false) Double latitude,
 			@RequestParam(value="distance", required=false) String qsDistance, 
@@ -37,7 +39,7 @@ public class ItemController {
 		Map<String,List<Item>> responseBody = new HashMap<String,List<Item>>();
 		List<Item> itemList = null;
 		try {
-			itemList = itemService.findItems(creatorId, requesterId, status, longitude, latitude, qsDistance, queryText);
+			itemList = itemService.findItems(creatorId,requesterId,status,type,condition,longitude,latitude,qsDistance,queryText);
 		} catch (Exception err) {
 			// we must return an empty array so Ember can pick up the json data format.  Return null will crash the ember client.
 			itemList = new ArrayList<Item>();

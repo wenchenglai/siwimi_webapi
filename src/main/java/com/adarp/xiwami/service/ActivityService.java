@@ -27,9 +27,13 @@ public class ActivityService {
 										 String requesterId,
 										 String status,
 										 String type,
+										 Integer period,
+										 String fromTime,
+										 String toTime,
 										 Double longitude,Double latitude,String qsDistance,
 										 String queryText) {													
-		List<Activity> activityList = activityRep.queryActivity(creatorId, status, type, longitude, latitude, qsDistance, queryText);
+		List<Activity> activityList = activityRep.queryActivity(creatorId,status,type,period,fromTime,toTime,
+				                                                longitude,latitude,qsDistance,queryText);
 
 		// increment viewcount by 1, and save it to MongoDB
 		for (int i=0; i<activityList.size(); i++) {
@@ -84,32 +88,16 @@ public class ActivityService {
 	
 	public Activity updateLocation(Activity activity) {
 		// lookup zipcode from the collection ZipCode;
-		ZipCode thisZipCode = new ZipCode();
-				
-		// if the zipCode is not provided by the user
-		if (activity.getZipCode() == null) {				
-			// Front-end must provide City and State
-			String city = activity.getCity();
-			String state = activity.getState();
-			if ((city != null) && (state != null)) {
-				thisZipCode = zipCodeRep.findByTownshipLikeIgnoreCaseAndStateLikeIgnoreCase(city, state);		
-			}								
-		} else {
-			/** if the zipCode is provided by the the front-end:
-			   (1) ignore state/City provided by the front-end, 
-			   (2) lookup zipcode from the collection ZipCode
-			   (3) The type of zipcode is "int" in the mongoDB collection 
-			**/
-			thisZipCode = zipCodeRep.findByzipCode(Integer.parseInt(activity.getZipCode()));			
+		ZipCode thisZipCode = zipCodeRep.queryZipCode(activity.getZipCode(), activity.getCity(), activity.getState());
+		// set longitude and latitude 
+		if (thisZipCode!=null) {
+			double[] location = {thisZipCode.getLongitude(), thisZipCode.getLatitude()};
+			activity.setZipCode(thisZipCode.getZipCode());
+			activity.setLocation(location);
+			activity.setCity(thisZipCode.getTownship());
+			activity.setState(thisZipCode.getStateCode());
 		}
-		
-		// set longitude and latitude of the family object 
-		double[] location = {thisZipCode.getLongitude(), thisZipCode.getLatitude()};
-		activity.setZipCode(thisZipCode.getZipCode());
-		activity.setLocation(location);
-		activity.setCity(thisZipCode.getTownship());
-		activity.setState(thisZipCode.getStateCode());
-		
+
 		return activity;
 	}
 }

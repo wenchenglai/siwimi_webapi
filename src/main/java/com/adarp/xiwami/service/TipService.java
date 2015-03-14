@@ -74,32 +74,16 @@ public class TipService {
 	
 	public Tip updateLocation(Tip tip) {
 		// lookup zipcode from the collection ZipCode;
-		ZipCode thisZipCode = new ZipCode();
-				
-		// if the zipCode is not provided by the user
-		if (tip.getZipCode() == null) {				
-			// Front-end must provide City and State
-			String city = tip.getCity();
-			String state = tip.getState();
-			if ((city != null) && (state != null)) {
-				thisZipCode = zipCodeRep.findByTownshipLikeIgnoreCaseAndStateLikeIgnoreCase(city, state);		
-			}								
-		} else {
-			/** if the zipCode is provided by the the front-end:
-			   (1) ignore state/City provided by the front-end, 
-			   (2) lookup zipcode from the collection ZipCode
-			   (3) The type of zipcode is "int" in the mongoDB collection 
-			**/
-			thisZipCode = zipCodeRep.findByzipCode(Integer.parseInt(tip.getZipCode()));			
+		ZipCode thisZipCode = zipCodeRep.queryZipCode(tip.getZipCode(), tip.getCity(), tip.getState());
+		// set longitude and latitude 
+		if (thisZipCode!=null) {
+			double[] location = {thisZipCode.getLongitude(), thisZipCode.getLatitude()};
+			tip.setZipCode(thisZipCode.getZipCode());
+			tip.setLocation(location);
+			tip.setCity(thisZipCode.getTownship());
+			tip.setState(thisZipCode.getStateCode());
 		}
-			
-		// set longitude and latitude of the family object 
-		double[] location = {thisZipCode.getLongitude(), thisZipCode.getLatitude()};
-		tip.setZipCode(thisZipCode.getZipCode());
-		tip.setLocation(location);
-		tip.setCity(thisZipCode.getTownship());
-		tip.setState(thisZipCode.getStateCode());	
-		
+
 		return tip;
 	}
 	

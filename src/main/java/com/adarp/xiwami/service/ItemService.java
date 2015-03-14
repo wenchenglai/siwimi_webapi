@@ -25,10 +25,10 @@ public class ItemService {
 	
 	public List<Item> findItems(String creatorId, 
 								String requesterId,
-								String status,
+								String status,String type,String condition,
 								Double longitude,Double latitude,String qsDistance,
 								String queryText) {					
-		List<Item> itemList = itemRep.queryItem(creatorId, status, longitude,latitude,qsDistance,queryText);
+		List<Item> itemList = itemRep.queryItem(creatorId,status,type,condition,longitude,latitude,qsDistance,queryText);
 		
 		// increment viewcount by 1, and save it to MongoDB
 		for (int i=0; i<itemList.size(); i++) {
@@ -72,32 +72,16 @@ public class ItemService {
 	
 	public Item updateLocation(Item item) {
 		// lookup zipcode from the collection ZipCode;
-		ZipCode thisZipCode = new ZipCode();
-				
-		// if the zipCode is not provided by the user
-		if (item.getZipCode() == null) {				
-			// Front-end must provide City and State
-			String city = item.getCity();
-			String state = item.getState();
-			if ((city != null) && (state != null)) {
-				thisZipCode = zipCodeRep.findByTownshipLikeIgnoreCaseAndStateLikeIgnoreCase(city, state);		
-			}								
-		} else {
-			/** if the zipCode is provided by the the front-end:
-			   (1) ignore state/City provided by the front-end, 
-			   (2) lookup zipcode from the collection ZipCode
-			   (3) The type of zipcode is "int" in the mongoDB collection 
-			**/
-			thisZipCode = zipCodeRep.findByzipCode(Integer.parseInt(item.getZipCode()));			
+		ZipCode thisZipCode = zipCodeRep.queryZipCode(item.getZipCode(), item.getCity(), item.getState());
+		// set longitude and latitude 
+		if (thisZipCode!=null) {
+			double[] location = {thisZipCode.getLongitude(), thisZipCode.getLatitude()};
+			item.setZipCode(thisZipCode.getZipCode());
+			item.setLocation(location);
+			item.setCity(thisZipCode.getTownship());
+			item.setState(thisZipCode.getStateCode());
 		}
-			
-		// set longitude and latitude of the family object 
-		double[] location = {thisZipCode.getLongitude(), thisZipCode.getLatitude()};
-		item.setZipCode(thisZipCode.getZipCode());
-		item.setLocation(location);
-		item.setCity(thisZipCode.getTownship());
-		item.setState(thisZipCode.getStateCode());	
-		
+
 		return item;
 	}
 }
