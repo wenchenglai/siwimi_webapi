@@ -22,6 +22,7 @@ public class Feedback {
 	private int viewCount;
 	private String city;
 	private String state;	
+	private String zipCode;
 	private List<String> comments = new ArrayList<String>();
 	
 	//The default of the below field is set by backend
@@ -123,6 +124,18 @@ public class Feedback {
 		this.state = state;
 	}	
 	
+	public String getZipCode() {
+		return zipCode;
+	}
+	
+	// ZipCode stored in MongoDB could only have 4-digit
+	public void setZipCode(String zipCode) {
+		if (zipCode != null) {
+			if (Integer.parseInt(zipCode)<10000)
+				zipCode = "0"+zipCode;	
+		}
+		this.zipCode = zipCode;
+	}
 	@Override
 	public int hashCode() {
 	    return id.hashCode();
