@@ -20,6 +20,8 @@ public class Tip implements Comparable<Tip>{
 	private Date expiredDate;
 	private String type;
 	private int viewCount;
+	private String imageData;
+	private String imageUrl;
 	
 	private String city;
 	private String state;
@@ -177,6 +179,22 @@ public class Tip implements Comparable<Tip>{
 		this.state = state;
 	}
 
+	public String getImageData() {
+		return imageData;
+	}
+
+	public void setImageData(String imageData) {
+		this.imageData = imageData;
+	}
+
+	public String getImageUrl() {
+		return imageUrl;
+	}
+	
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
+	}
+	
 	@Override
 	public int compareTo(Tip compareTip) {
 		int compareVoteUp = ((Tip)compareTip).getVoteUpCount();
