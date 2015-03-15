@@ -232,10 +232,12 @@ public class Member {
 
 	// ZipCode stored in MongoDB could only have 4-digit
 	public void setZipCode(String zipCode) {
-		if (Integer.parseInt(zipCode)<10000)
-			zipCode = "0"+zipCode;
+		if (zipCode != null) {
+			if (Integer.parseInt(zipCode)<10000)
+				zipCode = "0"+zipCode;
+		}
 		this.zipCode = zipCode;
-	}	
+	}
 	
 	public String getCity() {
 		return city;
