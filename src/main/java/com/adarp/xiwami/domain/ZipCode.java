@@ -46,5 +46,4 @@ public class ZipCode {
 	public String getZipCode() {
 		return zipCode;
 	}
-	
 }
