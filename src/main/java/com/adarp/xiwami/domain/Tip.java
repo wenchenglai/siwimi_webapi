@@ -21,7 +21,7 @@ public class Tip implements Comparable<Tip>{
 	private String type;
 	private int viewCount;
 	private String imageData;
-	private String imageUrl;
+	private String imageUrl;	
 	
 	private String city;
 	private String state;
@@ -123,13 +123,27 @@ public class Tip implements Comparable<Tip>{
 	public String getZipCode() {
 		return zipCode;
 	}
+	
+	public String getImageData() {
+		return imageData;
+	}
+
+	public void setImageData(String imageData) {
+		this.imageData = imageData;
+	}
+
+	public String getImageUrl() {
+		return imageUrl;
+	}
+	
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
+	}	
 
 	// ZipCode stored in MongoDB could only have 4-digit
 	public void setZipCode(String zipCode) {
-		if (zipCode != null) {
-			if (Integer.parseInt(zipCode)<10000)
-				zipCode = "0"+zipCode;
-		}
+		if (Integer.parseInt(zipCode)<10000)
+			zipCode = "0"+zipCode;
 		this.zipCode = zipCode;
 	}
 
@@ -181,22 +195,6 @@ public class Tip implements Comparable<Tip>{
 		this.state = state;
 	}
 
-	public String getImageData() {
-		return imageData;
-	}
-
-	public void setImageData(String imageData) {
-		this.imageData = imageData;
-	}
-
-	public String getImageUrl() {
-		return imageUrl;
-	}
-	
-	public void setImageUrl(String imageUrl) {
-		this.imageUrl = imageUrl;
-	}
-	
 	@Override
 	public int compareTo(Tip compareTip) {
 		int compareVoteUp = ((Tip)compareTip).getVoteUpCount();
