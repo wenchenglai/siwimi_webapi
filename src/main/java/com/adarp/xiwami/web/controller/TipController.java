@@ -2,8 +2,10 @@ package com.adarp.xiwami.web.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,10 +15,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.adarp.xiwami.domain.Member;
 import com.adarp.xiwami.domain.Tip;
+import com.adarp.xiwami.service.MemberService;
 import com.adarp.xiwami.service.TipService;
 import com.adarp.xiwami.web.dto.TipSideload;
 import com.adarp.xiwami.web.dto.PreviewWebPage;
+import com.adarp.xiwami.web.dto.TipSideloadList;
 
 @RestController
 public class TipController {
@@ -24,9 +29,12 @@ public class TipController {
 	@Autowired
 	private TipService tipService;
 	
+	@Autowired
+	private MemberService memberService;
+	
 	// Get tips by type
 	@RequestMapping(value = "/tips", method = RequestMethod.GET, produces = "application/json")
-	public Map<String,List<Tip>> findTips(
+	public TipSideloadList findTips(
 			@RequestParam(value="creator", required=false) String creatorId,
 			@RequestParam(value="requester", required=false) String requesterId, // userId who is sending this query request			
 			@RequestParam(value="status", required=false) String status,	// *** popular (by vote)*** status is transient, depends on expirationDate.  They are {all, popular, active, expired}.  Popular depends on the up votes.
@@ -36,8 +44,22 @@ public class TipController {
 			@RequestParam(value="distance", required=false) String qsDistance, 
 			@RequestParam(value="queryText", required=false) String queryText) {
 		
-		Map<String,List<Tip>> responseBody = new HashMap<String,List<Tip>>();
+		TipSideloadList responseBody = new TipSideloadList();
+		List<Tip> tipList = tipService.findTips(creatorId, requesterId, status, type, longitude, latitude, qsDistance, queryText);
+		Set<Member> members = new HashSet<Member>();
+		if (tipList!=null) {
+			for (Tip tip : tipList) {
+				Member member = memberService.findByMemberId(tip.getCreator());
+				members.add(member);
+			}
+		} else {
+			// we must return an empty array so Ember can pick up the json data format.  Return null will crash the ember client.
+			tipList = new ArrayList<Tip>();
+		}
+		
+		/*
 		List<Tip> tipList = null;
+		
 		try {
 			tipList = tipService.findTips(creatorId, requesterId, status, type, longitude, latitude, qsDistance, queryText);
 		} catch (Exception err) {
@@ -45,8 +67,11 @@ public class TipController {
 			tipList = new ArrayList<Tip>();
 
 		}
-		responseBody.put("tip", tipList);
+		responseBody.put("tip", tipList); 		*/
+		responseBody.tips = tipList;
+		responseBody.members = new ArrayList<Member>(members);
 		return responseBody;
+
 	}
 	
 	// Get tip by ID
