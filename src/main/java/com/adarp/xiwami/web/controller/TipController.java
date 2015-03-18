@@ -50,11 +50,9 @@ public class TipController {
 		if (tipList!=null) {
 			for (Tip tip : tipList) {
 				Member member = memberService.findByMemberId(tip.getCreator());
+				// we must return an empty object so Ember can pick up the json data format.  Return null will crash the ember client.
 				if (member!=null)
 					members.add(member);
-				else
-					// we must return an empty object so Ember can pick up the json data format.  Return null will crash the ember client.
-					members.add(new Member());
 			}
 		} else {
 			// we must return an empty array so Ember can pick up the json data format.  Return null will crash the ember client.
