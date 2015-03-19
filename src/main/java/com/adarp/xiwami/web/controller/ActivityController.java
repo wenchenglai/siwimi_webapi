@@ -2,8 +2,10 @@ package com.adarp.xiwami.web.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,8 +16,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.adarp.xiwami.service.ActivityService;
+import com.adarp.xiwami.service.MemberService;
 import com.adarp.xiwami.web.dto.ActivitySideload;
+import com.adarp.xiwami.web.dto.ActivitySideloadList;
 import com.adarp.xiwami.domain.Activity;
+import com.adarp.xiwami.domain.Member;
 
 @RestController
 public class ActivityController {
@@ -23,9 +28,12 @@ public class ActivityController {
 	@Autowired
 	private ActivityService activityService;
 
+	@Autowired
+	private MemberService memberService;
+	
 	// Get activities by criteria
 	@RequestMapping(value = "/activities", method = RequestMethod.GET, produces = "application/json")
-	public Map<String,List<Activity>> findActivities(
+	public ActivitySideloadList findActivities(
 			@RequestParam(value="creator", required=false) String creatorId,
 			@RequestParam(value="requester", required=false) String requesterId, // userId who is sending this query request
 			@RequestParam(value="status", required=false) String status,
@@ -37,8 +45,24 @@ public class ActivityController {
 			@RequestParam(value="latitude", required=false) Double latitude,
 			@RequestParam(value="distance", required=false) String qsDistance, 
 			@RequestParam(value="queryText", required=false) String queryText) {
-		Map<String,List<Activity>> responseBody = new HashMap<String,List<Activity>>();
-			
+		ActivitySideloadList responseBody = new ActivitySideloadList();
+		List<Activity> activityList = activityService.findActivities(creatorId,requesterId,status,type,period,fromTime,toTime,
+                                                                     longitude,latitude,qsDistance,queryText);
+		Set<Member> members = new HashSet<Member>();
+		if (activityList!=null) {
+			for (Activity activity : activityList) {
+				Member member = memberService.findByMemberId(activity.getCreator());
+				// we must return an empty object so Ember can pick up the json data format.  Return null will crash the ember client.
+				if (member!=null)
+					members.add(member);
+			}
+		} else {
+			// we must return an empty array so Ember can pick up the json data format.  Return null will crash the ember client.
+			activityList = new ArrayList<Activity>();
+		}
+		responseBody.activities = activityList;
+		responseBody.members = new ArrayList<Member>(members);
+		/*		
 		List<Activity> activityList = null;
 		try {
 			  activityList = activityService.findActivities(creatorId,requesterId,status,type,period,fromTime,toTime,
@@ -47,7 +71,7 @@ public class ActivityController {
 			// we must return an empty array so Ember can pick up the json data format.  Return null will crash the ember client.
 			activityList = new ArrayList<Activity>();
 		}
-		responseBody.put("activities", activityList);
+		responseBody.put("activities", activityList);*/
 		return responseBody;
 	}
 

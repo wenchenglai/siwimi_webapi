@@ -2,8 +2,10 @@ package com.adarp.xiwami.web.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,8 +16,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.adarp.xiwami.service.ItemService;
+import com.adarp.xiwami.service.MemberService;
 import com.adarp.xiwami.web.dto.ItemSideload;
+import com.adarp.xiwami.web.dto.ItemSideloadList;
 import com.adarp.xiwami.domain.Item;
+import com.adarp.xiwami.domain.Member;
 
 @RestController
 public class ItemController {
@@ -23,9 +28,12 @@ public class ItemController {
 	@Autowired
 	private ItemService itemService;
 	
+	@Autowired
+	private MemberService memberService;
+	
 	// Get items by criteria
 	@RequestMapping(value = "/items", method = RequestMethod.GET, produces = "application/json")
-	public Map<String,List<Item>> findItems(
+	public ItemSideloadList findItems(
 			@RequestParam(value="creator", required=false) String creatorId,
 			@RequestParam(value="requester", required=false) String requesterId, // userId who is sending this query request				
 			@RequestParam(value="status", required=false) String status,
@@ -36,8 +44,23 @@ public class ItemController {
 			@RequestParam(value="distance", required=false) String qsDistance, 
 			@RequestParam(value="queryText", required=false) String queryText) {
 		
-		Map<String,List<Item>> responseBody = new HashMap<String,List<Item>>();
-		List<Item> itemList = null;
+		ItemSideloadList responseBody = new ItemSideloadList();
+		List <Item> itemList = itemService.findItems(creatorId,requesterId,status,type,condition,longitude,latitude,qsDistance,queryText);
+		Set<Member> members = new HashSet<Member>();
+		if (itemList!=null) {
+			for (Item item : itemList) {
+				Member member = memberService.findByMemberId(item.getCreator());
+				// we must return an empty object so Ember can pick up the json data format.  Return null will crash the ember client.
+				if (member!=null)
+					members.add(member);
+			}
+		} else {
+			// we must return an empty array so Ember can pick up the json data format.  Return null will crash the ember client.
+			itemList = new ArrayList<Item>();
+		}
+		responseBody.items = itemList;
+		responseBody.members = new ArrayList<Member>(members);
+/*		List<Item> itemList = null;
 		try {
 			itemList = itemService.findItems(creatorId,requesterId,status,type,condition,longitude,latitude,qsDistance,queryText);
 		} catch (Exception err) {
@@ -45,7 +68,7 @@ public class ItemController {
 			itemList = new ArrayList<Item>();
 
 		}
-		responseBody.put("items", itemList);
+		responseBody.put("items", itemList);*/
 		return responseBody;
 	}
 
