@@ -1,13 +1,11 @@
 package com.adarp.xiwami.service;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.adarp.xiwami.domain.Email;
 import com.adarp.xiwami.repository.EmailRepository;
-import com.adarp.xiwami.service.misc.SendGridHandler;
+import com.adarp.xiwami.service.misc.Emailer;
 
 @Service
 public class EmailService {
@@ -15,12 +13,34 @@ public class EmailService {
 	@Autowired
 	EmailRepository emailRep;
 	
-	public Email addEmail(Email newEmail) {
-		List<String> recipients = newEmail.getSentTo();
-		for (String recipient : recipients) {
-			SendGridHandler sendEmail = new SendGridHandler(newEmail.getSentFrom(),recipient,newEmail.getSubject(),newEmail.getEmailText());
-			//sendEmail.doPost(request, response);
+	public Email sentEmail(Email newEmail) {
+		Emailer sendEmail = new Emailer(newEmail);
+		try {
+			sendEmail.send();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		return null;
+		return newEmail;
 	}
+	
+	public Email findByEmailId(String id) {
+		return emailRep.findByIdAndIsDestroyedIsFalse(id);
+	}
+	
+	public Email addEmail(Email newEmail) {
+		newEmail.setIsDestroyed(false);
+		return emailRep.save(newEmail);
+	}
+	
+	public Email updateEmail(String id, Email updatedEmail) {
+		updatedEmail.setId(id);
+		return emailRep.save(updatedEmail);
+	}
+	
+	public void deleteEmail(String id) {
+		Email email = emailRep.findOne(id);
+		email.setIsDestroyed(true);
+		emailRep.save(email);
+	}
+	
 }

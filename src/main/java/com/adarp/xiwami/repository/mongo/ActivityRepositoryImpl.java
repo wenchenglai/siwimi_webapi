@@ -97,12 +97,18 @@ public class ActivityRepositoryImpl implements ActivityRepositoryCustom {
 				case 5: // custom time range
 					SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd yyyy HH:mm:ss 'GMT'Z '('z')'");
 					try {
-						periodBegin = shiftDateWithoutTime(format.parse(fromTime),0);
+						if (fromTime != null)
+							periodBegin = shiftDateWithoutTime(format.parse(fromTime),0);
+						else
+							periodBegin = shiftDateWithoutTime(now,0);
 					} catch (ParseException e) {
 						e.printStackTrace();
 					}
 					try {
-						periodEnd = shiftDateWithoutTime(format.parse(toTime),0);
+						if (toTime != null)
+							periodEnd = shiftDateWithoutTime(format.parse(toTime),0);
+						else
+							periodEnd = shiftDateWithoutTime(now,365);
 					} catch (ParseException e) {
 						e.printStackTrace();
 					}
@@ -112,8 +118,15 @@ public class ActivityRepositoryImpl implements ActivityRepositoryCustom {
 					periodEnd = shiftDateWithoutTime(now,1);
 					break;
 			}									
-			criterias.add(new Criteria().andOperator(Criteria.where("fromTime").lte(periodEnd),
-                    								 Criteria.where("toTime").gte(periodBegin)));
+			Criteria c1 = new Criteria().andOperator(Criteria.where("fromTime").lte(periodEnd),
+					                                 Criteria.where("toTime").gte(periodBegin));
+			Criteria c2 = new Criteria().andOperator(Criteria.where("fromTime").is(null),
+                    								 Criteria.where("toTime").gte(periodBegin));
+			Criteria c3 = new Criteria().andOperator(Criteria.where("fromTime").lte(periodEnd),
+					 								 Criteria.where("toTime").is(null));
+			Criteria c4 = new Criteria().andOperator(Criteria.where("fromTime").is(null),
+					                                 Criteria.where("toTime").is(null));	
+			criterias.add(new Criteria().orOperator(c1,c2,c3,c4));
 		}
 		
 		Criteria c = new Criteria().andOperator(criterias.toArray(new Criteria[criterias.size()]));
