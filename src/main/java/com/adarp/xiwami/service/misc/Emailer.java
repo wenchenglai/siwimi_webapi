@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Properties;
 
 import javax.mail.Authenticator;
-import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.Multipart;
 import javax.mail.PasswordAuthentication;
@@ -46,19 +45,19 @@ public class Emailer{
     Session mailSession = Session.getDefaultInstance(props, auth);
 
     MimeMessage message = new MimeMessage(mailSession);
-    Multipart multipart = new MimeMultipart("alternative");
+    Multipart multipart = new MimeMultipart();
 
     // Sets up the contents of the email message
-    BodyPart part1 = new MimeBodyPart();
-    part1.setText(emailText);
-    BodyPart part2 = new MimeBodyPart();
+    MimeBodyPart part1 = new MimeBodyPart();
+    part1.setText(emailText, "utf-8");
+/*    MimeBodyPart part2 = new MimeBodyPart();
     part2.setContent(
     	    "<p>Hello,</p>" 
-    	    + "<p>Your Contoso order has <b>shipped</b>.</p>"
-    	    + "<p>Thank you,<br>John</br></p>",
-    	    "text/html");
+    	    + "<p>Your Siwami order has <b>shipped</b>.</p>"
+    	    + "<p>Thank you,<br>Siwami.com</br></p>",
+    	    "text/html; charset=utf-8");*/
     multipart.addBodyPart(part1);
-    multipart.addBodyPart(part2);
+ //   multipart.addBodyPart(part2);
     message.setContent(multipart);
     message.setFrom(new InternetAddress(sentFrom));
     message.setSubject(subject);
