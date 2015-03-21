@@ -21,34 +21,54 @@ public class Email {
 	private String subject;
 	private String emailText;
 
+	//The default of the below field is set by backend
+	private Boolean isDestroyed;
+		
 	public String getId() {
 		return id;
 	}
+	
 	public void setId(String id) {
 		this.id = id;
 	}
+	
 	public String getSentFrom() {
 		return sentFrom;
 	}
+	
 	public void setSentFrom(String sentFrom) {
 		this.sentFrom = sentFrom;
 	}
+	
 	public List<String> getSentTo() {
 		return sentTo;
 	}
+	
 	public void setSentTo(List<String> sentTo) {
 		this.sentTo = sentTo;
 	}
+	
 	public String getSubject() {
 		return subject;
 	}
+	
 	public void setSubject(String subject) {
 		this.subject = subject;
 	}
+	
 	public String getEmailText() {
 		return emailText;
 	}
+	
 	public void setEmailText(String emailText) {
 		this.emailText = emailText;
-	}		
+	}	
+	
+	public Boolean getIsDestroyed() {
+		return isDestroyed;
+	}
+
+	public void setIsDestroyed(Boolean isDestroyed) {
+		this.isDestroyed = isDestroyed;
+	}
 }
