@@ -18,10 +18,10 @@ import com.adarp.xiwami.repository.ZipCodeRepository;
 public class TipService {
 
 	@Autowired
-	TipRepository tipRep;
+	private TipRepository tipRep;
 	
 	@Autowired
-	FavoriteRepository favoriteRep;	
+	private FavoriteRepository favoriteRep;	
 	
 	@Autowired
 	private ZipCodeRepository zipCodeRep;

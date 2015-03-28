@@ -10,7 +10,7 @@ import com.adarp.xiwami.repository.FavoriteRepository;
 public class FavoriteService {
 	
 	@Autowired
-	FavoriteRepository favoriteRep;	
+	private FavoriteRepository favoriteRep;	
 	
 	public Favorite findByFavoriteId (String id) {
 		return favoriteRep.findByIdAndIsDestroyedIsFalse(id);

@@ -15,7 +15,7 @@ import com.adarp.xiwami.repository.FeedbackRepository;
 public class FeedbackService {
 
 	@Autowired
-	FeedbackRepository feedbackRep;
+	private FeedbackRepository feedbackRep;
 	
 	public List<Feedback> find(String creator, String parentId, String parentType, String queryText) {
 		List<Feedback> feedbacks = feedbackRep.query(creator, parentId, parentType, queryText);

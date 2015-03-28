@@ -12,7 +12,7 @@ import com.adarp.xiwami.repository.SurveyRepository;
 public class SurveyService {
 
 	@Autowired
-	SurveyRepository surveyRep;
+	private SurveyRepository surveyRep;
 	
 	public Survey addSurvey(Survey newSurvey) {
 		return surveyRep.save(newSurvey);

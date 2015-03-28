@@ -18,7 +18,7 @@ public class ItemService {
 	private ItemRepository itemRep;
 	
 	@Autowired
-	FavoriteRepository favoriteRep;	
+	private FavoriteRepository favoriteRep;	
 	
 	@Autowired
 	private ZipCodeRepository zipCodeRep;

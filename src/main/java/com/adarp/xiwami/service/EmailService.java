@@ -11,7 +11,7 @@ import com.adarp.xiwami.service.misc.Emailer;
 public class EmailService {
 
 	@Autowired
-	EmailRepository emailRep;
+	private EmailRepository emailRep;
 	
 	public Email sentEmail(Email newEmail) {
 		Emailer sendEmail = new Emailer(newEmail);

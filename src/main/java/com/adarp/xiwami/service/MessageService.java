@@ -12,7 +12,7 @@ import com.adarp.xiwami.repository.MessageRepository;
 public class MessageService {
 
 	@Autowired
-	MessageRepository repo;
+	private MessageRepository repo;
 	
 	public List<Message> find(String fromId, String toId, String fromStatus, String toStatus, String queryText) {
 		List<Message> list = repo.query(fromId, toId, fromStatus, toStatus, queryText);

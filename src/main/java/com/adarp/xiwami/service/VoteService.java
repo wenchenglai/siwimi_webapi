@@ -10,7 +10,7 @@ import com.adarp.xiwami.repository.VoteRepository;
 public class VoteService {
 
 	@Autowired
-	VoteRepository voteRep;
+	private VoteRepository voteRep;
 	
 	public Vote findByVoteId(String id) {
 		return voteRep.findByIdAndIsDestroyedIsFalse(id);
