@@ -12,7 +12,7 @@ import com.adarp.xiwami.repository.FollowRepository;
 public class FollowService {
 
 	@Autowired
-	FollowRepository followRep;
+	private FollowRepository followRep;
 	
 	public List<Follow> findFollows(String follower,String followee) {
 		return followRep.queryFollow(follower, followee);

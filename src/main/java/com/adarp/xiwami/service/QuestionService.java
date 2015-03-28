@@ -15,10 +15,10 @@ import com.adarp.xiwami.repository.ZipCodeRepository;
 public class QuestionService {
 
 	@Autowired
-	QuestionRepository questionRep;
+	private QuestionRepository questionRep;
 	
 	@Autowired
-	FavoriteRepository favoriteRep;	
+	private FavoriteRepository favoriteRep;	
 	
 	@Autowired
 	private ZipCodeRepository zipCodeRep;
