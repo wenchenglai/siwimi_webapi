@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "Group")
@@ -18,9 +17,6 @@ public class Group {
 	private String title;
 	private String description;
 	private Date createdDate;
-	
-	// This field is only for front-end use
-	@Transient
 	private List<String> members = new ArrayList<String>();
 	
 	//The default of the below field is set by backend

@@ -20,12 +20,13 @@ public class EmailController {
 	@Autowired
 	private EmailService emailService;
 	
-	// send New Email
+	// add & send New Email
 	@RequestMapping(value = "/emails/sent", method = RequestMethod.POST, produces = "application/json")
 	public Map<String, Email> sentEmail(@RequestBody EmailSideload newEmail) {
-		Email email = emailService.sentEmail(newEmail.email);		
+		Email savedEmail = emailService.addEmail(newEmail.email);
+		Email sentEmail = emailService.sentEmail(savedEmail);	
 		Map<String, Email> responseBody = new HashMap<String, Email>();
-		responseBody.put("email", email);
+		responseBody.put("email", sentEmail);
 		
 		return responseBody;		
 	}	
@@ -38,16 +39,7 @@ public class EmailController {
 		responseBody.put("email", email);
 		return responseBody;
 	}
-	
-	// Add New Email
-	@RequestMapping(value = "/emails", method = RequestMethod.POST, produces = "application/json")
-	public Map<String, Email> addEmail(@RequestBody EmailSideload newEmail) {
-		Email savedEmail = emailService.addEmail(newEmail.email);		
-		Map<String,Email> responseBody = new HashMap<String, Email>();
-		responseBody.put("email", savedEmail);
-		return responseBody;			
-	}	
-	
+		
 	// Update Email
 	@RequestMapping(value = "/emails/{id}", method = RequestMethod.PUT, produces = "application/json")
 	public Map<String, Email> updateEmail(@PathVariable("id") String id, @RequestBody EmailSideload updatedEmail){

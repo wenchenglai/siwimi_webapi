@@ -30,8 +30,7 @@ public class GroupController {
 	
 	@Autowired
 	private MemberService memberService;
-	
-	
+		
 	// Get all groups
 	@RequestMapping(value = "/groups", method = RequestMethod.GET, produces = "application/json")
 	public GroupSideloadList findGroups(
@@ -43,10 +42,13 @@ public class GroupController {
 		Set<Member> members = new HashSet<Member>();
 		if (groupList!=null) {
 			for (Group group : groupList) {
-				Member member = memberService.findByMemberId(group.getCreator());
-				// we must return an empty object so Ember can pick up the json data format.  Return null will crash the ember client.
-				if (member!=null)
-					members.add(member);
+				List<String> memberIds = group.getMembers();
+				for (String memberId : memberIds) {
+					Member member = memberService.findByMemberId(memberId);
+					// we must return an empty object so Ember can pick up the json data format.  Return null will crash the ember client.
+					if (member!=null)
+						members.add(member);	
+				}
 			}
 		} else {
 			// we must return an empty array so Ember can pick up the json data format.  Return null will crash the ember client.

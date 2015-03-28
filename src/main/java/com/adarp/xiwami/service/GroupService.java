@@ -1,6 +1,5 @@
 package com.adarp.xiwami.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +25,7 @@ public class GroupService {
 	public Group addGroup(Group newGroup) {
 		newGroup.setIsDestroyed(false);
 		// add creator into the member list
-		List<String> members = new ArrayList<String>(); 
+		List<String> members = newGroup.getMembers();
 		members.add(newGroup.getCreator());
 		newGroup.setMembers(members);
 		
