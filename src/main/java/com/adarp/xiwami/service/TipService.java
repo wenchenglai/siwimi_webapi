@@ -9,10 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.adarp.xiwami.domain.Tip;
-import com.adarp.xiwami.domain.ZipCode;
+import com.adarp.xiwami.domain.Location;
 import com.adarp.xiwami.repository.FavoriteRepository;
 import com.adarp.xiwami.repository.TipRepository;
-import com.adarp.xiwami.repository.ZipCodeRepository;
+import com.adarp.xiwami.repository.LocationRepository;
 
 @Service
 public class TipService {
@@ -24,7 +24,7 @@ public class TipService {
 	private FavoriteRepository favoriteRep;	
 	
 	@Autowired
-	private ZipCodeRepository zipCodeRep;
+	private LocationRepository locationRep;
 	
 	public List<Tip> findTips(String creatorId, 
 							  String requesterId,
@@ -73,15 +73,15 @@ public class TipService {
 	}
 	
 	public Tip updateLocation(Tip tip) {
-		// lookup zipcode from the collection ZipCode;
-		ZipCode thisZipCode = zipCodeRep.queryZipCode(tip.getZipCode(), tip.getCity(), tip.getState());
+		// lookup location from the collection Location;
+		Location thisLocation = locationRep.queryLocation(tip.getZipCode(), tip.getCity(), tip.getState());
 		// set longitude and latitude 
-		if (thisZipCode!=null) {
-			double[] location = {thisZipCode.getLongitude(), thisZipCode.getLatitude()};
-			tip.setZipCode(thisZipCode.getZipCode());
+		if (thisLocation!=null) {
+			double[] location = {thisLocation.getLongitude(), thisLocation.getLatitude()};
+			tip.setZipCode(thisLocation.getZipCode());
 			tip.setLocation(location);
-			tip.setCity(thisZipCode.getTownship());
-			tip.setState(thisZipCode.getStateCode());
+			tip.setCity(thisLocation.getTownship());
+			tip.setState(thisLocation.getStateCode());
 		}
 
 		return tip;

@@ -6,10 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.adarp.xiwami.domain.Activity;
-import com.adarp.xiwami.domain.ZipCode;
+import com.adarp.xiwami.domain.Location;
 import com.adarp.xiwami.repository.ActivityRepository;
 import com.adarp.xiwami.repository.FavoriteRepository;
-import com.adarp.xiwami.repository.ZipCodeRepository;
+import com.adarp.xiwami.repository.LocationRepository;
 
 @Service
 public class ActivityService {
@@ -21,7 +21,7 @@ public class ActivityService {
 	private FavoriteRepository favoriteRep;	
 	
 	@Autowired
-	private ZipCodeRepository zipCodeRep;
+	private LocationRepository locationRep;
 	
 	public List<Activity> findActivities(String creatorId,
 										 String requesterId,
@@ -60,7 +60,7 @@ public class ActivityService {
 		newActivity.setViewCount(0);
 		newActivity = updateLocation(newActivity);
 		
-		// fromTime must be ealier than toTime
+		// fromTime must be earlier than toTime
 		if ((newActivity.getFromTime()!=null) && (newActivity.getToTime()!=null) ) {
 			if (newActivity.getFromTime().compareTo(newActivity.getToTime())>0) {
 				// if fromTime is after toTime --> fromTime = toTime
@@ -87,15 +87,15 @@ public class ActivityService {
 	}
 	
 	public Activity updateLocation(Activity activity) {
-		// lookup zipcode from the collection ZipCode;
-		ZipCode thisZipCode = zipCodeRep.queryZipCode(activity.getZipCode(), activity.getCity(), activity.getState());
+		// lookup location from the collection Location;
+		Location thisLocation = locationRep.queryLocation(activity.getZipCode(), activity.getCity(), activity.getState());
 		// set longitude and latitude 
-		if (thisZipCode!=null) {
-			double[] location = {thisZipCode.getLongitude(), thisZipCode.getLatitude()};
-			activity.setZipCode(thisZipCode.getZipCode());
+		if (thisLocation!=null) {
+			double[] location = {thisLocation.getLongitude(), thisLocation.getLatitude()};
+			activity.setZipCode(thisLocation.getZipCode());
 			activity.setLocation(location);
-			activity.setCity(thisZipCode.getTownship());
-			activity.setState(thisZipCode.getStateCode());
+			activity.setCity(thisLocation.getTownship());
+			activity.setState(thisLocation.getStateCode());
 		}
 
 		return activity;
