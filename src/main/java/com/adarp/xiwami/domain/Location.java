@@ -3,6 +3,8 @@ package com.adarp.xiwami.domain;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Document(collection = "Location")
 public class Location {
 
@@ -20,36 +22,50 @@ public class Location {
 	private double longitude;
 	private double latitude;
 	
+	@JsonIgnore
 	public String getId() {
 		return id;
 	}	
+	
+	@JsonIgnore
 	public String getCountryCode() {
 		return countryCode;
 	}
+	
 	public String getTownship() {
 		return township;
 	}
+	
+	@JsonIgnore
 	public String getState() {
 		return state;
 	}
+	
 	public String getStateCode() {
 		return stateCode;
 	}
+	
+	@JsonIgnore
 	public String getCounty() {
 		return county;
 	}
 	
+	@JsonIgnore
 	public String getCountyCode() {
 		return countyCode;
 	}
 	
+	@JsonIgnore
 	public double getLatitude() {
 		return latitude;
 	}
 
+	@JsonIgnore
 	public double getLongitude() {
 		return longitude;
 	}
+	
+	@JsonIgnore
 	public String getZipCode() {
 		if (zipCode != null) {
 			if (Integer.parseInt(zipCode)<10000)

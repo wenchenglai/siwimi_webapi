@@ -17,8 +17,8 @@ public class LocationService {
 	private LocationRepository locationRep;
 	
 	public List<Location> queryFuzzyLocations(String queryText) {
-		//List<Location> locations = locationRep.queryFuzzyLocations(queryText);	
-		// Remove duplicated objects
-		return new ArrayList<Location>(new LinkedHashSet<Location>(locationRep.queryFuzzyLocations(queryText)));
+		List<Location> locations = new ArrayList<Location>(new LinkedHashSet<Location>(locationRep.queryFuzzyLocations(queryText)));
+		// only return the first five objects	
+		return locations.subList(0, 5 > locations.size()? locations.size():5);
 	}
 }
