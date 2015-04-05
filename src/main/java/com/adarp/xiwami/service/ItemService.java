@@ -6,10 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.adarp.xiwami.domain.Item;
-import com.adarp.xiwami.domain.ZipCode;
+import com.adarp.xiwami.domain.Location;
 import com.adarp.xiwami.repository.FavoriteRepository;
 import com.adarp.xiwami.repository.ItemRepository;
-import com.adarp.xiwami.repository.ZipCodeRepository;
+import com.adarp.xiwami.repository.LocationRepository;
 
 @Service
 public class ItemService {
@@ -21,7 +21,7 @@ public class ItemService {
 	private FavoriteRepository favoriteRep;	
 	
 	@Autowired
-	private ZipCodeRepository zipCodeRep;
+	private LocationRepository locationRep;
 	
 	public List<Item> findItems(String creatorId, 
 								String requesterId,
@@ -71,15 +71,15 @@ public class ItemService {
 	}
 	
 	public Item updateLocation(Item item) {
-		// lookup zipcode from the collection ZipCode;
-		ZipCode thisZipCode = zipCodeRep.queryZipCode(item.getZipCode(), item.getCity(), item.getState());
+		// lookup location from the collection Location;
+		Location thisLocation = locationRep.queryLocation(item.getZipCode(), item.getCity(), item.getState());
 		// set longitude and latitude 
-		if (thisZipCode!=null) {
-			double[] location = {thisZipCode.getLongitude(), thisZipCode.getLatitude()};
-			item.setZipCode(thisZipCode.getZipCode());
+		if (thisLocation!=null) {
+			double[] location = {thisLocation.getLongitude(), thisLocation.getLatitude()};
+			item.setZipCode(thisLocation.getZipCode());
 			item.setLocation(location);
-			item.setCity(thisZipCode.getTownship());
-			item.setState(thisZipCode.getStateCode());
+			item.setCity(thisLocation.getTownship());
+			item.setState(thisLocation.getStateCode());
 		}
 
 		return item;

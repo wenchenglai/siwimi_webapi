@@ -8,10 +8,10 @@ import org.springframework.stereotype.Service;
 
 import com.adarp.xiwami.domain.Family;
 import com.adarp.xiwami.domain.Member;
-import com.adarp.xiwami.domain.ZipCode;
+import com.adarp.xiwami.domain.Location;
 import com.adarp.xiwami.repository.FamilyRepository;
 import com.adarp.xiwami.repository.MemberRepository;
-import com.adarp.xiwami.repository.ZipCodeRepository;
+import com.adarp.xiwami.repository.LocationRepository;
 
 @Service
 public class FamilyService {
@@ -23,7 +23,7 @@ public class FamilyService {
 	private MemberRepository memberRep;
 	
 	@Autowired
-	private ZipCodeRepository zipCodeRep;
+	private LocationRepository zipCodeRep;
 	
 	public List<Family> findFamilies(Double longitude,Double latitude,String qsDistance,Integer fromAge,Integer toAge,String[] languages) {
 		List<String> geoFamiliesId = familyRep.findGeoFamiliesId(longitude, latitude, qsDistance);
@@ -66,7 +66,7 @@ public class FamilyService {
 	
 	public Family updateLocation(Family family) {
 		// lookup zipcode from the collection ZipCode;
-		ZipCode thisZipCode = zipCodeRep.queryZipCode(family.getZipCode(), family.getCity(), family.getState());
+		Location thisZipCode = zipCodeRep.queryLocation(family.getZipCode(), family.getCity(), family.getState());
 		// set longitude and latitude 
 		if (thisZipCode!=null) {
 			double[] location = {thisZipCode.getLongitude(), thisZipCode.getLatitude()};

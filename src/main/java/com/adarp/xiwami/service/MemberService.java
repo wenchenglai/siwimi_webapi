@@ -6,10 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.adarp.xiwami.domain.Member;
-import com.adarp.xiwami.domain.ZipCode;
+import com.adarp.xiwami.domain.Location;
 import com.adarp.xiwami.repository.FamilyRepository;
 import com.adarp.xiwami.repository.MemberRepository;
-import com.adarp.xiwami.repository.ZipCodeRepository;
+import com.adarp.xiwami.repository.LocationRepository;
 
 @Service
 public class MemberService {
@@ -21,7 +21,7 @@ public class MemberService {
 	private FamilyRepository familyRep;
 	
 	@Autowired
-	private ZipCodeRepository zipCodeRep;
+	private LocationRepository locationRep;
 	
 	/**
 	Add New Member
@@ -74,15 +74,15 @@ public class MemberService {
 	}
 
 	public Member updateLocation(Member member) {
-		// lookup zipcode from the collection ZipCode;
-		ZipCode thisZipCode = zipCodeRep.queryZipCode(member.getZipCode(), member.getCity(), member.getState());
+		// lookup location from the collection Location;
+		Location thisLocation = locationRep.queryLocation(member.getZipCode(), member.getCity(), member.getState());
 		// set longitude and latitude 
-		if (thisZipCode!=null) {
-			double[] location = {thisZipCode.getLongitude(), thisZipCode.getLatitude()};
-			member.setZipCode(thisZipCode.getZipCode());
+		if (thisLocation!=null) {
+			double[] location = {thisLocation.getLongitude(), thisLocation.getLatitude()};
+			member.setZipCode(thisLocation.getZipCode());
 			member.setLocation(location);
-			member.setCity(thisZipCode.getTownship());
-			member.setState(thisZipCode.getStateCode());
+			member.setCity(thisLocation.getTownship());
+			member.setState(thisLocation.getStateCode());
 		}
 
 		return member;
