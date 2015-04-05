@@ -25,10 +25,12 @@ public class Item {
 	private int fromAge;
 	private int toAge;
 	private String condition; // new, used
-	private String type; // toy, cloth, book, furniture, other
+	private String type; // toy, cloth, book, equipment, furniture, misc
+	private String transitionType; // Sale, Swap, Loan, GiveAway
 	private float price;
 	private String imageUrl;
 	private String imageData;
+	
 	private int viewCount;
 	
 	private String city;
@@ -265,5 +267,13 @@ public class Item {
 	          return false;
 	       
 	    return true;
+	}
+
+	public String getTransitionType() {
+		return transitionType;
+	}
+
+	public void setTransitionType(String transitionType) {
+		this.transitionType = transitionType;
 	}
 }
