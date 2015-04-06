@@ -22,7 +22,6 @@ public class Location {
 	private double longitude;
 	private double latitude;
 	
-	@JsonIgnore
 	public String getId() {
 		return id;
 	}	
