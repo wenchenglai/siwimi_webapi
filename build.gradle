@@ -24,7 +24,7 @@ apply plugin: 'war'
 sourceSets.test.java.srcDirs = ["src/test"]
 
 war {
-    baseName = 'xiwamirest'
+    baseName = 'siwimi-webapi'
     version =  '0.0.1'
 }
 
@@ -62,11 +62,11 @@ task wrapper(type: Wrapper) {
 task createPom << {
     pom {
         project {
-            groupId 'com.adarp'
-            artifactId 'xiwamirest'
+            groupId 'com.siwimi'
+            artifactId 'web-api'
             version '0.0.1'
 
-            inceptionYear '2014'
+            inceptionYear '2015'
             licenses {
                 license {
                     name 'The Apache Software License, Version 2.0'
