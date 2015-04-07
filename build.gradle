@@ -24,7 +24,7 @@ apply plugin: 'war'
 sourceSets.test.java.srcDirs = ["src/test"]
 
 war {
-    baseName = 'siwami-webapi'
+    baseName = 'siwimi-webapi'
     version =  '0.0.1'
 }
 
