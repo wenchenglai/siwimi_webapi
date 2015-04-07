@@ -1,2 +1,2 @@
-xiwami_rest
+siwami-webapi
 ===========
