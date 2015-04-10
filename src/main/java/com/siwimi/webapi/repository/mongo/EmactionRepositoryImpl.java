@@ -33,5 +33,5 @@ public class EmactionRepositoryImpl implements EmactionRepositoryCustom{
 			return mongoTemplate.find(q,Emaction.class,"Emaction");
 		}
 		
-	}
+	}		
 }

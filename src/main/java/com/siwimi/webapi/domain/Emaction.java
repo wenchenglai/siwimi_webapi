@@ -13,7 +13,7 @@ public class Emaction {
 	
 	private String member;
 	private String event;
-	private String type;
+	private String action;
 	private Date createdDate;
 	private Date lastUpdateDate;
 	
@@ -41,11 +41,11 @@ public class Emaction {
 		this.event = event;
 	}
 	
-	public String getType() {
-		return type;
+	public String getAction() {
+		return action;
 	}
-	public void setType(String type) {
-		this.type = type;
+	public void setAction(String action) {
+		this.action = action;
 	}
 	public Date getCreatedDate() {
 		return createdDate;

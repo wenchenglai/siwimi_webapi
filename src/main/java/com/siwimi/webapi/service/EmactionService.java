@@ -23,6 +23,10 @@ public class EmactionService {
 		return emactionRep.findOne(id);
 	}
 	
+	public Emaction save(Emaction obj) {				
+		return emactionRep.save(obj);
+	}	
+	
 	public Emaction updateEmaction(Emaction updatedEmaction) {
 		Emaction emaction = emactionRep.findByMemberAndEvent(updatedEmaction.getMember(), updatedEmaction.getEvent());
 		if (emaction != null) {

@@ -63,8 +63,19 @@ public class EmactionController {
 		return responseBody;
 	}
 	
+	// Add New
+	@RequestMapping(value = "/emactions", method = RequestMethod.POST, produces = "application/json")
+	public Map<String, Emaction> addActivity(@RequestBody EmactionSideload obj) {
+		Emaction newObj = emactionService.save(obj.emaction);
+		
+		Map<String, Emaction> responseBody = new HashMap<String, Emaction>();
+		responseBody.put("emaction", newObj);
+		
+		return responseBody;		
+	}		
+	
 	// Update Emaction
-	@RequestMapping(value = "/emactions", method = RequestMethod.PUT, produces = "application/json")
+	@RequestMapping(value = "/emactions/{id}", method = RequestMethod.PUT, produces = "application/json")
 	public Map<String, Emaction> updateEmaction(@RequestBody EmactionSideload updatedEmaction){
 		Emaction savedEmaction = emactionService.updateEmaction(updatedEmaction.emaction);		
 		Map<String,Emaction> responseBody = new HashMap<String, Emaction>();
