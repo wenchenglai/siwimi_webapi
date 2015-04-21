@@ -1,5 +1,6 @@
 package com.siwimi.webapi.web.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.siwimi.webapi.domain.JqueryObject;
 import com.siwimi.webapi.domain.Member;
 import com.siwimi.webapi.service.FamilyService;
 import com.siwimi.webapi.service.MemberService;
@@ -35,9 +37,31 @@ public class MemberController {
 	public Map<String, List<Member>> findMembers(
 			@RequestParam(value="queryText", required=false) String queryText) {			
 		List<Member> members = memberService.find(null,queryText);
+		if (members==null)
+			members = new ArrayList<Member>();
 		Map<String, List<Member>> responseBody = new HashMap<String, List<Member>>();
 		responseBody.put("member", members);
 		return responseBody;
+	}		
+	
+	/**
+	Scenario #2 : Get member by queryText (firstname or lastname) 
+
+	**/
+	@RequestMapping(value = "/membersjquery", method = RequestMethod.GET, produces = "application/json")
+	public List<JqueryObject> findFuzzyMembers(
+			@RequestParam(value="queryText", required=false) String queryText) {			
+		List<Member> members = memberService.find(null,queryText);
+		if (members==null)
+			members = new ArrayList<Member>();
+		
+		List<JqueryObject> jqueryObjects = new ArrayList<JqueryObject>();
+		for (Member member : members) {
+			String memberName = member.getFirstName() + " " + member.getLastName();
+			jqueryObjects.add(new JqueryObject(memberName,member.getId()));
+		}
+
+		return jqueryObjects;
 	}		
 	
 	/**
