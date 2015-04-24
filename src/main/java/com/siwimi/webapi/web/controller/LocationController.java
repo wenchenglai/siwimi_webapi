@@ -40,7 +40,7 @@ public class LocationController {
 		List<JqueryObject> jqueryObjects = new ArrayList<JqueryObject>();
 		for (Location location : locations) {
 			String place = location.getTownship() + ", " + location.getStateCode();
-			jqueryObjects.add(new JqueryObject(place,location.getId()));
+			jqueryObjects.add(new JqueryObject(place,place));
 		}
 		return jqueryObjects;
 	}

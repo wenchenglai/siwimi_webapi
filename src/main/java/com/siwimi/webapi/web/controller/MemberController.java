@@ -58,10 +58,31 @@ public class MemberController {
 		List<JqueryObject> jqueryObjects = new ArrayList<JqueryObject>();
 		for (Member member : members) {
 			String memberName = member.getFirstName() + " " + member.getLastName();
-			jqueryObjects.add(new JqueryObject(memberName,member.getId()));
+			//jqueryObjects.add(new JqueryObject(memberName,member.getId()));
+			jqueryObjects.add(new JqueryObject(memberName,memberName));
 		}
 
 		return jqueryObjects;
+	}		
+	
+	/**
+	Scenario #3 : Get member by queryText (firstname or lastname) 
+
+	**/
+	@RequestMapping(value = "/membersajax", method = RequestMethod.GET, produces = "application/json")
+	public List<String> findFuzzyMembersAjax(
+			@RequestParam(value="queryText", required=false) String queryText) {			
+		List<Member> members = memberService.find(null,queryText);
+		if (members==null)
+			members = new ArrayList<Member>();
+		
+		List<String> obj = new ArrayList<String>();
+		for (Member member : members) {
+			String memberName = member.getFirstName() + " " + member.getLastName();
+			obj.add(memberName);
+		}
+
+		return obj;
 	}		
 	
 	/**
