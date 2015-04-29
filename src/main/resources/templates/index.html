@@ -2,5 +2,14 @@
 <html xmlns:th="http://www.thymeleaf.org">
     <body>
         Hello, world!
+        	<form method="POST" enctype="multipart/form-data" action="/upload">
+				File to upload: <input type="file" name="file"></input>
+				<br /><br /> <br /> 
+				Type: <input type="text" name="type"> </input>
+				<br />
+				name: <input type="text" name="name"> </input>
+				<br />
+				<input type="submit" value="Upload"> Press here to upload the file! </input>
+			</form>
     </body>
 </html>

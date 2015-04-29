@@ -30,7 +30,7 @@ public class ActivityController {
 
 	@Autowired
 	private MemberService memberService;
-	
+	//page=1&per_page=12
 	// Get activities by criteria
 	@RequestMapping(value = "/activities", method = RequestMethod.GET, produces = "application/json")
 	public ActivitySideloadList findActivities(
@@ -44,10 +44,13 @@ public class ActivityController {
 			@RequestParam(value="longitude", required=false) Double longitude,
 			@RequestParam(value="latitude", required=false) Double latitude,
 			@RequestParam(value="distance", required=false) String qsDistance, 
-			@RequestParam(value="queryText", required=false) String queryText) {
+			@RequestParam(value="queryText", required=false) String queryText,
+			@RequestParam(value="page", required=true) Integer page, 
+			@RequestParam(value="per_page", required=true) Integer per_page) {
 		ActivitySideloadList responseBody = new ActivitySideloadList();
 		List<Activity> activityList = activityService.findActivities(creatorId,requesterId,status,type,period,fromTime,toTime,
-                                                                     longitude,latitude,qsDistance,queryText);
+                                                                     longitude,latitude,qsDistance,queryText,
+                                                                     page,per_page);
 		Set<Member> members = new HashSet<Member>();
 		if (activityList!=null) {
 			for (Activity activity : activityList) {
