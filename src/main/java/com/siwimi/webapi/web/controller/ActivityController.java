@@ -45,12 +45,9 @@ public class ActivityController {
 			@RequestParam(value="latitude", required=false) Double latitude,
 			@RequestParam(value="distance", required=false) String qsDistance, 
 			@RequestParam(value="queryText", required=false) String queryText,
-			@RequestParam(value="page", required=true) Integer page, 
-			@RequestParam(value="per_page", required=true) Integer per_page) {
 		ActivitySideloadList responseBody = new ActivitySideloadList();
 		List<Activity> activityList = activityService.findActivities(creatorId,requesterId,status,type,period,fromTime,toTime,
                                                                      longitude,latitude,qsDistance,queryText,
-                                                                     page,per_page);
 		Set<Member> members = new HashSet<Member>();
 		if (activityList!=null) {
 			for (Activity activity : activityList) {
