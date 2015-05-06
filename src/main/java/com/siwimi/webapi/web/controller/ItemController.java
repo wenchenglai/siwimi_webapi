@@ -42,10 +42,14 @@ public class ItemController {
 			@RequestParam(value="longitude", required=false) Double longitude,
 			@RequestParam(value="latitude", required=false) Double latitude,
 			@RequestParam(value="distance", required=false) String qsDistance, 
-			@RequestParam(value="queryText", required=false) String queryText) {
+			@RequestParam(value="queryText", required=false) String queryText,
+			@RequestParam(value="page", required=false) Integer pageNumber, 
+			@RequestParam(value="per_page", required=false) Integer pageSize) {
 		
 		ItemSideloadList responseBody = new ItemSideloadList();
-		List <Item> itemList = itemService.findItems(creatorId,requesterId,status,type,condition,longitude,latitude,qsDistance,queryText);
+		List <Item> itemList = itemService.findItems(creatorId,requesterId,status,type,condition,
+													 longitude,latitude,qsDistance,queryText,
+                                                     pageNumber,pageSize);
 		Set<Member> members = new HashSet<Member>();
 		if (itemList!=null) {
 			for (Item item : itemList) {

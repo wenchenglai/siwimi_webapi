@@ -30,9 +30,13 @@ public class TipService {
 							  String requesterId,
 			                  String status, String type, 
 			                  Double longitude, Double latitude, String qsDistance, 
-			                  String queryText) {
+			                  String queryText,
+							  Integer page,
+							  Integer per_page) {
 		
-		List<Tip> tipList = tipRep.queryTip(creatorId, status, type, longitude, latitude, qsDistance, queryText);
+		List<Tip> tipList = tipRep.queryTip(creatorId, status, type, 
+											longitude, latitude, qsDistance, queryText,
+                                            page,per_page);
 		
 		for (int i=0; i<tipList.size(); i++) {
 			Tip tip = tipList.get(i);

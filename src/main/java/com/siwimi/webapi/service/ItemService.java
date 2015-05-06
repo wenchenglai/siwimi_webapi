@@ -27,8 +27,12 @@ public class ItemService {
 								String requesterId,
 								String status,String type,String condition,
 								Double longitude,Double latitude,String qsDistance,
-								String queryText) {					
-		List<Item> itemList = itemRep.queryItem(creatorId,status,type,condition,longitude,latitude,qsDistance,queryText);
+								String queryText,
+								Integer page,
+								Integer per_page) {					
+		List<Item> itemList = itemRep.queryItem(creatorId,status,type,condition,
+											    longitude,latitude,qsDistance,queryText,
+                                                page,per_page);
 		
 		// increment viewcount by 1, and save it to MongoDB
 		for (int i=0; i<itemList.size(); i++) {
