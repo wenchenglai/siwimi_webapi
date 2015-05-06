@@ -64,10 +64,10 @@ public class ActivityService {
 		newActivity = updateLocation(newActivity);
 		
 		// fromTime must be earlier than toTime
-		if ((newActivity.getFromTime()!=null) && (newActivity.getToTime()!=null) ) {
-			if (newActivity.getFromTime().compareTo(newActivity.getToTime())>0) {
+		if ((newActivity.getFromDate()!=null) && (newActivity.getToDate()!=null) ) {
+			if (newActivity.getFromDate().compareTo(newActivity.getToDate())>0) {
 				// if fromTime is after toTime --> fromTime = toTime
-				newActivity.setToTime(newActivity.getFromTime());
+				newActivity.setToDate(newActivity.getFromDate());
 			}
 		}
 		

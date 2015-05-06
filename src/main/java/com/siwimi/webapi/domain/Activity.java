@@ -15,8 +15,10 @@ public class Activity {
 	private String creator;
 	private String title;
 	private String description;
-	private Date fromTime;
-	private Date toTime;
+	private Date fromDate;
+	private Date toDate;	
+	private String fromTime; // e.g. 12:30pm
+	private String toTime;	// e.g. 12:30pm
 	private String address;
 	private String city;
 	private String state;
@@ -43,6 +45,22 @@ public class Activity {
 	//The default of the below field is set by backend
 	private Boolean isDestroyed;
 	
+	public String getFromTime() {
+		return fromTime;
+	}
+
+	public void setFromTime(String fromTime) {
+		this.fromTime = fromTime;
+	}
+
+	public String getToTime() {
+		return toTime;
+	}
+
+	public void setToTime(String toTime) {
+		this.toTime = toTime;
+	}
+
 	public int getFromAge() {
 		return fromAge;
 	}
@@ -69,9 +87,9 @@ public class Activity {
 
 	public Activity() {
 		// this.status : this is for front-end only
-		if (this.fromTime != null) {
+		if (this.fromDate != null) {
 			Date today = new Date();
-			if (today.after(this.fromTime))
+			if (today.after(this.fromDate))
 				this.status = "Past";
 			else
 				this.status = "Upcoming";							
@@ -94,20 +112,20 @@ public class Activity {
 		this.description = description;
 	}
 	
-	public Date getFromTime() {
-		return fromTime;
+	public Date getFromDate() {
+		return fromDate;
 	}
 
-	public void setFromTime(Date fromTime) {
-		this.fromTime = fromTime;
+	public void setFromDate(Date fromDate) {
+		this.fromDate = fromDate;
 	}
 
-	public Date getToTime() {
-		return toTime;
+	public Date getToDate() {
+		return toDate;
 	}
 
-	public void setToTime(Date toTime) {
-		this.toTime = toTime;
+	public void setToDate(Date toDate) {
+		this.toDate = toDate;
 	}
 
 	public String getImageData() {
