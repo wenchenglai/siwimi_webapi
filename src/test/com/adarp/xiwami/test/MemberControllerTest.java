@@ -1,5 +1,7 @@
 package com.adarp.xiwami.test;
 
+import static org.junit.Assert.assertNull;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.IntegrationTest;
@@ -21,7 +23,7 @@ public class MemberControllerTest {
     public void testFindFamilies() {
 
     	/** facebookId=1234 must not exist in the database **/
-    	//assertNull(null);
+    	assertNull(null);
     	//String url = "http://localhost:8088/members?facebookId=1234";
     	//assertNull(restTemplate.getForObject(url, Map.class).get("member"));
     }
