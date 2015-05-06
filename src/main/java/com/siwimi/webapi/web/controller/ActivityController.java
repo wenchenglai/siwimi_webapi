@@ -30,7 +30,7 @@ public class ActivityController {
 
 	@Autowired
 	private MemberService memberService;
-	//page=1&per_page=12
+
 	// Get activities by criteria
 	@RequestMapping(value = "/activities", method = RequestMethod.GET, produces = "application/json")
 	public ActivitySideloadList findActivities(

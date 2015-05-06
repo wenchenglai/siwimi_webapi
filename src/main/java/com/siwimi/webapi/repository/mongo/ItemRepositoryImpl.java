@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.geo.Point;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.index.GeospatialIndex;
@@ -23,7 +24,8 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
 	@SuppressWarnings("static-access")
 	@Override
 	public List<Item> queryItem(String creatorId, String status, String type, String condition,
-			                    Double longitude, Double latitude, String qsDistance, String queryText) {
+			                    Double longitude, Double latitude, String qsDistance, String queryText,
+	                            Integer page, Integer per_page) {
 				
 		List<Criteria> criterias = new ArrayList<Criteria>();
 		
@@ -63,7 +65,20 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
 		}
 		
 		Criteria c = new Criteria().andOperator(criterias.toArray(new Criteria[criterias.size()]));
-		return mongoTemplate.find(new Query(c), Item.class, "Item");
+		
+		int pageSize = 1000;
+		if (per_page!=null)
+			pageSize = per_page.intValue();
+		
+		int skip = 0;
+		if (page!=null)
+			skip = (page.intValue()-1)*pageSize;
+		
+		Query q = new Query(c)
+        .limit(pageSize).skip(skip)
+        .with(new Sort(Sort.DEFAULT_DIRECTION.ASC,"fromTime"));
+		
+		return mongoTemplate.find(q, Item.class, "Item");
 	}
 		
 	@Override

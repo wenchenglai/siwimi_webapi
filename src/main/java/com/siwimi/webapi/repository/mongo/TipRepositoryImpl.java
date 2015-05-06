@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.geo.Point;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
@@ -32,7 +33,7 @@ public class TipRepositoryImpl implements TipRepositoryCustom{
 	public List<Tip> queryTip(String creatorId,
 			                  String status, String type, 
 			                  Double longitude, Double latitude, String qsDistance, 
-			                  String queryText) {				
+			                  String queryText,Integer page, Integer per_page) {				
 
 		List<Criteria> criterias = new ArrayList<Criteria>();
 		
@@ -73,8 +74,21 @@ public class TipRepositoryImpl implements TipRepositoryCustom{
 		}
 
 		Criteria c = new Criteria().andOperator(criterias.toArray(new Criteria[criterias.size()]));
+		
+		int pageSize = 1000;
+		if (per_page!=null)
+			pageSize = per_page.intValue();
+		
+		int skip = 0;
+		if (page!=null)
+			skip = (page.intValue()-1)*pageSize;
+		
+		Query q = new Query(c)
+        .limit(pageSize).skip(skip)
+        .with(new Sort(Sort.DEFAULT_DIRECTION.ASC,"expiredDate").and(new Sort(Sort.DEFAULT_DIRECTION.ASC,"createdDate")));
+		
 		// Retrieve the queried candidate Tips 
-		List<Tip> tipCandidateList = mongoTemplate.find(new Query(c), Tip.class, "Tip");
+		List<Tip> tipCandidateList = mongoTemplate.find(q, Tip.class, "Tip");
 		
 		// Convert the candidated tips to map
 		Map<String,Tip> tipCandidateMap = new LinkedHashMap<String,Tip>();
