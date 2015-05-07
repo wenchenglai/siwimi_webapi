@@ -23,7 +23,7 @@ public class VoteRepositoryImpl implements VoteRepositoryCustom{
 	public Vote queryVote(String creator, String targetObject, String objectType) {
 		
 		List<Criteria> criterias = new ArrayList<Criteria>();		
-		criterias.add(new Criteria().where("isDestroyed").is(false));	
+		criterias.add(new Criteria().where("isDeletedRecord").is(false));	
 		criterias.add(new Criteria().where("creator").is(creator));
 		criterias.add(new Criteria().where("targetObject").is(targetObject));
 		criterias.add(new Criteria().where("objectType").is(objectType));

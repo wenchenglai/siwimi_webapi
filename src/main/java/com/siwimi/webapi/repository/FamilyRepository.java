@@ -9,5 +9,5 @@ import com.siwimi.webapi.domain.Family;
 
 public interface FamilyRepository extends MongoRepository<Family, String>, FamilyRepositoryCustom{	
 	List<Family> findByIdIn(Set<String> foundFamilyId);
-	Family findByIdAndIsDestroyedIsFalse(String id);
+	Family findByIdAndIsDeletedRecordIsFalse(String id);
 }

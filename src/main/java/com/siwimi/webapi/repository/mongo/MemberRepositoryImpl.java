@@ -34,7 +34,7 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
 		} else {		
 			List<Criteria> criterias = new ArrayList<Criteria>();
 
-			criterias.add(new Criteria().where("isDestroyed").is(false));
+			criterias.add(new Criteria().where("isDeletedRecord").is(false));
 			
 			// Search by family ID
 			if (familyId != null) {
@@ -62,7 +62,7 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
 	public Member findByid(String id) {
 		List<Criteria> criterias = new ArrayList<Criteria>();
 
-		criterias.add(new Criteria().where("isDestroyed").is(false));
+		criterias.add(new Criteria().where("isDeletedRecord").is(false));
 		criterias.add(new Criteria().orOperator(Criteria.where("id").is(id),
 				                                Criteria.where("facebookId").is(id)));
 		
@@ -81,7 +81,7 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
 		} else {
 			List<Criteria> criterias = new ArrayList<Criteria>();
 
-			criterias.add(new Criteria().where("isDestroyed").is(false));
+			criterias.add(new Criteria().where("isDeletedRecord").is(false));
 		
 			if (facebookId != null) {
 				criterias.add(new Criteria().where("facebookId").is(facebookId));
@@ -107,7 +107,7 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
 		} else {
 			List<Criteria> criterias = new ArrayList<Criteria>();
 
-			criterias.add(new Criteria().where("isDestroyed").is(false));
+			criterias.add(new Criteria().where("isDeletedRecord").is(false));
 			criterias.add(new Criteria().where("email").is(email));
 			criterias.add(new Criteria().where("password").is(password));
 		
@@ -123,7 +123,7 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
 		
 		List<Criteria> criterias = new ArrayList<Criteria>();
 
-		criterias.add(new Criteria().where("isDestroyed").is(false));
+		criterias.add(new Criteria().where("isDeletedRecord").is(false));
 		
 		if (geoFamiliesId != null) {
 			criterias.add(new Criteria().where("family").in(geoFamiliesId));

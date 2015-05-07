@@ -44,7 +44,7 @@ public class MemberService {
 		if (memberRep.findExistingMember(newMember.getFacebookId(), newMember.getEmail())!=null) {
 			return null;
 		} else {
-			newMember.setIsDestroyed(false);
+			newMember.setIsDeletedRecord(false);
 			newMember = updateLocation(newMember);
 			Member member = memberRep.save(newMember);	
 			return member;	
@@ -61,7 +61,7 @@ public class MemberService {
 	public void deleteMember(String id) {
 		// For Member collection
 		Member member = memberRep.findOne(id);
-		member.setIsDestroyed(true);
+		member.setIsDeletedRecord(true);
 		memberRep.save(member);
 	}
 	

@@ -19,11 +19,11 @@ public class FollowService {
 	}
 	
 	public Follow findByFollowId(String id) {
-		return followRep.findByIdAndIsDestroyedIsFalse(id);
+		return followRep.findByIdAndIsDeletedRecordIsFalse(id);
 	}
 	
 	public Follow addFollow(Follow newFollow) {
-		newFollow.setIsDestroyed(false);
+		newFollow.setIsDeletedRecord(false);
 		return followRep.save(newFollow);
 	}
 	
@@ -34,7 +34,7 @@ public class FollowService {
 	
 	public void deleteFollow (String id) {
 		Follow follow = followRep.findOne(id);
-		follow.setIsDestroyed(true);
+		follow.setIsDeletedRecord(true);
 		followRep.save(follow);
 	}
 }

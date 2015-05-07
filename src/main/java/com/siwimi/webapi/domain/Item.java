@@ -38,7 +38,7 @@ public class Item {
 	private String zipCode;
 	private double[] location;
 	
-	private Boolean isDestroyed; 
+	private Boolean isDeletedRecord; 
 	
 	@Transient
 	private boolean isFavorite = false;
@@ -216,12 +216,12 @@ public class Item {
 		this.viewCount = viewCount;
 	}
 
-	public Boolean getIsDestroyed() {
-		return isDestroyed;
+	public Boolean getIsDeletedRecord() {
+		return isDeletedRecord;
 	}
 
-	public void setIsDestroyed(Boolean isDestroyed) {
-		this.isDestroyed = isDestroyed;
+	public void setIsDeletedRecord(Boolean isDeletedRecord) {
+		this.isDeletedRecord = isDeletedRecord;
 	}	
 		
 	public String getCity() {

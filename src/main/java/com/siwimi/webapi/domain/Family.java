@@ -25,7 +25,7 @@ public class Family {
 	
 	//The defaults of the below fields are set by backend
 	private double[] location;
-	private Boolean isDestroyed;
+	private Boolean isDeletedRecord;
 
 	public String getId() {
 		return id;
@@ -96,12 +96,12 @@ public class Family {
 		this.location = location;
 	}
 
-	public Boolean getIsDestroyed() {
-		return isDestroyed;
+	public Boolean getIsDeletedRecord() {
+		return isDeletedRecord;
 	}
 
-	public void setIsDestroyed(Boolean isDestroyed) {
-		this.isDestroyed = isDestroyed;
+	public void setIsDeletedRecord(Boolean isDeletedRecord) {
+		this.isDeletedRecord = isDeletedRecord;
 	}
 	
 	@Override

@@ -37,7 +37,7 @@ public class TipRepositoryImpl implements TipRepositoryCustom{
 
 		List<Criteria> criterias = new ArrayList<Criteria>();
 		
-		criterias.add(new Criteria().where("isDestroyed").is(false));
+		criterias.add(new Criteria().where("isDeletedRecord").is(false));
 
 		if (creatorId != null) {
 			criterias.add(new Criteria().where("creator").is(creatorId));
@@ -102,7 +102,7 @@ public class TipRepositoryImpl implements TipRepositoryCustom{
 		/******* Aggregation of VoteUp and VoteDown *******/
 		// basicVoteCriterias : all, except voteType
 		List<Criteria> basicVoteCriterias = new ArrayList<Criteria>();
-		basicVoteCriterias.add(new Criteria().where("isDestroyed").is(false));
+		basicVoteCriterias.add(new Criteria().where("isDeletedRecord").is(false));
 		basicVoteCriterias.add(new Criteria().where("objectType").regex("tip", "i"));
 		basicVoteCriterias.add(new Criteria().where("targetObject").in(tipCandidateIdList));
 		Criteria basicVoteCriteria = new Criteria().andOperator(basicVoteCriterias.toArray(new Criteria[basicVoteCriterias.size()]));

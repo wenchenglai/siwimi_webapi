@@ -5,5 +5,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import com.siwimi.webapi.domain.Feedback;
 
 public interface FeedbackRepository extends MongoRepository<Feedback, String>, FeedbackRepositoryCustom{
-	Feedback findByIdAndIsDestroyedIsFalse(String id);
+	Feedback findByIdAndIsDeletedRecordIsFalse(String id);
 }

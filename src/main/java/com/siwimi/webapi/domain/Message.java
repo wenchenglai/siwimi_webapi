@@ -21,7 +21,7 @@ public class Message {
 	private String toStatus; // unread, read, both (= unread, read)
 	
 	//The default of the below field is set by backend
-	private Boolean isDestroyed;
+	private Boolean isDeletedRecord;
 
 	public String getId() {
 		return id;
@@ -95,12 +95,12 @@ public class Message {
 		this.toStatus = toStatus;
 	}
 
-	public Boolean getIsDestroyed() {
-		return isDestroyed;
+	public Boolean getIsDeletedRecord() {
+		return isDeletedRecord;
 	}
 
-	public void setIsDestroyed(Boolean isDestroyed) {
-		this.isDestroyed = isDestroyed;
+	public void setIsDeletedRecord(Boolean isDeletedRecord) {
+		this.isDeletedRecord = isDeletedRecord;
 	}
 	
 	@Override

@@ -13,7 +13,7 @@ public class VoteService {
 	private VoteRepository voteRep;
 	
 	public Vote findByVoteId(String id) {
-		return voteRep.findByIdAndIsDestroyedIsFalse(id);
+		return voteRep.findByIdAndIsDeletedRecordIsFalse(id);
 	}
 	
 	public Vote addVote(Vote newVote) {
@@ -23,11 +23,11 @@ public class VoteService {
 		if ((existedVote != null) && (!existedVote.getVoteType().equalsIgnoreCase(newVote.getVoteType()))) {
 			// Voter changes voteType : delete old vote, save new Vote
 			deleteVote(existedVote.getId());
-			newVote.setIsDestroyed(false);
+			newVote.setIsDeletedRecord(false);
 			return voteRep.save(newVote);
 		} else if (existedVote == null) {
 			// Voter never voted before : save new Vote
-			newVote.setIsDestroyed(false);
+			newVote.setIsDeletedRecord(false);
 			return voteRep.save(newVote);
 		} else
 			return null;
@@ -40,7 +40,7 @@ public class VoteService {
 	
 	public void deleteVote(String id) {
 		Vote vote = voteRep.findOne(id);
-		vote.setIsDestroyed(true);
+		vote.setIsDeletedRecord(true);
 		voteRep.save(vote);
 	}
 }

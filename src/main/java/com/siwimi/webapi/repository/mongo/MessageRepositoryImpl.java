@@ -24,7 +24,7 @@ public class MessageRepositoryImpl implements MessageRepositoryCustom{
 		
 		List<Criteria> criterias = new ArrayList<Criteria>();
 		
-		criterias.add(new Criteria().where("isDestroyed").is(false));
+		criterias.add(new Criteria().where("isDeletedRecord").is(false));
 		
 		if (fromId != null) {
 			criterias.add(new Criteria().where("from").is(fromId));

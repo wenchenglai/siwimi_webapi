@@ -46,11 +46,11 @@ public class QuestionService {
 	}
 	
 	public Question findByQuestionId(String id) {
-		return questionRep.findByIdAndIsDestroyedIsFalse(id);
+		return questionRep.findByIdAndIsDeletedRecordIsFalse(id);
 	}
 	
 	public Question addQuestion(Question newQuestion) {
-		newQuestion.setIsDestroyed(false);
+		newQuestion.setIsDeletedRecord(false);
 		newQuestion.setViewCount(0);
 		newQuestion = updateLocation(newQuestion);
 		return questionRep.saveQuestion(newQuestion);
@@ -64,7 +64,7 @@ public class QuestionService {
 	
 	public void deleteQuestion(String id) {
 		Question question = questionRep.findOne(id);
-		question.setIsDestroyed(true);
+		question.setIsDeletedRecord(true);
 		questionRep.saveQuestion(question);
 	}
 	

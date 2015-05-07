@@ -21,11 +21,11 @@ public class MessageService {
 	}
 	
 	public Message findById(String id) {
-		return repo.findByIdAndIsDestroyedIsFalse(id);
+		return repo.findByIdAndIsDeletedRecordIsFalse(id);
 	}
 	
 	public Message add(Message newObj) {
-		newObj.setIsDestroyed(false);
+		newObj.setIsDeletedRecord(false);
 		return repo.save(newObj);
 	}
 	
@@ -36,7 +36,7 @@ public class MessageService {
 	
 	public void delete(String id) {
 		Message obj = repo.findOne(id);
-		obj.setIsDestroyed(true);
+		obj.setIsDeletedRecord(true);
 		repo.save(obj);
 	}
 }

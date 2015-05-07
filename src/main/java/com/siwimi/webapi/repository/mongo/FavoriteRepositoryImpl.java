@@ -26,7 +26,7 @@ public class FavoriteRepositoryImpl implements FavoriteRepositoryCustom{
 			return null;
 		} else {
 			List<Criteria> criterias = new ArrayList<Criteria>();		
-			criterias.add(new Criteria().where("isDestroyed").is(false));	
+			criterias.add(new Criteria().where("isDeletedRecord").is(false));	
 			criterias.add(new Criteria().where("creator").is(requesterId));
 			criterias.add(new Criteria().where("targetObject").is(targetObject));
 			criterias.add(new Criteria().where("objectType").regex(objectType, "i"));
