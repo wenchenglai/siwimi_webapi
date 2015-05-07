@@ -33,7 +33,7 @@ public class FamilyRepositoryImpl implements FamilyRepositoryCustom {
 		
 		List<Criteria> criterias = new ArrayList<Criteria>();
 		
-		criterias.add(new Criteria().where("isDestroyed").is(false));
+		criterias.add(new Criteria().where("isDeletedRecord").is(false));
 		
 		if ((longitude != null) && (latitude != null) && (qsDistance!= null)) {			
 			double distance = 0.0;

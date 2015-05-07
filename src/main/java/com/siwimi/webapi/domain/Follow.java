@@ -13,7 +13,7 @@ public class Follow {
 	private String follower; // member Id
 	private String followee; // member Id
 	private Date createdDate;
-	private Boolean isDestroyed;
+	private Boolean isDeletedRecord;
 	
 	public String getId() {
 		return id;
@@ -39,11 +39,11 @@ public class Follow {
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
 	}
-	public Boolean getIsDestroyed() {
-		return isDestroyed;
+	public Boolean getIsDeletedRecord() {
+		return isDeletedRecord;
 	}
-	public void setIsDestroyed(Boolean isDestroyed) {
-		this.isDestroyed = isDestroyed;
+	public void setIsDeletedRecord(Boolean isDeletedRecord) {
+		this.isDeletedRecord = isDeletedRecord;
 	}
 	
 	@Override

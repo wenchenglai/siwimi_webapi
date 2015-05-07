@@ -54,11 +54,11 @@ public class TipService {
 	}
 	
 	public Tip findByTipId(String id) {
-		return tipRep.findByIdAndIsDestroyedIsFalse(id);
+		return tipRep.findByIdAndIsDeletedRecordIsFalse(id);
 	}
 	
 	public Tip addTip(Tip newTip) {
-		newTip.setIsDestroyed(false);
+		newTip.setIsDeletedRecord(false);
 		newTip.setViewCount(0);
 		newTip = updateLocation(newTip);
 		return tipRep.saveTip(newTip);
@@ -72,7 +72,7 @@ public class TipService {
 	
 	public void deleteTip(String id) {
 		Tip tip = tipRep.findOne(id);
-		tip.setIsDestroyed(true);
+		tip.setIsDeletedRecord(true);
 		tipRep.saveTip(tip);
 	}
 	

@@ -43,7 +43,7 @@ public class Activity {
 	private boolean isFavorite = false;
 	
 	//The default of the below field is set by backend
-	private Boolean isDestroyed;
+	private Boolean isDeletedRecord;
 	
 	public String getFromTime() {
 		return fromTime;
@@ -142,14 +142,6 @@ public class Activity {
 	
 	public void setImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
-	}
-
-	public Boolean getIsDestroyed() {
-		return isDestroyed;
-	}
-
-	public void setIsDestroyed(Boolean isDestroyed) {
-		this.isDestroyed = isDestroyed;
 	}
 
 	public String getId() {
@@ -269,6 +261,14 @@ public class Activity {
 		this.createdDate = createdDate;
 	}	
 	
+	public Boolean getIsDeletedRecord() {
+		return isDeletedRecord;
+	}
+
+	public void setIsDeletedRecord(Boolean isDeletedRecord) {
+		this.isDeletedRecord = isDeletedRecord;
+	}
+	
 	@Override
 	public int hashCode() {
 	    return id.hashCode();
@@ -289,4 +289,5 @@ public class Activity {
 	       
 	    return true;
 	}
+
 }

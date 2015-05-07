@@ -40,7 +40,7 @@ public class Member {
 	private double[] location;
 	
 	//The default of the below field is set by back end
-	private boolean isDestroyed;
+	private boolean isDeletedRecord;
 	
 	public void setId(String id) {
 		this.id = id;
@@ -202,12 +202,12 @@ public class Member {
 		this.ftimezone = ftimezone;
 	}
 
-	public boolean getIsDestroyed() {
-		return isDestroyed;
+	public Boolean getIsDeletedRecord() {
+		return isDeletedRecord;
 	}
 
-	public void setIsDestroyed(boolean isDestroyed) {
-		this.isDestroyed = isDestroyed;
+	public void setIsDeletedRecord(Boolean isDeletedRecord) {
+		this.isDeletedRecord = isDeletedRecord;
 	}
 
 	public String getHighSchool() {

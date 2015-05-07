@@ -32,11 +32,11 @@ public class FeedbackService {
 	}
 	
 	public Feedback findById(String id) {
-		return feedbackRep.findByIdAndIsDestroyedIsFalse(id);
+		return feedbackRep.findByIdAndIsDeletedRecordIsFalse(id);
 	}
 	
 	public Feedback add(Feedback newObj) {
-		newObj.setIsDestroyed(false);
+		newObj.setIsDeletedRecord(false);
 		newObj.setViewCount(0);
 		newObj.setLikeCount(0);
 		Feedback saveObj = feedbackRep.save(newObj);
@@ -70,7 +70,7 @@ public class FeedbackService {
 	
 	public void delete(String id) {
 		Feedback obj = feedbackRep.findOne(id);
-		obj.setIsDestroyed(true);
+		obj.setIsDeletedRecord(true);
 		feedbackRep.save(obj);
 	}
 }

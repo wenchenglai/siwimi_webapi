@@ -23,7 +23,7 @@ public class FollowRepositoryImpl implements FollowRepositoryCustom {
 	public List<Follow> queryFollow (String follower, String followee) {
 		List<Criteria> criterias = new ArrayList<Criteria>();
 		
-		criterias.add(new Criteria().where("isDestroyed").is(false));
+		criterias.add(new Criteria().where("isDeletedRecord").is(false));
 	
 		if (follower != null) {
 			criterias.add(new Criteria().where("follower").regex(follower.trim(), "i"));

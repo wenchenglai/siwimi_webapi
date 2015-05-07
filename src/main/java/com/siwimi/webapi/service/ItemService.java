@@ -51,11 +51,11 @@ public class ItemService {
 	}
 	
 	public Item findByItemId(String id) {
-		return itemRep.findByIdAndIsDestroyedIsFalse(id);
+		return itemRep.findByIdAndIsDeletedRecordIsFalse(id);
 	}
 	
 	public Item addItem(Item newItem) {
-		newItem.setIsDestroyed(false);
+		newItem.setIsDeletedRecord(false);
 		newItem.setViewCount(0);
 		newItem = updateLocation(newItem);
 		itemRep.saveItem(newItem);		
@@ -70,7 +70,7 @@ public class ItemService {
 	
 	public void deleteItem(String id) {
 		Item item = itemRep.findOne(id);
-		item.setIsDestroyed(true);
+		item.setIsDeletedRecord(true);
 		itemRep.saveItem(item);
 	}
 	

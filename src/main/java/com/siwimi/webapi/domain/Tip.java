@@ -38,7 +38,7 @@ public class Tip implements Comparable<Tip>{
 	private boolean isFavorite = false;
 	
 	// The default of the below field is set by backend
-	private Boolean isDestroyed;
+	private Boolean isDeletedRecord;
 
 	public String getId() {
 		return id;
@@ -104,12 +104,12 @@ public class Tip implements Comparable<Tip>{
 		this.createdDate = createdDate;
 	}
 
-	public Boolean getIsDestroyed() {
-		return isDestroyed;
+	public Boolean getIsDeletedRecord() {
+		return isDeletedRecord;
 	}
 
-	public void setIsDestroyed(Boolean isDestroyed) {
-		this.isDestroyed = isDestroyed;
+	public void setIsDeletedRecord(Boolean isDeletedRecord) {
+		this.isDeletedRecord = isDeletedRecord;
 	}
 	
 	public double[] getLocation() {

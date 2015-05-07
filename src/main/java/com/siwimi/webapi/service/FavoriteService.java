@@ -13,7 +13,7 @@ public class FavoriteService {
 	private FavoriteRepository favoriteRep;	
 	
 	public Favorite findByFavoriteId (String id) {
-		return favoriteRep.findByIdAndIsDestroyedIsFalse(id);
+		return favoriteRep.findByIdAndIsDeletedRecordIsFalse(id);
 	}
 	
 	public Favorite addFavorite(Favorite newFavorite) {
@@ -21,7 +21,7 @@ public class FavoriteService {
 		Favorite existedFavorite = favoriteRep.queryFavorite(newFavorite.getCreator(), newFavorite.getTargetObject(), newFavorite.getObjectType());
 		// User never give favorite before : save new Favorite
 		if (existedFavorite == null) {
-			newFavorite.setIsDestroyed(false);
+			newFavorite.setIsDeletedRecord(false);
 			return favoriteRep.save(newFavorite);
 		} else
 			return null;
@@ -34,7 +34,7 @@ public class FavoriteService {
 	
 	public void deleteFavorite(String id) {
 		Favorite Favorite = favoriteRep.findOne(id);
-		Favorite.setIsDestroyed(true);
+		Favorite.setIsDeletedRecord(true);
 		favoriteRep.save(Favorite);
 	}	
 }

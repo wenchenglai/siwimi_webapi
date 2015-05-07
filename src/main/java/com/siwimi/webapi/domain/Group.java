@@ -20,7 +20,7 @@ public class Group {
 	private List<String> members = new ArrayList<String>();
 	
 	//The default of the below field is set by backend
-	private Boolean isDestroyed;
+	private Boolean isDeletedRecord;
 
 	public String getId() {
 		return id;
@@ -70,12 +70,12 @@ public class Group {
 		this.createdDate = createdDate;
 	}
 
-	public Boolean getIsDestroyed() {
-		return isDestroyed;
+	public Boolean getIsDeletedRecord() {
+		return isDeletedRecord;
 	}
 
-	public void setIsDestroyed(Boolean isDestroyed) {
-		this.isDestroyed = isDestroyed;
+	public void setIsDeletedRecord(Boolean isDeletedRecord) {
+		this.isDeletedRecord = isDeletedRecord;
 	}
 	
 	@Override

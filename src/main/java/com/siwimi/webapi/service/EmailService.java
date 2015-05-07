@@ -24,11 +24,11 @@ public class EmailService {
 	}
 	
 	public Email findByEmailId(String id) {
-		return emailRep.findByIdAndIsDestroyedIsFalse(id);
+		return emailRep.findByIdAndIsDeletedRecordIsFalse(id);
 	}
 	
 	public Email addEmail(Email newEmail) {
-		newEmail.setIsDestroyed(false);
+		newEmail.setIsDeletedRecord(false);
 		return emailRep.save(newEmail);
 	}
 	
@@ -39,7 +39,7 @@ public class EmailService {
 	
 	public void deleteEmail(String id) {
 		Email email = emailRep.findOne(id);
-		email.setIsDestroyed(true);
+		email.setIsDeletedRecord(true);
 		emailRep.save(email);
 	}
 	

@@ -32,11 +32,11 @@ public class FamilyService {
 	}
 	
 	public Family findByFamilyId(String id) {
-		return familyRep.findByIdAndIsDestroyedIsFalse(id);
+		return familyRep.findByIdAndIsDeletedRecordIsFalse(id);
 	}
 	
 	public Family addFamily(Family newFamily) {				
-		newFamily.setIsDestroyed(false);
+		newFamily.setIsDeletedRecord(false);
 		newFamily = updateLocation(newFamily);
 		return familyRep.saveFamily(newFamily);
 	}
@@ -53,13 +53,13 @@ public class FamilyService {
 		List<Member> memberList = memberRep.query(id,null);
 		for (Member member:memberList) {
 			if ((member.getFacebookId()==null)) {
-				member.setIsDestroyed(true);
+				member.setIsDeletedRecord(true);
 				memberRep.save(member);
 			}				
 		}
 		
 		Family family = familyRep.findOne(id);
-		family.setIsDestroyed(true);
+		family.setIsDeletedRecord(true);
 		familyRep.save(family);		
 		
 	}

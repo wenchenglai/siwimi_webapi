@@ -19,11 +19,11 @@ public class GroupService {
 	}
 		
 	public Group findByGroupId(String id) {
-		return groupRep.findByIdAndIsDestroyedIsFalse(id);
+		return groupRep.findByIdAndIsDeletedRecordIsFalse(id);
 	}
 	
 	public Group addGroup(Group newGroup) {
-		newGroup.setIsDestroyed(false);
+		newGroup.setIsDeletedRecord(false);
 		// add creator into the member list
 		List<String> members = newGroup.getMembers();
 		members.add(newGroup.getCreator());
@@ -39,7 +39,7 @@ public class GroupService {
 	
 	public void deleteGroup(String id) {
 		Group group = groupRep.findOne(id);
-		group.setIsDestroyed(true);
+		group.setIsDeletedRecord(true);
 		groupRep.save(group);
 	}
 }

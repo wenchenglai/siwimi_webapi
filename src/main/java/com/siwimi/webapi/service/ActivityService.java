@@ -55,11 +55,11 @@ public class ActivityService {
 	}
 	
 	public Activity findByActivityId(String id){
-		return activityRep.findByIdAndIsDestroyedIsFalse(id);
+		return activityRep.findByIdAndIsDeletedRecordIsFalse(id);
 	}
 	
 	public Activity addActivity(Activity newActivity) {			
-		newActivity.setIsDestroyed(false);
+		newActivity.setIsDeletedRecord(false);
 		newActivity.setViewCount(0);
 		newActivity = updateLocation(newActivity);
 		
@@ -85,7 +85,7 @@ public class ActivityService {
 	
 	public void deleteActivity(String id) {
 		Activity activity = activityRep.findOne(id);
-		activity.setIsDestroyed(true);
+		activity.setIsDeletedRecord(true);
 		activityRep.saveActivity(activity);
 	}
 	
