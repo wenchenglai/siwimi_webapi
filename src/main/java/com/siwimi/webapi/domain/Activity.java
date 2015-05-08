@@ -39,6 +39,10 @@ public class Activity {
 	@Transient
 	private String status = "Upcoming";
 	
+	//This field is only for front-end purpose : total page count
+	@Transient
+	private int queryCount = 0;
+	
 	@Transient
 	private boolean isFavorite = false;
 	
@@ -269,6 +273,14 @@ public class Activity {
 		this.isDeletedRecord = isDeletedRecord;
 	}
 	
+	public int getQueryCount() {
+		return queryCount;
+	}
+
+	public void setQueryCount(int queryCount) {
+		this.queryCount = queryCount;
+	}
+
 	@Override
 	public int hashCode() {
 	    return id.hashCode();

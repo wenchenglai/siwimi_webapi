@@ -61,10 +61,12 @@ public class ActivityRepositoryImpl implements ActivityRepositoryCustom {
 				criterias.add(new Criteria().where("toTime").lt(now));
 			} else if (status.equalsIgnoreCase("Ongoing")) {
 				criterias.add(new Criteria().andOperator(Criteria.where("fromTime").lte(now),Criteria.where("toTime").gte(now)));
-			}
-			else if (status.equalsIgnoreCase("Upcoming")){
+			} else if (status.equalsIgnoreCase("Upcoming")){
 				criterias.add(new Criteria().where("fromTime").gt(now));
-			}			
+			} else if (status.equalsIgnoreCase("timeless")) {
+				criterias.add(new Criteria().andOperator(Criteria.where("fromTime").is(null),
+                                                         Criteria.where("toTime").is(null)));
+			}
 		}
 	
 		if ((type != null) && (!type.equals("all"))) {	
@@ -132,20 +134,40 @@ public class ActivityRepositoryImpl implements ActivityRepositoryCustom {
 		}
 		
 		Criteria c = new Criteria().andOperator(criterias.toArray(new Criteria[criterias.size()]));
+
+		// Queried result without pagination
+		List<Activity> allResults = mongoTemplate.find(new Query(c), Activity.class, "Activity");
 		
-		int pageSize = 1000;
-		if (per_page!=null)
-			pageSize = per_page.intValue();
+		if ((allResults == null) || (allResults.isEmpty()))
+			return allResults;
+		else {
 		
-		int skip = 0;
-		if (page!=null)
-			skip = (page.intValue()-1)*pageSize;
-		
-		Query q = new Query(c)
-		          .limit(pageSize).skip(skip)
-		          .with(new Sort(Sort.DEFAULT_DIRECTION.ASC,"fromTime").and(new Sort(Sort.DEFAULT_DIRECTION.ASC,"createdDate")));
-		
-		return mongoTemplate.find(q, Activity.class, "Activity");
+			int pageSize = 1000;
+			if (per_page!=null)
+				pageSize = per_page.intValue();
+			
+			int skip = 0;
+			if (page!=null)
+				skip = (page.intValue()-1)*pageSize;
+
+			int totalPageCounts = allResults.size() / pageSize + ((allResults.size() % pageSize == 0)? 0 : 1); 
+			
+			Query q = new Query(c)
+			          .limit(pageSize).skip(skip)
+			          .with(new Sort(Sort.DEFAULT_DIRECTION.ASC,"fromTime").and(new Sort(Sort.DEFAULT_DIRECTION.ASC,"createdDate")));
+			
+			// Queried result with pagination
+			List<Activity> queryResults = mongoTemplate.find(q, Activity.class, "Activity");
+			
+			// Insert total page count to the first element of the quired result
+			if (queryResults!=null) {
+				Activity activity = queryResults.get(0);
+				activity.setQueryCount(totalPageCounts);
+				queryResults.add(0, activity);
+			}
+				
+			return queryResults;
+		}					
 	}
 		
 	@Override
