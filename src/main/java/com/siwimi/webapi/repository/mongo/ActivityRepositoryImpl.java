@@ -159,11 +159,10 @@ public class ActivityRepositoryImpl implements ActivityRepositoryCustom {
 			// Queried result with pagination
 			List<Activity> queryResults = mongoTemplate.find(q, Activity.class, "Activity");
 			
-			// Insert total page count to the first element of the quired result
-			if (queryResults!=null) {
+			// Insert total record count to the first element of the queried result
+			if (queryResults != null) {
 				Activity activity = queryResults.get(0);
-				activity.setQueryCount(totalPageCounts);
-				queryResults.add(0, activity);
+				activity.setQueryCount(allResults.size());
 			}
 				
 			return queryResults;
