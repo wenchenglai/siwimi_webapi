@@ -138,8 +138,8 @@ public class ActivityRepositoryImpl implements ActivityRepositoryCustom {
 		// Queried result without pagination
 		List<Activity> allResults = mongoTemplate.find(new Query(c), Activity.class, "Activity");
 		
-		if ((allResults == null) || (allResults.isEmpty()))
-			return allResults;
+		if ((allResults == null))
+			return new ArrayList<Activity>();
 		else {
 		
 			int pageSize = 1000;
@@ -149,9 +149,7 @@ public class ActivityRepositoryImpl implements ActivityRepositoryCustom {
 			int skip = 0;
 			if (page!=null)
 				skip = (page.intValue()-1)*pageSize;
-
-			int totalPageCounts = allResults.size() / pageSize + ((allResults.size() % pageSize == 0)? 0 : 1); 
-			
+	
 			Query q = new Query(c)
 			          .limit(pageSize).skip(skip)
 			          .with(new Sort(Sort.DEFAULT_DIRECTION.ASC,"fromTime").and(new Sort(Sort.DEFAULT_DIRECTION.ASC,"createdDate")));
@@ -160,7 +158,9 @@ public class ActivityRepositoryImpl implements ActivityRepositoryCustom {
 			List<Activity> queryResults = mongoTemplate.find(q, Activity.class, "Activity");
 			
 			// Insert total record count to the first element of the queried result
-			if (queryResults != null) {
+			if (queryResults == null) {
+				return new ArrayList<Activity>();
+			} else {
 				Activity activity = queryResults.get(0);
 				activity.setQueryCount(allResults.size());
 			}

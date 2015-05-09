@@ -39,7 +39,7 @@ public class Activity {
 	@Transient
 	private String status = "Upcoming";
 	
-	//This field is only for front-end purpose : total page count
+	//This field is only for front-end purpose : total record count
 	@Transient
 	private int queryCount = 0;
 	

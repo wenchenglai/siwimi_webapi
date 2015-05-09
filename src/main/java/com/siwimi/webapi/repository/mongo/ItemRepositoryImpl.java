@@ -66,19 +66,38 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
 		
 		Criteria c = new Criteria().andOperator(criterias.toArray(new Criteria[criterias.size()]));
 		
-		int pageSize = 1000;
-		if (per_page!=null)
-			pageSize = per_page.intValue();
+		// Queried result without pagination
+		List<Item> allResults = mongoTemplate.find(new Query(c), Item.class, "Item");
 		
-		int skip = 0;
-		if (page!=null)
-			skip = (page.intValue()-1)*pageSize;
-		
-		Query q = new Query(c)
-        .limit(pageSize).skip(skip)
-        .with(new Sort(Sort.DEFAULT_DIRECTION.ASC,"fromTime"));
-		
-		return mongoTemplate.find(q, Item.class, "Item");
+		if ((allResults == null))
+			return new ArrayList<Item>();
+		else {
+			
+			int pageSize = 1000;
+			if (per_page!=null)
+				pageSize = per_page.intValue();
+			
+			int skip = 0;
+			if (page!=null)
+				skip = (page.intValue()-1)*pageSize;
+			
+			Query q = new Query(c)
+	        .limit(pageSize).skip(skip)
+	        .with(new Sort(Sort.DEFAULT_DIRECTION.ASC,"fromTime"));
+			
+			List<Item> queryResults = mongoTemplate.find(q, Item.class, "Item");
+			
+			// Insert total record count to the first element of the queried result
+			if (queryResults == null) {
+				return new ArrayList<Item>();
+			} else {
+				Item item = queryResults.get(0);
+				item.setQueryCount(allResults.size());
+			}
+				
+			return queryResults;
+		}
+
 	}
 		
 	@Override
