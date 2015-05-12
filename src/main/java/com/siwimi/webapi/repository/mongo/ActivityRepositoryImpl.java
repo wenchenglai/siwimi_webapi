@@ -57,15 +57,15 @@ public class ActivityRepositoryImpl implements ActivityRepositoryCustom {
 		
 		if ((status != null) && (!status.equals("all"))) {		
 			Date now = new Date();
-			if (status.equalsIgnoreCase("Past")) {
-				criterias.add(new Criteria().where("toTime").lt(now));
-			} else if (status.equalsIgnoreCase("Ongoing")) {
-				criterias.add(new Criteria().andOperator(Criteria.where("fromTime").lte(now),Criteria.where("toTime").gte(now)));
-			} else if (status.equalsIgnoreCase("Upcoming")){
-				criterias.add(new Criteria().where("fromTime").gt(now));
-			} else if (status.equalsIgnoreCase("timeless")) {
-				criterias.add(new Criteria().andOperator(Criteria.where("fromTime").is(null),
-                                                         Criteria.where("toTime").is(null)));
+			if (status.equals("past")) {
+				criterias.add(new Criteria().where("toDate").lt(now));
+			} else if (status.equals("ongoing")) {
+				criterias.add(new Criteria().andOperator(Criteria.where("fromDate").lte(now),Criteria.where("toDate").gte(now)));
+			} else if (status.equals("upcoming")){
+				criterias.add(new Criteria().where("fromDate").gt(now));
+			} else if (status.equals("timeless")) {
+				criterias.add(new Criteria().andOperator(Criteria.where("fromDate").is(null),
+                                                         Criteria.where("toDate").is(null)));
 			}
 		}
 	
@@ -122,14 +122,14 @@ public class ActivityRepositoryImpl implements ActivityRepositoryCustom {
 					periodEnd = shiftDateWithoutTime(now,1);
 					break;
 			}									
-			Criteria c1 = new Criteria().andOperator(Criteria.where("fromTime").lte(periodEnd),
-					                                 Criteria.where("toTime").gte(periodBegin));
-			Criteria c2 = new Criteria().andOperator(Criteria.where("fromTime").is(null),
-                    								 Criteria.where("toTime").gte(periodBegin));
-			Criteria c3 = new Criteria().andOperator(Criteria.where("fromTime").lte(periodEnd),
-					 								 Criteria.where("toTime").is(null));
-			Criteria c4 = new Criteria().andOperator(Criteria.where("fromTime").is(null),
-					                                 Criteria.where("toTime").is(null));	
+			Criteria c1 = new Criteria().andOperator(Criteria.where("fromDate").lte(periodEnd),
+					                                 Criteria.where("toDate").gte(periodBegin));
+			Criteria c2 = new Criteria().andOperator(Criteria.where("fromDate").is(null),
+                    								 Criteria.where("toDate").gte(periodBegin));
+			Criteria c3 = new Criteria().andOperator(Criteria.where("fromDate").lte(periodEnd),
+					 								 Criteria.where("toDate").is(null));
+			Criteria c4 = new Criteria().andOperator(Criteria.where("fromDate").is(null),
+					                                 Criteria.where("toDate").is(null));	
 			criterias.add(new Criteria().orOperator(c1,c2,c3,c4));
 		}
 		
@@ -139,7 +139,7 @@ public class ActivityRepositoryImpl implements ActivityRepositoryCustom {
 		List<Activity> allResults = mongoTemplate.find(new Query(c), Activity.class, "Activity");
 		
 		if ((allResults == null) || (allResults.isEmpty()))
-			return allResults;
+			return new ArrayList<Activity>();
 		else {
 		
 			int pageSize = 1000;
@@ -149,18 +149,18 @@ public class ActivityRepositoryImpl implements ActivityRepositoryCustom {
 			int skip = 0;
 			if (page!=null)
 				skip = (page.intValue()-1)*pageSize;
-
-			int totalPageCounts = allResults.size() / pageSize + ((allResults.size() % pageSize == 0)? 0 : 1); 
-			
+	
 			Query q = new Query(c)
 			          .limit(pageSize).skip(skip)
-			          .with(new Sort(Sort.DEFAULT_DIRECTION.ASC,"fromTime").and(new Sort(Sort.DEFAULT_DIRECTION.ASC,"createdDate")));
+			          .with(new Sort(Sort.DEFAULT_DIRECTION.ASC,"fromDate").and(new Sort(Sort.DEFAULT_DIRECTION.ASC,"createdDate")));
 			
 			// Queried result with pagination
 			List<Activity> queryResults = mongoTemplate.find(q, Activity.class, "Activity");
 			
 			// Insert total record count to the first element of the queried result
-			if (queryResults != null) {
+			if ((queryResults == null) || (queryResults.isEmpty())) {
+				return new ArrayList<Activity>();
+			} else {
 				Activity activity = queryResults.get(0);
 				activity.setQueryCount(allResults.size());
 			}

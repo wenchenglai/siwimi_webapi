@@ -63,14 +63,6 @@ public class ActivityService {
 		newActivity.setViewCount(0);
 		newActivity = updateLocation(newActivity);
 		
-		// fromTime must be earlier than toTime
-		if ((newActivity.getFromDate()!=null) && (newActivity.getToDate()!=null) ) {
-			if (newActivity.getFromDate().compareTo(newActivity.getToDate())>0) {
-				// if fromTime is after toTime --> fromTime = toTime
-				newActivity.setToDate(newActivity.getFromDate());
-			}
-		}
-		
 		/** We cannot use activityRep.save()
 			Because Spring repository does not provide geospatial indexing : db.location.ensureIndex( {location: "2d"} )
 		**/

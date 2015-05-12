@@ -43,6 +43,10 @@ public class Item {
 	@Transient
 	private boolean isFavorite = false;
 	
+	//This field is only for front-end purpose : total record count
+	@Transient
+	private int queryCount = 0;
+	
 	public String getZipCode() {
 		return zipCode;
 	}
@@ -246,6 +250,14 @@ public class Item {
 
 	public void setIsFavorite(boolean isFavorite) {
 		this.isFavorite = isFavorite;
+	}
+
+	public int getQueryCount() {
+		return queryCount;
+	}
+
+	public void setQueryCount(int queryCount) {
+		this.queryCount = queryCount;
 	}
 
 	@Override

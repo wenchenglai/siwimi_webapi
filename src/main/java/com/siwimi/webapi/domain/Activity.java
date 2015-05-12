@@ -37,9 +37,9 @@ public class Activity {
 	
 	//This field is only for front-end purpose
 	@Transient
-	private String status = "Upcoming";
+	private String status = "upcoming";
 	
-	//This field is only for front-end purpose : total page count
+	//This field is only for front-end purpose : total record count
 	@Transient
 	private int queryCount = 0;
 	
@@ -94,9 +94,7 @@ public class Activity {
 		if (this.fromDate != null) {
 			Date today = new Date();
 			if (today.after(this.fromDate))
-				this.status = "Past";
-			else
-				this.status = "Upcoming";							
+				this.status = "past";						
 		} 
 	}
 	

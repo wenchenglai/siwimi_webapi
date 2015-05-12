@@ -27,6 +27,9 @@ public class Tip implements Comparable<Tip>{
 	private String state;
 	private String zipCode;
 	private double[] location;
+		
+	// The default of the below field is set by backend
+	private Boolean isDeletedRecord;
 	
 	@Transient
 	private int voteUpCount = 0;
@@ -37,9 +40,10 @@ public class Tip implements Comparable<Tip>{
 	@Transient
 	private boolean isFavorite = false;
 	
-	// The default of the below field is set by backend
-	private Boolean isDeletedRecord;
-
+	//This field is only for front-end purpose : total record count
+	@Transient
+	private int queryCount = 0;
+	
 	public String getId() {
 		return id;
 	}
@@ -195,6 +199,14 @@ public class Tip implements Comparable<Tip>{
 
 	public void setState(String state) {
 		this.state = state;
+	}
+
+	public int getQueryCount() {
+		return queryCount;
+	}
+
+	public void setQueryCount(int queryCount) {
+		this.queryCount = queryCount;
 	}
 
 	@Override
