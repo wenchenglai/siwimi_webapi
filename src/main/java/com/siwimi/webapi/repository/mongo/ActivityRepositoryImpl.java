@@ -59,7 +59,7 @@ public class ActivityRepositoryImpl implements ActivityRepositoryCustom {
 			Date now = new Date();
 			if (status.equals("past")) {
 				criterias.add(new Criteria().where("toDate").lt(now));
-			} else if (status.equals("ongoing")) {
+			} else if (status.equals("current")) {
 				criterias.add(new Criteria().andOperator(Criteria.where("fromDate").lte(now),Criteria.where("toDate").gte(now)));
 			} else if (status.equals("upcoming")){
 				criterias.add(new Criteria().where("fromDate").gt(now));
