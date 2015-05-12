@@ -69,7 +69,7 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
 		// Queried result without pagination
 		List<Item> allResults = mongoTemplate.find(new Query(c), Item.class, "Item");
 		
-		if ((allResults == null))
+		if ((allResults == null) || (allResults.isEmpty()))
 			return new ArrayList<Item>();
 		else {
 			
@@ -88,7 +88,7 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
 			List<Item> queryResults = mongoTemplate.find(q, Item.class, "Item");
 			
 			// Insert total record count to the first element of the queried result
-			if (queryResults == null) {
+			if ((queryResults == null) || (queryResults.isEmpty())) {
 				return new ArrayList<Item>();
 			} else {
 				Item item = queryResults.get(0);

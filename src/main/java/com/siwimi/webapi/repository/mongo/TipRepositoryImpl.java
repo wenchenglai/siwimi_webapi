@@ -77,7 +77,7 @@ public class TipRepositoryImpl implements TipRepositoryCustom{
 		
 		List<Tip> allResults = mongoTemplate.find(new Query(c), Tip.class, "Tip");
 		
-		if ((allResults == null))
+		if ((allResults == null) || (allResults.isEmpty()))
 			return new ArrayList<Tip>();
 		else {
 			
@@ -95,7 +95,7 @@ public class TipRepositoryImpl implements TipRepositoryCustom{
 			
 			// Retrieve the queried candidate Tips 
 			List<Tip> tipCandidateList = mongoTemplate.find(q, Tip.class, "Tip");
-			if (tipCandidateList == null) {
+			if ((tipCandidateList == null) || (tipCandidateList.isEmpty())) {
 				return new ArrayList<Tip>();
 			}
 			
