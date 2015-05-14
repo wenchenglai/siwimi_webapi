@@ -48,7 +48,7 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
 		}
 		
 		if (queryText != null) {
-			criterias.add(new Criteria().orOperator(Criteria.where("name").regex(queryText.trim(), "i"),
+			criterias.add(new Criteria().orOperator(Criteria.where("title").regex(queryText.trim(), "i"),
                                                     Criteria.where("description").regex(queryText.trim(), "i")));
 		}
 		
