@@ -33,7 +33,7 @@ public class TipRepositoryImpl implements TipRepositoryCustom{
 	public List<Tip> queryTip(String creatorId,
 			                  String status, String type, 
 			                  Double longitude, Double latitude, String qsDistance, 
-			                  String queryText,Integer page, Integer per_page) {				
+			                  String queryText,Integer page, Integer per_page, String sortBy) {				
 
 		List<Criteria> criterias = new ArrayList<Criteria>();
 		
@@ -89,9 +89,19 @@ public class TipRepositoryImpl implements TipRepositoryCustom{
 			if (page!=null)
 				skip = (page.intValue()-1)*pageSize;
 			
-			Query q = new Query(c)
-	        .limit(pageSize).skip(skip)
-	        .with(new Sort(Sort.DEFAULT_DIRECTION.ASC,"expiredDate").and(new Sort(Sort.DEFAULT_DIRECTION.ASC,"createdDate")));
+			Query q = new Query(c).limit(pageSize).skip(skip);			
+			if (sortBy != null) {
+				if (sortBy.equals("title")) {
+					q = q.with(new Sort(Sort.DEFAULT_DIRECTION.ASC,"title").and(new Sort(Sort.DEFAULT_DIRECTION.ASC,"createdDate")));
+				} else if (sortBy.equals("type")) {
+					q = q.with(new Sort(Sort.DEFAULT_DIRECTION.ASC,"type").and(new Sort(Sort.DEFAULT_DIRECTION.ASC,"createdDate")));
+				} else {
+					q = q.with(new Sort(Sort.DEFAULT_DIRECTION.ASC,"expiredDate")
+					                   .and(new Sort(Sort.DEFAULT_DIRECTION.ASC,"createdDate")));
+				}
+			} else {
+				q = q.with(new Sort(Sort.DEFAULT_DIRECTION.ASC,"expiredDate").and(new Sort(Sort.DEFAULT_DIRECTION.ASC,"createdDate")));
+			}
 			
 			// Retrieve the queried candidate Tips 
 			List<Tip> tipCandidateList = mongoTemplate.find(q, Tip.class, "Tip");
