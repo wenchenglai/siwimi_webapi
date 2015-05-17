@@ -8,6 +8,6 @@ public interface TipRepositoryCustom {
 	List<Tip> queryTip(String creatorId,
 			           String status, String type, 
 			           Double queryLongitude, Double queryLatitude, String qsDistance, 
-			           String queryText,Integer page, Integer per_page);
+			           String queryText,Integer page, Integer per_page, String sortBy);
 	Tip saveTip(Tip newTip);
 }

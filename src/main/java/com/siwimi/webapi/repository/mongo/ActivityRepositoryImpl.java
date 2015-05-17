@@ -29,7 +29,7 @@ public class ActivityRepositoryImpl implements ActivityRepositoryCustom {
 	@Override
 	public List<Activity> queryActivity(String creatorId,String status,String type,Integer period,String fromTime, String toTime,
 			                            Double longitude,Double latitude,String qsDistance,String queryText,
-			                            Integer page, Integer per_page) {
+			                            Integer page, Integer per_page, String sortBy) {
 			
 		List<Criteria> criterias = new ArrayList<Criteria>();
 		
@@ -60,7 +60,15 @@ public class ActivityRepositoryImpl implements ActivityRepositoryCustom {
 			if (status.equals("past")) {
 				criterias.add(new Criteria().where("toDate").lt(now));
 			} else if (status.equals("current")) {
-				criterias.add(new Criteria().andOperator(Criteria.where("fromDate").lte(now),Criteria.where("toDate").gte(now)));
+				Criteria c1 = new Criteria().andOperator(Criteria.where("fromDate").lte(now),
+                        								 Criteria.where("toDate").gte(now));
+				Criteria c2 = new Criteria().andOperator(Criteria.where("fromDate").lte(now),
+														 Criteria.where("toDate").is(null),
+														 Criteria.where("fromDate").gt(shiftDateWithoutTime(now,-1)));
+				Criteria c3 = new Criteria().andOperator(Criteria.where("fromDate").is(null),
+														 Criteria.where("toDate").gte(now),
+						 								 Criteria.where("toDate").lt(shiftDateWithoutTime(now,1)));
+				criterias.add(new Criteria().orOperator(c1,c2,c3));
 			} else if (status.equals("upcoming")){
 				criterias.add(new Criteria().where("fromDate").gt(now));
 			} else if (status.equals("timeless")) {
@@ -150,10 +158,20 @@ public class ActivityRepositoryImpl implements ActivityRepositoryCustom {
 			if (page!=null)
 				skip = (page.intValue()-1)*pageSize;
 	
-			Query q = new Query(c)
-			          .limit(pageSize).skip(skip)
-			          .with(new Sort(Sort.DEFAULT_DIRECTION.ASC,"fromDate").and(new Sort(Sort.DEFAULT_DIRECTION.ASC,"createdDate")));
-			
+			Query q = new Query(c).limit(pageSize).skip(skip);			
+			if (sortBy != null) {
+				if (sortBy.equals("title")) {
+					q = q.with(new Sort(Sort.DEFAULT_DIRECTION.ASC,"title").and(new Sort(Sort.DEFAULT_DIRECTION.ASC,"createdDate")));
+				} else if (sortBy.equals("type")) {
+					q = q.with(new Sort(Sort.DEFAULT_DIRECTION.ASC,"type").and(new Sort(Sort.DEFAULT_DIRECTION.ASC,"createdDate")));
+				} else {
+					q = q.with(new Sort(Sort.DEFAULT_DIRECTION.ASC,"fromDate")
+					                   .and(new Sort(Sort.DEFAULT_DIRECTION.ASC,"createdDate")));
+				}
+			} else {
+				q = q.with(new Sort(Sort.DEFAULT_DIRECTION.ASC,"fromDate").and(new Sort(Sort.DEFAULT_DIRECTION.ASC,"createdDate")));
+			}
+		
 			// Queried result with pagination
 			List<Activity> queryResults = mongoTemplate.find(q, Activity.class, "Activity");
 			
