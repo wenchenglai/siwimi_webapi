@@ -25,7 +25,7 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
 	@Override
 	public List<Item> queryItem(String creatorId, String status, String type, String condition,
 			                    Double longitude, Double latitude, String qsDistance, String queryText,
-	                            Integer page, Integer per_page) {
+	                            Integer page, Integer per_page, String sortBy) {
 				
 		List<Criteria> criterias = new ArrayList<Criteria>();
 		
@@ -81,9 +81,18 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
 			if (page!=null)
 				skip = (page.intValue()-1)*pageSize;
 			
-			Query q = new Query(c)
-	        .limit(pageSize).skip(skip)
-	        .with(new Sort(Sort.DEFAULT_DIRECTION.ASC,"fromTime"));
+			Query q = new Query(c).limit(pageSize).skip(skip);			
+			if (sortBy != null) {
+				if (sortBy.equals("title")) {
+					q = q.with(new Sort(Sort.DEFAULT_DIRECTION.ASC,"title").and(new Sort(Sort.DEFAULT_DIRECTION.ASC,"createdDate")));
+				} else if (sortBy.equals("type")) {
+					q = q.with(new Sort(Sort.DEFAULT_DIRECTION.ASC,"type").and(new Sort(Sort.DEFAULT_DIRECTION.ASC,"createdDate")));
+				} else {
+					q = q.with(new Sort(Sort.DEFAULT_DIRECTION.ASC,"createdDate"));
+				}
+			} else {
+				q = q.with(new Sort(Sort.DEFAULT_DIRECTION.ASC,"createdDate"));
+			}
 			
 			List<Item> queryResults = mongoTemplate.find(q, Item.class, "Item");
 			
@@ -97,7 +106,6 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
 				
 			return queryResults;
 		}
-
 	}
 		
 	@Override

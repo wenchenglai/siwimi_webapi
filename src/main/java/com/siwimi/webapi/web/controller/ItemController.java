@@ -44,12 +44,13 @@ public class ItemController {
 			@RequestParam(value="distance", required=false) String qsDistance, 
 			@RequestParam(value="queryText", required=false) String queryText,
 			@RequestParam(value="page", required=false) Integer pageNumber, 
-			@RequestParam(value="per_page", required=false) Integer pageSize) {
+			@RequestParam(value="per_page", required=false) Integer pageSize,
+			@RequestParam(value="sortBy", required=false) String sortBy) {
 		
 		ItemSideloadList responseBody = new ItemSideloadList();
 		List <Item> itemList = itemService.findItems(creatorId,requesterId,status,type,condition,
 													 longitude,latitude,qsDistance,queryText,
-                                                     pageNumber,pageSize);
+                                                     pageNumber,pageSize,sortBy);
 		Set<Member> members = new HashSet<Member>();
 		if (itemList!=null) {
 			for (Item item : itemList) {
@@ -64,15 +65,6 @@ public class ItemController {
 		}
 		responseBody.items = itemList;
 		responseBody.members = new ArrayList<Member>(members);
-/*		List<Item> itemList = null;
-		try {
-			itemList = itemService.findItems(creatorId,requesterId,status,type,condition,longitude,latitude,qsDistance,queryText);
-		} catch (Exception err) {
-			// we must return an empty array so Ember can pick up the json data format.  Return null will crash the ember client.
-			itemList = new ArrayList<Item>();
-
-		}
-		responseBody.put("items", itemList);*/
 		return responseBody;
 	}
 

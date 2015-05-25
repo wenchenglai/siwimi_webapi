@@ -66,16 +66,7 @@ public class ActivityController {
 		}
 		responseBody.activities = activityList;
 		responseBody.members = new ArrayList<Member>(members);
-		/*		
-		List<Activity> activityList = null;
-		try {
-			  activityList = activityService.findActivities(creatorId,requesterId,status,type,period,fromTime,toTime,
-					                                        longitude,latitude,qsDistance,queryText);
-		} catch (Exception err) {
-			// we must return an empty array so Ember can pick up the json data format.  Return null will crash the ember client.
-			activityList = new ArrayList<Activity>();
-		}
-		responseBody.put("activities", activityList);*/
+
 		return responseBody;
 	}
 

@@ -64,17 +64,6 @@ public class TipController {
 			tipList = new ArrayList<Tip>();
 		}
 		
-		/*
-		List<Tip> tipList = null;
-		
-		try {
-			tipList = tipService.findTips(creatorId, requesterId, status, type, longitude, latitude, qsDistance, queryText);
-		} catch (Exception err) {
-			// we must return an empty array so Ember can pick up the json data format.  Return null will crash the ember client.
-			tipList = new ArrayList<Tip>();
-
-		}
-		responseBody.put("tip", tipList); 		*/
 		responseBody.tips = tipList;
 		responseBody.members = new ArrayList<Member>(members);
 		return responseBody;
