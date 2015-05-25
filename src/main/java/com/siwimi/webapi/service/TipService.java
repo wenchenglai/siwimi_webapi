@@ -49,8 +49,7 @@ public class TipService {
 			// increment viewcount by 1, and save it to MongoDB
 			tip.setViewCount(tip.getViewCount()+1);
 			tipRep.saveTip(tip);
-		}
-		
+		}		
 		return tipList;
 	}
 	

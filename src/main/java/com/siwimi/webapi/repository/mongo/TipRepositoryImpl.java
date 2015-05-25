@@ -123,22 +123,25 @@ public class TipRepositoryImpl implements TipRepositoryCustom{
 			basicVoteCriterias.add(new Criteria().where("isDeletedRecord").is(false));
 			basicVoteCriterias.add(new Criteria().where("objectType").regex("tip", "i"));
 			basicVoteCriterias.add(new Criteria().where("targetObject").in(tipCandidateIdList));
-			Criteria basicVoteCriteria = new Criteria().andOperator(basicVoteCriterias.toArray(new Criteria[basicVoteCriterias.size()]));
+			Criteria basicVoteCriteria = new Criteria().andOperator(basicVoteCriterias.
+					                                                toArray(new Criteria[basicVoteCriterias.size()]));
 
 			// add criteria : voteType == up
-			Criteria upVoteCriteria = new Criteria().andOperator(basicVoteCriteria,new Criteria().where("voteType").regex("up", "i"));
+			Criteria upVoteCriteria = new Criteria().andOperator(basicVoteCriteria,
+					                                             new Criteria().where("voteType").regex("up", "i"));
 			// add criteria : voteType == down
-			Criteria downVoteCriteria = new Criteria().andOperator(basicVoteCriteria,new Criteria().where("voteType").regex("down", "i"));
+			Criteria downVoteCriteria = new Criteria().andOperator(basicVoteCriteria,
+					                                               new Criteria().where("voteType").regex("down", "i"));
 			
 			// Aggregation : voteType = up
 			Aggregation upVoteAgg = Aggregation.newAggregation(
 					Aggregation.match(upVoteCriteria),
 					Aggregation.group("targetObject").count().as("count"));
-					//Aggregation.project("count").and("id").previousOperation(),
-					//Aggregation.sort(Sort.Direction.DESC, "count"));
+
 			// upVoteCountList : Aggregation results of vote up
 			AggregationResults<Count> upVoteAggResult = mongoTemplate.aggregate(upVoteAgg, "Vote", Count.class);
 			List<Count> upVoteCountList = upVoteAggResult.getMappedResults();
+			
 			// upVoteResultMap : Aggregation results of vote up
 			Map<String,Count> upVoteResultMap = new LinkedHashMap<String,Count>();
 			for (Count count : upVoteCountList) {
@@ -149,11 +152,11 @@ public class TipRepositoryImpl implements TipRepositoryCustom{
 			Aggregation downVoteAgg = Aggregation.newAggregation(
 					Aggregation.match(downVoteCriteria),
 			        Aggregation.group("targetObject").count().as("count"));
-			       // Aggregation.project("count").and("targetObject").previousOperation(),
-			       // Aggregation.sort(Sort.Direction.ASC, "count"));
+
 			// downVoteCountList : Aggregation results of vote down
 			AggregationResults<Count> downVoteAggResult = mongoTemplate.aggregate(downVoteAgg, "Vote", Count.class);
 			List<Count> downVoteResultList = downVoteAggResult.getMappedResults();	
+			
 			// downVoteResultMap : Aggregation results of vote down
 			Map<String,Count> downVoteResultMap = new LinkedHashMap<String,Count>();
 			for (Count count : downVoteResultList) {
@@ -173,7 +176,6 @@ public class TipRepositoryImpl implements TipRepositoryCustom{
 				}
 				
 				tip.setQueryCount(allResults.size());
-				//tipCandidateList.set(i, tip);
 			}
 			
 			if (status != null) {
@@ -181,11 +183,8 @@ public class TipRepositoryImpl implements TipRepositoryCustom{
 					Collections.sort(tipCandidateList);
 				} 
 			}
-
 			return tipCandidateList;	
 		}
-
-
 	}
 	
 	@Override

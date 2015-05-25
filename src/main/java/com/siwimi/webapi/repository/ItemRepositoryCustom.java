@@ -7,6 +7,6 @@ import com.siwimi.webapi.domain.Item;
 public interface ItemRepositoryCustom {
 		List<Item> queryItem(String sellerId,String status,String type,String condition,
 				             Double longitude,Double latitude,String qsDistance,String queryText,
-		                     Integer page, Integer per_page);
+		                     Integer page, Integer per_page,String sortBy);
 		Item saveItem(Item newItem);
 }
