@@ -100,7 +100,7 @@ public class TipRepositoryImpl implements TipRepositoryCustom{
 					                   .and(new Sort(Sort.DEFAULT_DIRECTION.DESC,"expiredDate")));
 				}
 			} else {
-				q = q.with(new Sort(Sort.DEFAULT_DIRECTION.ASC,"createdDate").and(new Sort(Sort.DEFAULT_DIRECTION.ASC,"expiredDate")));
+				q = q.with(new Sort(Sort.DEFAULT_DIRECTION.DESC,"createdDate").and(new Sort(Sort.DEFAULT_DIRECTION.DESC,"expiredDate")));
 			}
 			
 			// Retrieve the queried candidate Tips 
