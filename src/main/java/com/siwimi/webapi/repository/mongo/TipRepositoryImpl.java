@@ -96,11 +96,11 @@ public class TipRepositoryImpl implements TipRepositoryCustom{
 				} else if (sortBy.equals("type")) {
 					q = q.with(new Sort(Sort.DEFAULT_DIRECTION.ASC,"type").and(new Sort(Sort.DEFAULT_DIRECTION.ASC,"createdDate")));
 				} else {
-					q = q.with(new Sort(Sort.DEFAULT_DIRECTION.ASC,"expiredDate")
-					                   .and(new Sort(Sort.DEFAULT_DIRECTION.ASC,"createdDate")));
+					q = q.with(new Sort(Sort.DEFAULT_DIRECTION.DESC,"createdDate")
+					                   .and(new Sort(Sort.DEFAULT_DIRECTION.DESC,"expiredDate")));
 				}
 			} else {
-				q = q.with(new Sort(Sort.DEFAULT_DIRECTION.ASC,"expiredDate").and(new Sort(Sort.DEFAULT_DIRECTION.ASC,"createdDate")));
+				q = q.with(new Sort(Sort.DEFAULT_DIRECTION.DESC,"createdDate").and(new Sort(Sort.DEFAULT_DIRECTION.DESC,"expiredDate")));
 			}
 			
 			// Retrieve the queried candidate Tips 
