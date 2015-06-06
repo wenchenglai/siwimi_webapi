@@ -70,7 +70,9 @@ public class ActivityRepositoryImpl implements ActivityRepositoryCustom {
 						 								 Criteria.where("toDate").lt(shiftDateWithoutTime(now,1)));
 				criterias.add(new Criteria().orOperator(c1,c2,c3));
 			} else if (status.equals("upcoming")){
-				criterias.add(new Criteria().where("fromDate").gt(now));
+				Criteria c1 = new Criteria().where("fromDate").gte(now);
+				Criteria c2 = new Criteria().where("toDate").gte(now);
+				criterias.add(new Criteria().orOperator(c1,c2));
 			} else if (status.equals("timeless")) {
 				criterias.add(new Criteria().andOperator(Criteria.where("fromDate").is(null),
                                                          Criteria.where("toDate").is(null)));
@@ -161,15 +163,15 @@ public class ActivityRepositoryImpl implements ActivityRepositoryCustom {
 			Query q = new Query(c).limit(pageSize).skip(skip);			
 			if (sortBy != null) {
 				if (sortBy.equals("title")) {
-					q = q.with(new Sort(Sort.DEFAULT_DIRECTION.ASC,"title").and(new Sort(Sort.DEFAULT_DIRECTION.ASC,"createdDate")));
+					q = q.with(new Sort(Sort.DEFAULT_DIRECTION.ASC,"title").and(new Sort(Sort.DEFAULT_DIRECTION.DESC,"createdDate")));
 				} else if (sortBy.equals("type")) {
-					q = q.with(new Sort(Sort.DEFAULT_DIRECTION.ASC,"type").and(new Sort(Sort.DEFAULT_DIRECTION.ASC,"createdDate")));
+					q = q.with(new Sort(Sort.DEFAULT_DIRECTION.ASC,"type").and(new Sort(Sort.DEFAULT_DIRECTION.DESC,"createdDate")));
 				} else {
-					q = q.with(new Sort(Sort.DEFAULT_DIRECTION.ASC,"fromDate")
-					                   .and(new Sort(Sort.DEFAULT_DIRECTION.ASC,"createdDate")));
+					q = q.with(new Sort(Sort.DEFAULT_DIRECTION.DESC,"fromDate")
+					                   .and(new Sort(Sort.DEFAULT_DIRECTION.DESC,"createdDate")));
 				}
 			} else {
-				q = q.with(new Sort(Sort.DEFAULT_DIRECTION.ASC,"fromDate").and(new Sort(Sort.DEFAULT_DIRECTION.ASC,"createdDate")));
+				q = q.with(new Sort(Sort.DEFAULT_DIRECTION.DESC,"fromDate").and(new Sort(Sort.DEFAULT_DIRECTION.DESC,"createdDate")));
 			}
 		
 			// Queried result with pagination

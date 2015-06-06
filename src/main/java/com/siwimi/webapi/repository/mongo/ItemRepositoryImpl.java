@@ -84,14 +84,14 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
 			Query q = new Query(c).limit(pageSize).skip(skip);			
 			if (sortBy != null) {
 				if (sortBy.equals("title")) {
-					q = q.with(new Sort(Sort.DEFAULT_DIRECTION.ASC,"title").and(new Sort(Sort.DEFAULT_DIRECTION.ASC,"createdDate")));
+					q = q.with(new Sort(Sort.DEFAULT_DIRECTION.ASC,"title").and(new Sort(Sort.DEFAULT_DIRECTION.DESC,"createdDate")));
 				} else if (sortBy.equals("type")) {
-					q = q.with(new Sort(Sort.DEFAULT_DIRECTION.ASC,"type").and(new Sort(Sort.DEFAULT_DIRECTION.ASC,"createdDate")));
+					q = q.with(new Sort(Sort.DEFAULT_DIRECTION.ASC,"type").and(new Sort(Sort.DEFAULT_DIRECTION.DESC,"createdDate")));
 				} else {
-					q = q.with(new Sort(Sort.DEFAULT_DIRECTION.ASC,"createdDate"));
+					q = q.with(new Sort(Sort.DEFAULT_DIRECTION.DESC,"createdDate"));
 				}
 			} else {
-				q = q.with(new Sort(Sort.DEFAULT_DIRECTION.ASC,"createdDate"));
+				q = q.with(new Sort(Sort.DEFAULT_DIRECTION.DESC,"createdDate"));
 			}
 			
 			List<Item> queryResults = mongoTemplate.find(q, Item.class, "Item");
