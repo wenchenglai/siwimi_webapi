@@ -28,32 +28,28 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
 	@Override
 	public List<Member> query(String familyId, String queryText) {
 		
-		// If both input parameters are null, no need to query the existing member
-		if ((familyId == null) && (queryText == null)) {
-			return null;
-		} else {		
-			List<Criteria> criterias = new ArrayList<Criteria>();
+		List<Criteria> criterias = new ArrayList<Criteria>();
 
-			criterias.add(new Criteria().where("isDeletedRecord").is(false));
+		criterias.add(new Criteria().where("isDeletedRecord").is(false));
 			
-			// Search by family ID
-			if (familyId != null) {
-				criterias.add(new Criteria().where("family").is(familyId));
-			}
+		// Search by family ID
+		if (familyId != null) {
+			criterias.add(new Criteria().where("family").is(familyId));
+		}
 			
-			// Search name by queryText
-			if (queryText != null) {
-				criterias.add(new Criteria().orOperator(Criteria.where("firstName").regex(queryText.trim(), "i"),
-	                    								Criteria.where("lastName").regex(queryText.trim(), "i")));
-			}
+		// Search name by queryText
+		if (queryText != null) {
+			criterias.add(new Criteria().orOperator(Criteria.where("firstName").regex(queryText.trim(), "i"),
+	                   								Criteria.where("lastName").regex(queryText.trim(), "i")));
+		}
 			
-			Criteria c = new Criteria().andOperator(criterias.toArray(new Criteria[criterias.size()]));
+		Criteria c = new Criteria().andOperator(criterias.toArray(new Criteria[criterias.size()]));
 			
-			//Sort by "firstName" --> then sort by "lastName"
-			Query q = new Query(c).with(new Sort(Sort.DEFAULT_DIRECTION.ASC,"firstName").and(new Sort(Sort.DEFAULT_DIRECTION.ASC,"lastName")));
-			
-			return mongoTemplate.find(q, Member.class, "Member");
-		}			
+		//Sort by "firstName" --> then sort by "lastName"
+		Query q = new Query(c).with(new Sort(Sort.DEFAULT_DIRECTION.ASC,"firstName").
+				                             and(new Sort(Sort.DEFAULT_DIRECTION.ASC,"lastName")));
+		
+		return mongoTemplate.find(q, Member.class, "Member");			
 	}
 
 	// Search member id from DB id or facebook id.
