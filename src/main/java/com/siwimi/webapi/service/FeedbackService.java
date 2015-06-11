@@ -43,11 +43,13 @@ public class FeedbackService {
 		
 		// if newObj is a comment, we need to update its parent.
 		if (saveObj.getParentType() == null) {
-			Feedback feedback = feedbackRep.findOne(saveObj.getParent());
-			Set <String> commentSet = new LinkedHashSet<String>(feedback.getComments());
-			commentSet.add(saveObj.getId());
-			feedback.setComments(new ArrayList<String>(commentSet));
-			feedbackRep.save(feedback);
+			if (saveObj.getParent() != null) {
+				Feedback feedback = feedbackRep.findOne(saveObj.getParent());
+				Set <String> commentSet = new LinkedHashSet<String>(feedback.getComments());
+				commentSet.add(saveObj.getId());
+				feedback.setComments(new ArrayList<String>(commentSet));
+				feedbackRep.save(feedback);
+			}
 		}
 		
 		return saveObj;
