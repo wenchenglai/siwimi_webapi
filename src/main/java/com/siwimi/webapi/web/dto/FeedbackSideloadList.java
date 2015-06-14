@@ -7,6 +7,5 @@ import com.siwimi.webapi.domain.Member;
 
 public class FeedbackSideloadList {
 	public List<Feedback> feedbacks;
-	public List<Feedback> comments;
 	public List<Member> members;
 }

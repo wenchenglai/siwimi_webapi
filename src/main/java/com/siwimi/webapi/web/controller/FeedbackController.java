@@ -46,15 +46,10 @@ public class FeedbackController {
 		
 		/** Populate FeedbackSideloadList **/
 		Set <Feedback> feedbacks = new HashSet<Feedback>();
-		Set <Feedback> comments = new HashSet<Feedback>();
 		Map <String,Member> members = new HashMap<String,Member>();		
 		for (Feedback feedback : queryFeedbacks) {	
-			// populate feedbacks or comments
-			if (feedback.getParentType()==null) {
-				comments.add(feedback);
-			} else {
-				feedbacks.add(feedback);
-			}
+
+			feedbacks.add(feedback);
 			// populate members
 			String key = feedback.getCreator();
 			if (!members.containsKey(key)) {
@@ -62,8 +57,7 @@ public class FeedbackController {
 			}	
 		}
 
-		responseBody.feedbacks = new ArrayList<Feedback>(feedbacks);
-		responseBody.comments = new ArrayList<Feedback>(comments);			
+		responseBody.feedbacks = new ArrayList<Feedback>(feedbacks);	
 		responseBody.members = new ArrayList<Member>(members.values());
 		
 		return responseBody;
