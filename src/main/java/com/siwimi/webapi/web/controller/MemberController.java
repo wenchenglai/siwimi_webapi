@@ -1,6 +1,7 @@
 package com.siwimi.webapi.web.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.siwimi.webapi.domain.Email;
 import com.siwimi.webapi.domain.JqueryObject;
 import com.siwimi.webapi.domain.Member;
+import com.siwimi.webapi.service.EmailService;
 import com.siwimi.webapi.service.FamilyService;
 import com.siwimi.webapi.service.MemberService;
 import com.siwimi.webapi.web.dto.MemberSideload;
@@ -28,6 +31,8 @@ public class MemberController {
 	@Autowired
 	private FamilyService familyService;	
 
+	@Autowired
+	private EmailService emailService;
 	
 	/**
 	Scenario #1 : Get member by queryText (firstname or lastname) 
@@ -106,8 +111,26 @@ public class MemberController {
 		Map<String, Member> responseBody = new HashMap<String, Member>();
 		if (savedMember == null)
 			responseBody.put("error: duplicate email or facebookId", savedMember);
-		else
+		else {
 			responseBody.put("member", savedMember);
+			
+			String subject = "New Siwimi Member is added";
+			String memberInfo = "Name : " + savedMember.getFirstName() + " " + savedMember.getLastName() + " \n" +
+                                "Email : " + savedMember.getEmail() + " \n" +
+                                "FacebookId : " + savedMember.getFacebookId();
+			List<String> sentTo = new ArrayList<String>();
+			sentTo.add("walay133@yahoo.com.tw");	
+			sentTo.add("wenchenglai@gmail.com");
+			Email notifySiwimiFounders = new Email();
+			notifySiwimiFounders.setSentTo(sentTo);
+			notifySiwimiFounders.setSubject(subject);
+			notifySiwimiFounders.setEmailText(memberInfo);
+			notifySiwimiFounders.setSentTime(new Date());
+			
+			emailService.sentEmail(notifySiwimiFounders);
+			emailService.addEmail(notifySiwimiFounders);
+		}
+
 		
 		return responseBody;
 	}	

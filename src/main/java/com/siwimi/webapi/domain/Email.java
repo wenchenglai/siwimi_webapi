@@ -1,6 +1,7 @@
 package com.siwimi.webapi.domain;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -13,14 +14,15 @@ public class Email {
 	private String id;
 	
 	public Email() {
-		this.sentFrom = "admin@siwami.com";
+		this.sentFrom = "admin@siwimi.com";
 	}
 	
 	private String sentFrom;
 	private List<String> sentTo = new ArrayList<String>();
 	private String subject;
 	private String emailText;
-
+	private Date sentTime;
+	
 	//The default of the below field is set by backend
 	private Boolean isDeletedRecord;
 		
@@ -71,4 +73,14 @@ public class Email {
 	public void setIsDeletedRecord(Boolean isDeletedRecord) {
 		this.isDeletedRecord = isDeletedRecord;
 	}
+
+	public Date getSentTime() {
+		return sentTime;
+	}
+
+	public void setSentTime(Date sentTime) {
+		this.sentTime = sentTime;
+	}
+	
+	
 }

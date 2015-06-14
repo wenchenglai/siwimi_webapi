@@ -1,6 +1,7 @@
 package com.siwimi.webapi.web.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -15,8 +16,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.siwimi.webapi.domain.Email;
 import com.siwimi.webapi.domain.Member;
 import com.siwimi.webapi.domain.Question;
+import com.siwimi.webapi.service.EmailService;
 import com.siwimi.webapi.service.MemberService;
 import com.siwimi.webapi.service.QuestionService;
 import com.siwimi.webapi.web.dto.QuestionSideload;
@@ -30,6 +33,9 @@ public class QuestionController {
 
 	@Autowired
 	private MemberService memberService;
+	
+	@Autowired
+	private EmailService emailService;
 	
 	// Get all questions
 	@RequestMapping(value = "/questions", method = RequestMethod.GET, produces = "application/json")
@@ -56,14 +62,7 @@ public class QuestionController {
 		}
 		responseBody.questions = questionList;
 		responseBody.members = new ArrayList<Member>(members);
-/*		List<Question> questionList = null;
-		try {
-			questionList = questionService.findQuestions(creatorId,requesterId,longitude,latitude,qsDistance,queryText);
-		} catch (Exception err) {
-			// we must return an empty array so Ember can pick up the json data format.  Return null will crash the ember client.
-			questionList = new ArrayList<Question>();
-		}
-		responseBody.put("question", questionList);*/
+
 		return responseBody;
 	}
 
@@ -82,6 +81,26 @@ public class QuestionController {
 		Question savedQuestion = questionService.addQuestion(newQuestion.question);		
 		Map<String,Question> responseBody = new HashMap<String, Question>();
 		responseBody.put("question", savedQuestion);
+		
+		String subject = "New Siwimi Question is added";
+		Member asker = memberService.findByMemberId(savedQuestion.getCreator());
+		String questionInfo = "Creator : " + asker.getFirstName() + " " + asker.getLastName() + " \n" +
+                              "Creator's email : " + asker.getEmail() + " \n" +
+                              "Creator's facebookId : " + asker.getFacebookId() + " \n" +
+                              "Title : " + savedQuestion.getTitle() + " \n" +
+                              "Description : " + savedQuestion.getDescription();
+		List<String> sentTo = new ArrayList<String>();
+		sentTo.add("walay133@yahoo.com.tw");	
+		sentTo.add("wenchenglai@gmail.com");
+		Email notifySiwimiFounders = new Email();
+		notifySiwimiFounders.setSentTo(sentTo);
+		notifySiwimiFounders.setSubject(subject);
+		notifySiwimiFounders.setEmailText(questionInfo);
+		notifySiwimiFounders.setSentTime(new Date());
+		
+		emailService.sentEmail(notifySiwimiFounders);
+		emailService.addEmail(notifySiwimiFounders);
+		
 		return responseBody;			
 	}	
 	
