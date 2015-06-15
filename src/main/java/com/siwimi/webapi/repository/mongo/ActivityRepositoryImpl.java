@@ -70,11 +70,9 @@ public class ActivityRepositoryImpl implements ActivityRepositoryCustom {
 						 								 Criteria.where("toDate").lt(shiftDateWithoutTime(now,1)));
 				criterias.add(new Criteria().orOperator(c1,c2,c3));
 			} else if (status.equals("upcoming")){
-				//criterias.add(new Criteria().orOperator(Criteria.where("fromDate").gte(now),Criteria.where("toDate").gte(now)));
 				Criteria c1 = new Criteria().where("fromDate").gte(now);
 				Criteria c2 = new Criteria().where("toDate").gte(now);
 				criterias.add(new Criteria().orOperator(c1,c2));
-
 			} else if (status.equals("timeless")) {
 				criterias.add(new Criteria().andOperator(Criteria.where("fromDate").is(null),
                                                          Criteria.where("toDate").is(null)));
