@@ -82,12 +82,15 @@ public class QuestionController {
 		Map<String,Question> responseBody = new HashMap<String, Question>();
 		responseBody.put("question", savedQuestion);
 		
+		// subject and recipient of the emails
 		String subject = "New Siwimi Question is added";
 		Member asker = memberService.findByMemberId(savedQuestion.getCreator());
-		String questionInfo = "Creator : " + asker.getFirstName() + " " + asker.getLastName() + " \n" +
-                              "Creator's email : " + asker.getEmail() + " \n" +
-                              "Creator's facebookId : " + asker.getFacebookId() + " \n" +
-                              "Title : " + savedQuestion.getTitle() + " \n" +
+		
+		// Sent email to Siwimi founders
+		String questionInfo = "Creator : " + asker.getFirstName() + " " + asker.getLastName() + " \n " +
+                              "Creator's email : " + asker.getEmail() + " \n " +
+                              "Creator's facebookId : " + asker.getFacebookId() + " \n " +
+                              "Title : " + savedQuestion.getTitle() + " \n " +
                               "Description : " + savedQuestion.getDescription();
 		List<String> sentTo = new ArrayList<String>();
 		sentTo.add("walay133@yahoo.com.tw");	
@@ -96,11 +99,30 @@ public class QuestionController {
 		notifySiwimiFounders.setSentTo(sentTo);
 		notifySiwimiFounders.setSubject(subject);
 		notifySiwimiFounders.setEmailText(questionInfo);
-		notifySiwimiFounders.setSentTime(new Date());
-		
+		notifySiwimiFounders.setSentTime(new Date());		
 		emailService.sentEmail(notifySiwimiFounders);
 		emailService.addEmail(notifySiwimiFounders);
 		
+		// Sent email to asker
+		if (asker.getEmail() != null) {
+			String body = "You've asked a question on Siwimi.com. " +
+		                  "We'll send this question to parents who live in your neighborhood.\n " +
+					      "Your question is : \n\n " +
+                          "Title -- " + savedQuestion.getTitle() + "\n " +
+                          "Description -- " + savedQuestion.getDescription() + "\n\n " + 
+                          "Best Regards," + "\n " + 
+                          "The Siwimi Team";	        			
+			List<String> recipent = new ArrayList<String> ();
+			recipent.add(asker.getEmail());
+			Email notifyAsker = new Email();
+			notifyAsker.setSentTo(recipent);
+			notifyAsker.setSubject(subject);
+			notifyAsker.setEmailText(body);
+			notifyAsker.setSentTime(new Date());		
+			emailService.sentEmail(notifyAsker);
+			emailService.addEmail(notifyAsker);	
+		}
+
 		return responseBody;			
 	}	
 	
