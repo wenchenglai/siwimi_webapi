@@ -41,7 +41,7 @@ public class MemberService {
 	
 	public Member addMember(Member newMember){		
 		// If newMember is a duplicated member, don't save it.
-		if (memberRep.findExistingMember(newMember.getFacebookId(), newMember.getEmail())!=null) {
+		if (memberRep.findExistingMember(newMember.getEmail())!=null) {
 			return null;
 		} else {
 			newMember.setIsDeletedRecord(false);
@@ -86,6 +86,5 @@ public class MemberService {
 		}
 
 		return member;
-	}
-	
+	}	
 }
