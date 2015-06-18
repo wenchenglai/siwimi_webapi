@@ -6,7 +6,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.siwimi.exception.ExistingMemberException;
 import com.siwimi.webapi.domain.Email;
 import com.siwimi.webapi.domain.JqueryObject;
 import com.siwimi.webapi.domain.Member;
@@ -110,7 +114,7 @@ public class MemberController {
 		Member savedMember = memberService.addMember(member.member);
 		Map<String, Member> responseBody = new HashMap<String, Member>();
 		if (savedMember == null)
-			responseBody.put("error: duplicate email or facebookId", savedMember);
+			throw new ExistingMemberException("This email is already on our system");
 		else {
 			responseBody.put("member", savedMember);
 			
@@ -151,4 +155,15 @@ public class MemberController {
 	public void deleteMember(@PathVariable("id")String id) {
 		memberService.deleteMember(id);
 	}	
+	
+	// Exception handler
+	@ExceptionHandler(ExistingMemberException.class)
+	public Map<String, Map<String, String>> handleExistingMemberHandler(ExistingMemberException ex, HttpServletResponse res) {
+		Map<String, Map<String, String>> responseBody = new HashMap<String, Map<String, String>>();
+		Map<String, String> response = new HashMap<String, String>();
+		response.put("email",ex.getErrMsg());
+		responseBody.put("error",response);
+		res.setStatus(422);
+		return responseBody;
+	}
 }

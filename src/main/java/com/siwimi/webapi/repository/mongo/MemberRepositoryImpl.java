@@ -69,20 +69,16 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
 	
 	@SuppressWarnings("static-access")
 	@Override
-	public Member findExistingMember(String facebookId, String email) {
+	public Member findExistingMember(String email) {
 		
 		// If both input parameters are null, no need to query the existing member
-		if (facebookId == null && email == null) {
+		if (email == null) {
 			return null;
 		} else {
 			List<Criteria> criterias = new ArrayList<Criteria>();
 
 			criterias.add(new Criteria().where("isDeletedRecord").is(false));
-		
-			if (facebookId != null) {
-				criterias.add(new Criteria().where("facebookId").is(facebookId));
-			}
-		
+			
 			if (email != null) {
 				criterias.add(new Criteria().where("email").regex(email.trim(), "i"));
 			}
