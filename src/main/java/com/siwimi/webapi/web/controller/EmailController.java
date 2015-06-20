@@ -1,22 +1,8 @@
 package com.siwimi.webapi.web.controller;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.siwimi.webapi.domain.Email;
-import com.siwimi.webapi.service.EmailService;
-import com.siwimi.webapi.web.dto.EmailSideload;
-
-@RestController
+//@RestController
 public class EmailController {
-	
+/*	
 	@Autowired
 	private EmailService emailService;
 	
@@ -53,5 +39,5 @@ public class EmailController {
 	@RequestMapping (value = "/emails/{id}", method = RequestMethod.DELETE, produces = "application/json")
 	public void deleteEmail(@PathVariable("id")String id) {
 		emailService.deleteEmail(id);
-	}	
+	}	*/
 }

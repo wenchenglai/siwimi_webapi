@@ -1,7 +1,6 @@
 package com.siwimi.webapi.web.controller;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.siwimi.webapi.domain.Email;
 import com.siwimi.webapi.domain.Member;
 import com.siwimi.webapi.domain.Question;
 import com.siwimi.webapi.service.EmailService;
@@ -81,48 +79,10 @@ public class QuestionController {
 		Question savedQuestion = questionService.addQuestion(newQuestion.question);		
 		Map<String,Question> responseBody = new HashMap<String, Question>();
 		responseBody.put("question", savedQuestion);
-		
-		// subject and recipient of the emails
-		String subject = "New Siwimi Question is added";
-		Member asker = memberService.findByMemberId(savedQuestion.getCreator());
-		
-		// Sent email to Siwimi founders
-		String questionInfo = "Creator : " + asker.getFirstName() + " " + asker.getLastName() + " \n " +
-                              "Creator's email : " + asker.getEmail() + " \n " +
-                              "Creator's facebookId : " + asker.getFacebookId() + " \n " +
-                              "Title : " + savedQuestion.getTitle() + " \n " +
-                              "Description : " + savedQuestion.getDescription();
-		List<String> sentTo = new ArrayList<String>();
-		sentTo.add("walay133@yahoo.com.tw");	
-		sentTo.add("wenchenglai@gmail.com");
-		Email notifySiwimiFounders = new Email();
-		notifySiwimiFounders.setSentTo(sentTo);
-		notifySiwimiFounders.setSubject(subject);
-		notifySiwimiFounders.setEmailText(questionInfo);
-		notifySiwimiFounders.setSentTime(new Date());		
-		emailService.sentEmail(notifySiwimiFounders);
-		emailService.addEmail(notifySiwimiFounders);
-		
-		// Sent email to asker
-		if (asker.getEmail() != null) {
-			String body = "You've asked a question on Siwimi.com. " +
-		                  "We'll send this question to parents who live in your neighborhood.\n " +
-					      "Your question is : \n\n " +
-                          "Title -- " + savedQuestion.getTitle() + "\n " +
-                          "Description -- " + savedQuestion.getDescription() + "\n\n " + 
-                          "Best Regards," + "\n " + 
-                          "The Siwimi Team";	        			
-			List<String> recipent = new ArrayList<String> ();
-			recipent.add(asker.getEmail());
-			Email notifyAsker = new Email();
-			notifyAsker.setSentTo(recipent);
-			notifyAsker.setSubject(subject);
-			notifyAsker.setEmailText(body);
-			notifyAsker.setSentTime(new Date());		
-			emailService.sentEmail(notifyAsker);
-			emailService.addEmail(notifyAsker);	
-		}
-
+		// email to Siwimi.com
+		emailService.notifyNewQuestionToSiwimi(savedQuestion);
+		// email to asker
+		emailService.notifyNewQuestionToAsker(savedQuestion);		
 		return responseBody;			
 	}	
 	
