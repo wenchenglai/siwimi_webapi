@@ -133,7 +133,7 @@ public class EmailService {
 	                              "Feedback description : " + newFeedback.getDescription();
 			List<String> sentTo = new ArrayList<String>();
 			sentTo.add("walay133@yahoo.com.tw");	
-			//sentTo.add("wenchenglai@gmail.com");
+			sentTo.add("wenchenglai@gmail.com");
 			Email notifySiwimi = new Email();
 			notifySiwimi.setSentTo(sentTo);
 			notifySiwimi.setSubject(subject);
