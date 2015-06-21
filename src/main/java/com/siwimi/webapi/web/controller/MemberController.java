@@ -1,7 +1,6 @@
 package com.siwimi.webapi.web.controller;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.siwimi.exception.ExistingMemberException;
-import com.siwimi.webapi.domain.Email;
 import com.siwimi.webapi.domain.JqueryObject;
 import com.siwimi.webapi.domain.Member;
 import com.siwimi.webapi.service.EmailService;
@@ -117,25 +115,8 @@ public class MemberController {
 			throw new ExistingMemberException("This email is already on our system");
 		else {
 			responseBody.put("member", savedMember);
-			
-			String subject = "New Siwimi Member is added";
-			String memberInfo = "Name : " + savedMember.getFirstName() + " " + savedMember.getLastName() + " \n" +
-                                "Email : " + savedMember.getEmail() + " \n" +
-                                "FacebookId : " + savedMember.getFacebookId();
-			List<String> sentTo = new ArrayList<String>();
-			sentTo.add("walay133@yahoo.com.tw");	
-			sentTo.add("wenchenglai@gmail.com");
-			Email notifySiwimiFounders = new Email();
-			notifySiwimiFounders.setSentTo(sentTo);
-			notifySiwimiFounders.setSubject(subject);
-			notifySiwimiFounders.setEmailText(memberInfo);
-			notifySiwimiFounders.setSentTime(new Date());
-			
-			emailService.sentEmail(notifySiwimiFounders);
-			emailService.addEmail(notifySiwimiFounders);
-		}
-
-		
+			emailService.notifyNewMemberToSiwimi(savedMember);
+		}		
 		return responseBody;
 	}	
 	
