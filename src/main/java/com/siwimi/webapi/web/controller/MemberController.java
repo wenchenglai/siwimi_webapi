@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.siwimi.exception.ExistingMemberException;
 import com.siwimi.webapi.domain.JqueryObject;
 import com.siwimi.webapi.domain.Member;
+import com.siwimi.webapi.exception.ExistingMemberException;
 import com.siwimi.webapi.service.EmailService;
 import com.siwimi.webapi.service.FamilyService;
 import com.siwimi.webapi.service.MemberService;
