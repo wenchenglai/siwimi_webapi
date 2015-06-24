@@ -1,4 +1,4 @@
-package com.siwimi.exception;
+package com.siwimi.webapi.exception;
 
 public class ExistingMemberException extends RuntimeException{
 
