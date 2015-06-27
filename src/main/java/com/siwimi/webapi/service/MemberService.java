@@ -65,8 +65,16 @@ public class MemberService {
 		memberRep.save(member);
 	}
 	
-	public Member findByMemberId(String id) {
-		return memberRep.findByid(id);
+	public Member findByMemberId(String id, String action) {		
+		Member member = memberRep.findByid(id);
+		if (action != null) {
+			if (action.equals("confirm"))
+				if (member != null) {
+					member.setIsConfirmedMember(true);
+					return updateMember(id,member);
+				}									
+		} 				
+		return member;
 	}	
 	
 	public List<Member> find(String familyId, String queryText) {

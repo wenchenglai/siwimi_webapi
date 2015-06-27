@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -20,7 +21,7 @@ public class MessageRepositoryImpl implements MessageRepositoryCustom{
 	
 	@SuppressWarnings("static-access")
 	@Override
-	public List<Message> query(String fromId, String toId, String fromStatus, String toStatus, String queryText) {				
+	public List<Message> query(String fromId, String toId, String fromStatus, String toStatus, String queryText, String sort) {				
 		
 		List<Criteria> criterias = new ArrayList<Criteria>();
 		
@@ -54,14 +55,20 @@ public class MessageRepositoryImpl implements MessageRepositoryCustom{
 		}		
 		
 		Criteria c = new Criteria().andOperator(criterias.toArray(new Criteria[criterias.size()]));
-		return mongoTemplate.find(new Query(c), Message.class, "Message");
+		
+		Query q = new Query(c);
+		if (sort != null) {
+			if (sort.equals("asc"))
+				q = q.with(new Sort(Sort.DEFAULT_DIRECTION.ASC,"createdDate"));
+			else
+				q = q.with(new Sort(Sort.DEFAULT_DIRECTION.ASC,"createdDate"));
+		} else {
+			q = q.with(new Sort(Sort.DEFAULT_DIRECTION.DESC,"createdDate"));
+		}
+				
+		return mongoTemplate.find(q, Message.class, "Message");
 	}
 	
-//	@Override
-//	public Message save(Message newObj) {
-//		mongoTemplate.save(newObj, "Message");
-//		return newObj;
-//	}	
 }
 
 

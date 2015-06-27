@@ -49,7 +49,7 @@ public class QuestionController {
 		Set<Member> members = new HashSet<Member>();
 		if (questionList!=null) {
 			for (Question question : questionList) {
-				Member member = memberService.findByMemberId(question.getCreator());
+				Member member = memberService.findByMemberId(question.getCreator(),null);
 				// we must return an empty object so Ember can pick up the json data format.  Return null will crash the ember client.
 				if (member!=null)
 					members.add(member);

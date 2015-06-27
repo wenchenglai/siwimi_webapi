@@ -44,7 +44,7 @@ public class GroupController {
 			for (Group group : groupList) {
 				List<String> memberIds = group.getMembers();
 				for (String memberId : memberIds) {
-					Member member = memberService.findByMemberId(memberId);
+					Member member = memberService.findByMemberId(memberId,null);
 					// we must return an empty object so Ember can pick up the json data format.  Return null will crash the ember client.
 					if (member!=null)
 						members.add(member);	

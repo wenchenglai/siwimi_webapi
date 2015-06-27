@@ -36,21 +36,22 @@ public class MessageController {
 			@RequestParam(value="to", required=false) String toId,	
 			@RequestParam(value="fromStatus", required=false) String fromStatus,
 			@RequestParam(value="toStatus", required=false) String toStatus,			
-			@RequestParam(value="queryText", required=false) String queryText) {
+			@RequestParam(value="queryText", required=false) String queryText,
+			@RequestParam(value="sort", required=false) String sort) {
 		
 		MessageSideloadList responseBody = new MessageSideloadList();
 		
 		List<Message> messages = null;
 		List<Member> members = new ArrayList<Member>();
 		try {
-			messages = service.find(fromId, toId, fromStatus, toStatus, queryText);
+			messages = service.find(fromId, toId, fromStatus, toStatus, queryText,sort);
 			
 			if (messages.size() > 0) {
-				Member fromMember = memberService.findByMemberId(messages.get(0).getFrom());
+				Member fromMember = memberService.findByMemberId(messages.get(0).getFrom(),null);
 				members.add(fromMember);
 				for (Message msg:messages) {
 					if (msg.getTo() != null) {
-						Member toMember = memberService.findByMemberId(msg.getTo());
+						Member toMember = memberService.findByMemberId(msg.getTo(),null);
 						members.add(toMember);
 					}
 				}

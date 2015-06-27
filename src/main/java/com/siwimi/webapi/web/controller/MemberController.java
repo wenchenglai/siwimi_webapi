@@ -93,12 +93,14 @@ public class MemberController {
 	}		
 	
 	/**
-	 Find member either by database id or facebook id.
+	 (1) Find member either by database id or facebook id.
+	 (2) To confirm a newly added member 
 	 **/
 	// Get Member by ID
 	@RequestMapping(value = "/members/{id}", method = RequestMethod.GET, produces = "application/json")
-	public Map<String, Member> findByMemberId(@PathVariable("id") String id) {
-		Member member = memberService.findByMemberId(id);	
+	public Map<String, Member> findByMemberId(@PathVariable("id") String id,
+			                                  @RequestParam(value="action", required=false) String action) {
+		Member member = memberService.findByMemberId(id, action);
 		Map<String, Member> responseBody = new HashMap<String, Member>();		
 		responseBody.put("member", member);		
 		return responseBody;
@@ -116,6 +118,7 @@ public class MemberController {
 		else {
 			responseBody.put("member", savedMember);
 			emailService.notifyNewMemberToSiwimi(savedMember);
+			emailService.notifyConfirmationToNewMember(savedMember);
 		}		
 		return responseBody;
 	}	

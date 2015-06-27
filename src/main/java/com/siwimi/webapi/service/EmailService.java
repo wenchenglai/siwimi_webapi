@@ -67,6 +67,7 @@ public class EmailService {
 		emailRep.save(email);
 	}
 	
+	/** Notify Siwimi :  new member is added **/
 	public void notifyNewMemberToSiwimi(Member newMember) {		
 		String subject = "New Siwimi Member is added";
 		String memberInfo = "Name : " + newMember.getFirstName() + " " + newMember.getLastName() + " \n" +
@@ -87,6 +88,7 @@ public class EmailService {
 		addEmail(notifySiwimi);
 	}
 	
+	/** Notify Siwimi :  new question is added **/
 	public void notifyNewQuestionToSiwimi(Question newQuestion) {	
 		// subject and recipient of the emails
 		String subject = "New Siwimi Question is added";
@@ -110,6 +112,7 @@ public class EmailService {
 		addEmail(notifySiwimi);
 	}
 	
+	/** Notify Siwimi :  new feedback is added **/
 	public void notifyNewFeedbackToSiwimi(Feedback newFeedback) {	
 		
 		Member feedbackIssuer = memberRep.findByid(newFeedback.getCreator());	
@@ -145,6 +148,7 @@ public class EmailService {
 		return;
 	}
 	
+	/** Notify question asker **/
 	public void notifyNewQuestionToAsker(Question newQuestion) {
 		Member asker = memberRep.findByid(newQuestion.getCreator());
 		
@@ -170,6 +174,7 @@ public class EmailService {
 		}
 	}
 	
+	/** Notify answer to the replier **/
 	public void notifyNewFeedbackToReplier(Feedback newFeedback) {
 		Member feedbackIssuer = memberRep.findByid(newFeedback.getCreator());
 		
@@ -188,21 +193,6 @@ public class EmailService {
 				// parentType of parent-feedback is null : not allowed
 				return;
 			else if (parentFeedback.getParentType().equals("feedback")) {
-/*				String subject = "Thank you for your feedback!";
-				String body = "Thank you for your suggestions on Siwimi.com. " +
-				              "We take your opinions seriously. " +
-						      "Please give us some time to prioritize our tasks. \n\n " +
-		                      "Best Regards," + "\n " + 
-		                      "The Siwimi Team";	        			
-				List<String> recipent = new ArrayList<String> ();
-				recipent.add(feedbackIssuer.getEmail());
-				Email notifyReplier = new Email();
-				notifyReplier.setSentTo(recipent);
-				notifyReplier.setSubject(subject);
-				notifyReplier.setEmailText(body);
-				notifyReplier.setSentTime(new Date());		
-				sentEmail(notifyReplier);
-				addEmail(notifyReplier);*/
 				return;
 			}
 			else if (parentFeedback.getParentType().equals("question")) {
@@ -243,6 +233,7 @@ public class EmailService {
 		}		
 	}
 	
+	/** Notify answer to the question asker **/
 	public void notifyNewFeedbackToAsker(Feedback newFeedback) {
 		Member feedbackIssuer = memberRep.findByid(newFeedback.getCreator());
 		
@@ -314,4 +305,27 @@ public class EmailService {
 			addEmail(notifyAsker);	
 		}		
 	}		
+	
+	/** Email confirmation to the new member **/
+	public void notifyConfirmationToNewMember(Member newMember) {		
+		String subject = "Siwimi sign-up confirmation is needed";
+		String body = "You've signed up a new a account at siwimi.com.\n\n " +
+		              "Please click on the link below : http://www.siwimi.com/members/" + newMember.getId() +
+		              "?action=confirm to confirm your sign up process.\n " +
+		              "If you didn't sign up, please ignore this email.\n\n " +
+                      "Best Regards," + "\n " + 
+                      "The Siwimi Team";
+		List<String> sentTo = new ArrayList<String>();
+		sentTo.add(newMember.getEmail());	
+
+		
+		Email notifyMember = new Email();
+		notifyMember.setSentTo(sentTo);
+		notifyMember.setSubject(subject);
+		notifyMember.setEmailText(body);
+		notifyMember.setSentTime(new Date());
+		
+		sentEmail(notifyMember);
+		addEmail(notifyMember);
+	}
 }
