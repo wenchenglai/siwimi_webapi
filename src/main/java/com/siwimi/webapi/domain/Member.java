@@ -42,6 +42,10 @@ public class Member {
 	//The default of the below field is set by back end
 	private boolean isDeletedRecord;
 	
+	// need email confirmation from the user,
+	private boolean isConfirmedMember = false;
+	
+
 	public void setId(String id) {
 		this.id = id;
 	}
@@ -261,6 +265,14 @@ public class Member {
 
 	public void setLocation(double[] location) {
 		this.location = location;
+	}
+	
+	public boolean getIsConfirmedMember() {
+		return isConfirmedMember;
+	}
+
+	public void setIsConfirmedMember(boolean isConfirmedMember) {
+		this.isConfirmedMember = isConfirmedMember;
 	}
 	
 	@Override

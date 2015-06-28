@@ -54,7 +54,7 @@ public class ItemController {
 		Set<Member> members = new HashSet<Member>();
 		if (itemList!=null) {
 			for (Item item : itemList) {
-				Member member = memberService.findByMemberId(item.getCreator());
+				Member member = memberService.findByMemberId(item.getCreator(),null);
 				// we must return an empty object so Ember can pick up the json data format.  Return null will crash the ember client.
 				if (member!=null)
 					members.add(member);

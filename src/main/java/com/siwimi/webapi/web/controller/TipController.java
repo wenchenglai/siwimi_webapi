@@ -54,7 +54,7 @@ public class TipController {
 		Set<Member> members = new HashSet<Member>();
 		if (tipList!=null) {
 			for (Tip tip : tipList) {
-				Member member = memberService.findByMemberId(tip.getCreator());
+				Member member = memberService.findByMemberId(tip.getCreator(),null);
 				// we must return an empty object so Ember can pick up the json data format.  Return null will crash the ember client.
 				if (member!=null)
 					members.add(member);

@@ -14,8 +14,8 @@ public class MessageService {
 	@Autowired
 	private MessageRepository repo;
 	
-	public List<Message> find(String fromId, String toId, String fromStatus, String toStatus, String queryText) {
-		List<Message> list = repo.query(fromId, toId, fromStatus, toStatus, queryText);
+	public List<Message> find(String fromId, String toId, String fromStatus, String toStatus, String queryText, String sort) {
+		List<Message> list = repo.query(fromId, toId, fromStatus, toStatus, queryText, sort);
 		
 		return list;
 	}
