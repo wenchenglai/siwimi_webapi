@@ -1,5 +1,6 @@
 package com.siwimi.webapi.domain;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import org.springframework.data.annotation.Id;
@@ -119,7 +120,14 @@ public class Activity {
 	}
 
 	public void setFromDate(Date fromDate) {
-		this.fromDate = fromDate;
+		// Set HH:MM:SS = 00:00:00
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(fromDate);
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+				
+		this.fromDate = cal.getTime();
 	}
 
 	public Date getToDate() {
@@ -127,7 +135,14 @@ public class Activity {
 	}
 
 	public void setToDate(Date toDate) {
-		this.toDate = toDate;
+		// Set HH:MM:SS = 23:59:59
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(toDate);
+		cal.set(Calendar.HOUR_OF_DAY, 23);
+		cal.set(Calendar.MINUTE, 59);
+		cal.set(Calendar.SECOND, 59);
+
+		this.toDate = cal.getTime();
 	}
 
 	public String getImageData() {
