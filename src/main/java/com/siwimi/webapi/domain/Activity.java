@@ -120,14 +120,16 @@ public class Activity {
 	}
 
 	public void setFromDate(Date fromDate) {
-		// Set HH:MM:SS = 00:00:00
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(fromDate);
-		cal.set(Calendar.HOUR_OF_DAY, 0);
-		cal.set(Calendar.MINUTE, 0);
-		cal.set(Calendar.SECOND, 0);
-				
-		this.fromDate = cal.getTime();
+		if (toDate != null) {
+			// Set HH:MM:SS = 00:00:00
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(fromDate);
+			cal.set(Calendar.HOUR_OF_DAY, 0);
+			cal.set(Calendar.MINUTE, 0);
+			cal.set(Calendar.SECOND, 0);
+					
+			this.fromDate = cal.getTime();	
+		}
 	}
 
 	public Date getToDate() {
