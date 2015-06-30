@@ -120,7 +120,7 @@ public class Activity {
 	}
 
 	public void setFromDate(Date fromDate) {
-		if (toDate != null) {
+		if (fromDate != null) {
 			// Set HH:MM:SS = 00:00:00
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(fromDate);
