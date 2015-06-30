@@ -135,14 +135,16 @@ public class Activity {
 	}
 
 	public void setToDate(Date toDate) {
-		// Set HH:MM:SS = 23:59:59
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(toDate);
-		cal.set(Calendar.HOUR_OF_DAY, 23);
-		cal.set(Calendar.MINUTE, 59);
-		cal.set(Calendar.SECOND, 59);
+		if (toDate != null) {
+			// Set HH:MM:SS = 23:59:59
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(toDate);
+			cal.set(Calendar.HOUR_OF_DAY, 23);
+			cal.set(Calendar.MINUTE, 59);
+			cal.set(Calendar.SECOND, 59);
 
-		this.toDate = cal.getTime();
+			this.toDate = cal.getTime();	
+		}
 	}
 
 	public String getImageData() {
