@@ -57,7 +57,7 @@ public class FeedbackController {
 			// populate members
 			String key = feedback.getCreator();
 			if (!members.containsKey(key)) {
-				members.put(key, memberService.findByMemberId(key,null));
+				members.put(key, memberService.findByMemberId(key));
 			}	
 		}
 

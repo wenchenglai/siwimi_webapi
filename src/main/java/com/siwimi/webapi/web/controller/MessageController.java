@@ -47,11 +47,11 @@ public class MessageController {
 			messages = service.find(fromId, toId, fromStatus, toStatus, queryText,sort);
 			
 			if (messages.size() > 0) {
-				Member fromMember = memberService.findByMemberId(messages.get(0).getFrom(),null);
+				Member fromMember = memberService.findByMemberId(messages.get(0).getFrom());
 				members.add(fromMember);
 				for (Message msg:messages) {
 					if (msg.getTo() != null) {
-						Member toMember = memberService.findByMemberId(msg.getTo(),null);
+						Member toMember = memberService.findByMemberId(msg.getTo());
 						members.add(toMember);
 					}
 				}
