@@ -45,6 +45,8 @@ public class Member {
 	// need email confirmation from the user,
 	private boolean isConfirmedMember = false;
 	
+	// need to know if this user is still in the process of signing up
+	private boolean isInSignUpProcess = true;
 
 	public void setId(String id) {
 		this.id = id;
@@ -275,6 +277,15 @@ public class Member {
 		this.isConfirmedMember = isConfirmedMember;
 	}
 	
+	
+	public boolean getIsInSignUpProcess() {
+		return isInSignUpProcess;
+	}
+
+	public void setIsInSignUpProcess(boolean isInSignUpProcess) {
+		this.isInSignUpProcess = isInSignUpProcess;
+	}
+
 	@Override
 	public int hashCode() {
 	    return id.hashCode();

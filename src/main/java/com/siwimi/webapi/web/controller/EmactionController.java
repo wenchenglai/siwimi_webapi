@@ -39,7 +39,7 @@ public class EmactionController {
 		Set<Member> members = new HashSet<Member>();
 		if (emactionList!=null) {
 			for (Emaction emaction : emactionList) {
-				Member member = memberService.findByMemberId(emaction.getMember(),null);
+				Member member = memberService.findByMemberId(emaction.getMember());
 				// we must return an empty object so Ember can pick up the json data format.  Return null will crash the ember client.
 				if (member!=null)
 					members.add(member);

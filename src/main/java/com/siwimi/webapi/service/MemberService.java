@@ -65,22 +65,24 @@ public class MemberService {
 		memberRep.save(member);
 	}
 	
-	public Member findByMemberId(String id, String action) {		
-		Member member = memberRep.findByid(id);
-		if (action != null) {
-			if (action.equals("confirm"))
-				if (member != null) {
-					member.setIsConfirmedMember(true);
-					return updateMember(id,member);
-				}									
-		} 				
-		return member;
+	public Member findByMemberId(String id) {		
+		return memberRep.findByid(id);			
 	}	
 	
 	public List<Member> find(String familyId, String queryText) {
 		return memberRep.query(familyId, queryText);
 	}
 
+	public Member setConfirmedMember(String id, String action) {
+		Member member = memberRep.findByid(id);
+		if (action.equals("confirm"))
+			if (member != null) {
+				member.setIsConfirmedMember(true);
+				return updateMember(id,member);
+			}									
+		return null;
+	}
+	
 	public Member updateLocation(Member member) {
 		// lookup location from the collection Location;
 		Location thisLocation = locationRep.queryLocation(member.getZipCode(), member.getCity(), member.getState());
