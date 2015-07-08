@@ -310,8 +310,8 @@ public class EmailService {
 	public void notifyConfirmationToNewMember(Member newMember) {		
 		String subject = "Siwimi sign-up confirmation is needed";
 		String body = "You've signed up a new a account at siwimi.com.\n\n " +
-		              "Please click on the link below : http://www.siwimi.com/members/" + newMember.getId() +
-		              "?action=confirm to confirm your sign up process.\n " +
+		              "Please click on the link below : http://www.siwimi.com/#/member/browse?id=" + newMember.getId() +
+		              "&action=confirm to confirm your sign up process.\n " +
 		              "If you didn't sign up, please ignore this email.\n\n " +
                       "Best Regards," + "\n " + 
                       "The Siwimi Team";
