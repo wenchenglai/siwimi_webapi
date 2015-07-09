@@ -39,31 +39,15 @@ public class MemberController {
 	/**
 	Scenario #1 : Get member by queryText (firstname or lastname) 
 	OUTPUT      : Must contain { members: [ list of member object] }
-	
-	Or, confirm a newly added member
 	**/
 	@RequestMapping(value = "/members", method = RequestMethod.GET, produces = "application/json")
 	public Map<String, List<Member>> findMembers(
-			@RequestParam(value="queryText", required=false) String queryText,
-			@RequestParam(value="id", required=false) String id,
-            @RequestParam(value="action", required=false) String action) {		
-		
+			@RequestParam(value="queryText", required=false) String queryText) {				
 		Map<String, List<Member>> responseBody = new HashMap<String, List<Member>>();
-		
-		if (action == null) {
-			/** Query Member **/
-			List<Member> members = memberService.find(null,queryText);
-			if (members==null)
-				members = new ArrayList<Member>();
-			responseBody.put("member", members);			
-		} else {
-			/** Confirm new member **/
-			Member member = memberService.setConfirmedMember(id, action);
-			// We have to use List<Member> to meet the output format of Map<String, List<Member>>	
-			List<Member> members = new ArrayList<Member>();
-			members.add(member);
-			responseBody.put("member", members);
-		}
+		List<Member> members = memberService.find(null,queryText);
+		if (members==null)
+			members = new ArrayList<Member>();
+		responseBody.put("member", members);
 		
 		return responseBody;
 	}		
@@ -117,6 +101,17 @@ public class MemberController {
 	public Map<String, Member> findByMemberId(@PathVariable("id") String id) {
 		Member member = memberService.findByMemberId(id);
 		Map<String, Member> responseBody = new HashMap<String, Member>();		
+		responseBody.put("member", member);		
+		return responseBody;
+	}	
+	
+	/** confirm a newly added member **/
+	@RequestMapping(value = "/member", method = RequestMethod.GET, produces = "application/json")
+	public Map<String, Member> confirmMember(
+			@RequestParam(value="id", required=false) String id,
+            @RequestParam(value="action", required=false) String action) {				
+		Map<String, Member> responseBody = new HashMap<String, Member>();
+		Member member = memberService.setConfirmedMember(id, action);
 		responseBody.put("member", member);		
 		return responseBody;
 	}	
