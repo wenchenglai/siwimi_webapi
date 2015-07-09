@@ -39,18 +39,36 @@ public class MemberController {
 	/**
 	Scenario #1 : Get member by queryText (firstname or lastname) 
 	OUTPUT      : Must contain { members: [ list of member object] }
+	
+	Or, confirm a newly added member
 	**/
 	@RequestMapping(value = "/members", method = RequestMethod.GET, produces = "application/json")
 	public Map<String, List<Member>> findMembers(
-			@RequestParam(value="queryText", required=false) String queryText) {				
+			@RequestParam(value="queryText", required=false) String queryText,
+			@RequestParam(value="id", required=false) String id,
+            @RequestParam(value="action", required=false) String action) {		
+		
 		Map<String, List<Member>> responseBody = new HashMap<String, List<Member>>();
-		List<Member> members = memberService.find(null,queryText);
-		if (members==null)
-			members = new ArrayList<Member>();
-		responseBody.put("member", members);
+		
+		if (action == null) {
+			/** Query Member **/
+			List<Member> members = memberService.find(null,queryText);
+			if (members==null)
+				members = new ArrayList<Member>();
+			responseBody.put("member", members);			
+		} else {
+			/** Confirm new member **/
+			if (id != null) {
+				Member member = memberService.setConfirmedMember(id, action);
+				// We have to use List<Member> to meet the output format of Map<String, List<Member>>	
+				List<Member> members = new ArrayList<Member>();
+				members.add(member);
+				responseBody.put("member", members);	
+			}
+		}
 		
 		return responseBody;
-	}		
+	}	
 	
 	/**
 	Scenario #2 : Get member by queryText (firstname or lastname) 
