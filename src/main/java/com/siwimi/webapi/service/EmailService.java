@@ -1,8 +1,14 @@
 package com.siwimi.webapi.service;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -68,15 +74,22 @@ public class EmailService {
 	}
 	
 	/** Notify Siwimi :  new member is added **/
-	public void notifyNewMemberToSiwimi(Member newMember) {		
-		String subject = "New Siwimi Member is added";
-		String memberInfo = "Name : " + newMember.getFirstName() + " " + newMember.getLastName() + " \n" +
-                            "Email : " + newMember.getEmail() + " \n" +
-                            "FacebookId : " + newMember.getFacebookId();
+	public void notifyNewMemberToSiwimi(Member newMember) {	
 		
-		List<String> sentTo = new ArrayList<String>();
-		sentTo.add("walay133@yahoo.com.tw");	
-		sentTo.add("wenchenglai@gmail.com");
+		Properties properties = new Properties();
+		try {
+			properties.load(new FileInputStream("/usr/local/tomcat8/siwimi/notifyNewMemberToSiwimi.properties"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+						
+		String subject = properties.getProperty("subject");		
+		String memberInfo = MessageFormat.format(properties.getProperty("memberInfo"), 
+				                                 newMember.getFirstName(), newMember.getLastName(),
+				                                 newMember.getEmail(),newMember.getFacebookId());
+		List<String> sentTo = Arrays.asList(properties.getProperty("sendTo").toString().split(","));
 		
 		Email notifySiwimi = new Email();
 		notifySiwimi.setSentTo(sentTo);
@@ -90,19 +103,26 @@ public class EmailService {
 	
 	/** Notify Siwimi :  new question is added **/
 	public void notifyNewQuestionToSiwimi(Question newQuestion) {	
+		
+		Properties properties = new Properties();
+		try {
+			properties.load(new FileInputStream("/usr/local/tomcat8/siwimi/notifyNewQuestionToSiwimi.properties"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 		// subject and recipient of the emails
-		String subject = "New Siwimi Question is added";
+		String subject = properties.getProperty("subject");	
 		Member asker = memberRep.findByid(newQuestion.getCreator());
 		
 		// Sent email to Siwimi founders
-		String questionInfo = "Creator : " + asker.getFirstName() + " " + asker.getLastName() + " \n " +
-                              "Creator's email : " + asker.getEmail() + " \n " +
-                              "Creator's facebookId : " + asker.getFacebookId() + " \n " +
-                              "Title : " + newQuestion.getTitle() + " \n " +
-                              "Description : " + newQuestion.getDescription();
-		List<String> sentTo = new ArrayList<String>();
-		sentTo.add("walay133@yahoo.com.tw");	
-		sentTo.add("wenchenglai@gmail.com");
+		String questionInfo = MessageFormat.format(properties.getProperty("questionInfo"), 
+				                                   asker.getFirstName(), asker.getLastName(), asker.getEmail(),asker.getFacebookId(),
+				                                   newQuestion.getTitle(), newQuestion.getDescription());
+		List<String> sentTo = Arrays.asList(properties.getProperty("sendTo").toString().split(","));
+		
 		Email notifySiwimi = new Email();
 		notifySiwimi.setSentTo(sentTo);
 		notifySiwimi.setSubject(subject);
@@ -126,21 +146,30 @@ public class EmailService {
 		if (parentFeedback.getParentType() == null)
 			// parentType of parent-feedback is null : not allowed
 			return;
-		else if (parentFeedback.getParentType().equals("feedback")) {
+		else if (parentFeedback.getParentType().equals("feedback")) {			
+			Properties properties = new Properties();
+			try {
+				properties.load(new FileInputStream("/usr/local/tomcat8/siwimi/notifyNewFeedbackToSiwimi.properties"));
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
 			// subject and recipient of the emails
-			String subject = "New Siwimi Feedback is added";			
+			String subject = properties.getProperty("subject");			
 			// Sent email to Siwimi founders
-			String questionInfo = "Creator : " + feedbackIssuer.getFirstName() + " " + feedbackIssuer.getLastName() + " \n " +
-	                              "Creator's email : " + feedbackIssuer.getEmail() + " \n " +
-	                              "Creator's facebookId : " + feedbackIssuer.getFacebookId() + " \n " +
-	                              "Feedback description : " + newFeedback.getDescription();
-			List<String> sentTo = new ArrayList<String>();
-			sentTo.add("walay133@yahoo.com.tw");	
-			sentTo.add("wenchenglai@gmail.com");
+			String feedbackInfo = MessageFormat.format(properties.getProperty("feedbackInfo"), 
+					                                   feedbackIssuer.getFirstName(), feedbackIssuer.getLastName(),
+					                                   feedbackIssuer.getEmail(), feedbackIssuer.getFacebookId(),
+					                                   newFeedback.getDescription());
+			
+			List<String> sentTo = Arrays.asList(properties.getProperty("sendTo").toString().split(","));
+			
 			Email notifySiwimi = new Email();
 			notifySiwimi.setSentTo(sentTo);
 			notifySiwimi.setSubject(subject);
-			notifySiwimi.setEmailText(questionInfo);
+			notifySiwimi.setEmailText(feedbackInfo);
 			notifySiwimi.setSentTime(new Date());		
 			sentEmail(notifySiwimi);
 			addEmail(notifySiwimi);
@@ -154,14 +183,17 @@ public class EmailService {
 		
 		if (asker.getEmail() != null) {
 			// subject and recipient of the emails
-			String subject = "Your question is added at Siwimi.com";
-			String body = "You've asked a question on Siwimi.com. " +
-		                  "We'll send this question to parents who live in your neighborhood.\n\n " +
-					      "Your question is : \n " +
-                          "Title -- " + newQuestion.getTitle() + "\n " +
-                          "Description -- " + newQuestion.getDescription() + "\n\n\n " + 
-                          "Best Regards," + "\n " + 
-                          "The Siwimi Team";	        			
+			Properties properties = new Properties();
+			try {
+				properties.load(new FileInputStream("/usr/local/tomcat8/siwimi/notifyNewQuestionToAsker.properties"));
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			String subject = properties.getProperty("subject");
+			String body = MessageFormat.format(properties.getProperty("body"),newQuestion.getTitle(),newQuestion.getDescription());	        			
 			List<String> recipent = new ArrayList<String> ();
 			recipent.add(asker.getEmail());
 			Email notifyAsker = new Email();
@@ -211,15 +243,16 @@ public class EmailService {
 			// Sent email to the replier
 			String answer = newFeedback.getDescription();			
 			if ( ((title != null) || (description != null)) && (answer != null) && (!answer.isEmpty())) {
-				String subject = "Thank you for helping others!";
-				String body = "Thank your for your help!  You've replied to a question posted by a local parent. " +
-			                  "We've notified the parent about your reply.\n\n " +
-					          "The question that you answer is :\n " +
-		                      "Title -- " + title + "\n " +
-		                      "Description -- " + description + "\n\n " + 
-		                      "Your answer is :\n" + answer + "\n\n " +
-		                      "Best Regards," + "\n " + 
-		                      "The Siwimi Team";	        			
+				Properties properties = new Properties();
+				try {
+					properties.load(new FileInputStream("/usr/local/tomcat8/siwimi/notifyNewFeedbackToReplier.properties"));
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				String subject = properties.getProperty("subject");
+				String body = MessageFormat.format(properties.getProperty("body"),title,description,answer);	        			
 				List<String> recipent = new ArrayList<String> ();
 				recipent.add(feedbackIssuer.getEmail());
 				Email notifyReplier = new Email();
@@ -253,12 +286,16 @@ public class EmailService {
 			// parentType of parent-feedback is null : not allowed
 			return;
 		else if (parentFeedback.getParentType().equals("feedback")) {
-			String subject = "Thank you for your feedback!";
-			String body = "Thank you for your suggestions on Siwimi.com. " +
-			              "We take your opinions very seriously. " +
-					      "Your valuable feedback will help us to provide better service to you. \n\n " +
-	                      "Best Regards," + "\n " + 
-	                      "The Siwimi Team";	        			
+			Properties properties = new Properties();
+			try {
+				properties.load(new FileInputStream("/usr/local/tomcat8/siwimi/notifyNewFeedbackToAsker.properties"));
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}			
+			String subject = properties.getProperty("subject");
+			String body = properties.getProperty("body");	        			
 			List<String> recipent = new ArrayList<String> ();
 			recipent.add(feedbackIssuer.getEmail());
 			Email notifyReplier = new Email();
@@ -286,14 +323,16 @@ public class EmailService {
 		String answer = newFeedback.getDescription();
 		// Sent email to asker
 		if ((asker.getEmail() != null) && (answer != null) && (!answer.isEmpty())) {
-			String subject = "Someone replies your question on Siwimi.com!";
-			String body = "Someone has answered the question that you've posted on Siwimi.com.\n\n " +
-				          "The question that you ask is :\n " +
-                          "Title -- " + title + "\n " +
-                          "Description -- " + description + "\n\n " + 
-                          "The answer is :\n " + answer + "\n\n " +
-                          "Best Regards," + "\n " + 
-                          "The Siwimi Team";	
+			Properties properties = new Properties();
+			try {
+				properties.load(new FileInputStream("/usr/local/tomcat8/siwimi/notifyNewAnswerToAsker.properties"));
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			String subject = properties.getProperty("subject");
+			String body = MessageFormat.format(properties.getProperty("body"),title,description,answer);	
 			List<String> recipent = new ArrayList<String> ();
 			recipent.add(asker.getEmail());
 			Email notifyAsker = new Email();
@@ -307,17 +346,19 @@ public class EmailService {
 	}		
 	
 	/** Email confirmation to the new member **/
-	public void notifyConfirmationToNewMember(Member newMember) {		
-		String subject = "Siwimi sign-up confirmation is needed";
-		String body = "You've signed up a new a account at siwimi.com.\n\n " +
-		              "Please click on the link below : http://www.siwimi.com/#/member/browse?id=" + newMember.getId() +
-		              "&action=confirm to confirm your sign up process.\n " +
-		              "If you didn't sign up, please ignore this email.\n\n " +
-                      "Best Regards," + "\n " + 
-                      "The Siwimi Team";
+	public void notifyConfirmationToNewMember(Member newMember) {	
+		Properties properties = new Properties();
+		try {
+			properties.load(new FileInputStream("/usr/local/tomcat8/siwimi/notifyConfirmationToNewMember.properties"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		String subject = properties.getProperty("subject");
+		String body = MessageFormat.format(properties.getProperty("body"),newMember.getId());
 		List<String> sentTo = new ArrayList<String>();
 		sentTo.add(newMember.getEmail());	
-
 		
 		Email notifyMember = new Email();
 		notifyMember.setSentTo(sentTo);
