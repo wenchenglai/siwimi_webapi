@@ -1,6 +1,5 @@
 package com.siwimi.webapi.service;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.MessageFormat;
@@ -75,10 +74,10 @@ public class EmailService {
 	
 	/** Notify Siwimi :  new member is added **/
 	public void notifyNewMemberToSiwimi(Member newMember) {	
-		
+		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 		Properties properties = new Properties();
 		try {
-			properties.load(new FileInputStream("/usr/local/tomcat8/siwimi/notifyNewMemberToSiwimi.properties"));
+			properties.load(classLoader.getResourceAsStream("notifyNewMemberToSiwimi.properties"));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -103,10 +102,10 @@ public class EmailService {
 	
 	/** Notify Siwimi :  new question is added **/
 	public void notifyNewQuestionToSiwimi(Question newQuestion) {	
-		
+		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 		Properties properties = new Properties();
 		try {
-			properties.load(new FileInputStream("/usr/local/tomcat8/siwimi/notifyNewQuestionToSiwimi.properties"));
+			properties.load(classLoader.getResourceAsStream("notifyNewQuestionToSiwimi.properties"));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -146,24 +145,23 @@ public class EmailService {
 		if (parentFeedback.getParentType() == null)
 			// parentType of parent-feedback is null : not allowed
 			return;
-		else if (parentFeedback.getParentType().equals("feedback")) {			
+		else if (parentFeedback.getParentType().equals("feedback")) {		
+			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 			Properties properties = new Properties();
 			try {
-				properties.load(new FileInputStream("/usr/local/tomcat8/siwimi/notifyNewFeedbackToSiwimi.properties"));
+				properties.load(classLoader.getResourceAsStream("notifyNewFeedbackToSiwimi.properties"));
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
-			}
-			
+			}			
 			// subject and recipient of the emails
 			String subject = properties.getProperty("subject");			
 			// Sent email to Siwimi founders
 			String feedbackInfo = MessageFormat.format(properties.getProperty("feedbackInfo"), 
 					                                   feedbackIssuer.getFirstName(), feedbackIssuer.getLastName(),
 					                                   feedbackIssuer.getEmail(), feedbackIssuer.getFacebookId(),
-					                                   newFeedback.getDescription());
-			
+					                                   newFeedback.getDescription());			
 			List<String> sentTo = Arrays.asList(properties.getProperty("sendTo").toString().split(","));
 			
 			Email notifySiwimi = new Email();
@@ -182,10 +180,11 @@ public class EmailService {
 		Member asker = memberRep.findByid(newQuestion.getCreator());
 		
 		if (asker.getEmail() != null) {
+			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 			// subject and recipient of the emails
 			Properties properties = new Properties();
 			try {
-				properties.load(new FileInputStream("/usr/local/tomcat8/siwimi/notifyNewQuestionToAsker.properties"));
+				properties.load(classLoader.getResourceAsStream("notifyNewQuestionToAsker.properties"));
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
@@ -243,9 +242,10 @@ public class EmailService {
 			// Sent email to the replier
 			String answer = newFeedback.getDescription();			
 			if ( ((title != null) || (description != null)) && (answer != null) && (!answer.isEmpty())) {
+				ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 				Properties properties = new Properties();
 				try {
-					properties.load(new FileInputStream("/usr/local/tomcat8/siwimi/notifyNewFeedbackToReplier.properties"));
+					properties.load(classLoader.getResourceAsStream("notifyNewFeedbackToReplier.properties"));
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
 				} catch (IOException e) {
@@ -286,9 +286,10 @@ public class EmailService {
 			// parentType of parent-feedback is null : not allowed
 			return;
 		else if (parentFeedback.getParentType().equals("feedback")) {
+			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 			Properties properties = new Properties();
 			try {
-				properties.load(new FileInputStream("/usr/local/tomcat8/siwimi/notifyNewFeedbackToAsker.properties"));
+				properties.load(classLoader.getResourceAsStream("notifyNewFeedbackToAsker.properties"));
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
@@ -323,9 +324,10 @@ public class EmailService {
 		String answer = newFeedback.getDescription();
 		// Sent email to asker
 		if ((asker.getEmail() != null) && (answer != null) && (!answer.isEmpty())) {
+			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 			Properties properties = new Properties();
 			try {
-				properties.load(new FileInputStream("/usr/local/tomcat8/siwimi/notifyNewAnswerToAsker.properties"));
+				properties.load(classLoader.getResourceAsStream("notifyNewAnswerToAsker.properties"));
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
@@ -346,10 +348,11 @@ public class EmailService {
 	}		
 	
 	/** Email confirmation to the new member **/
-	public void notifyConfirmationToNewMember(Member newMember) {	
+	public void notifyConfirmationToNewMember(Member newMember) {
+		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 		Properties properties = new Properties();
 		try {
-			properties.load(new FileInputStream("/usr/local/tomcat8/siwimi/notifyConfirmationToNewMember.properties"));
+			properties.load(classLoader.getResourceAsStream("notifyConfirmationToNewMember.properties"));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
