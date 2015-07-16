@@ -1,43 +1,51 @@
 package com.siwimi.webapi.web.controller;
 
-//@RestController
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.siwimi.webapi.domain.Member;
+import com.siwimi.webapi.exception.ExistingMemberException;
+import com.siwimi.webapi.service.EmailService;
+import com.siwimi.webapi.service.MemberService;
+
+@RestController
 public class EmailController {
-/*	
+	
 	@Autowired
 	private EmailService emailService;
 	
-	// add & send New Email
-	@RequestMapping(value = "/emails/sent", method = RequestMethod.POST, produces = "application/json")
-	public Map<String, Email> sentEmail(@RequestBody EmailSideload newEmail) {
-		Email savedEmail = emailService.addEmail(newEmail.email);
-		Email sentEmail = emailService.sentEmail(savedEmail);	
-		Map<String, Email> responseBody = new HashMap<String, Email>();
-		responseBody.put("email", sentEmail);
-		
-		return responseBody;		
-	}	
-	
+	@Autowired
+	private MemberService memberService;
+
 	// Get Email by ID
-	@RequestMapping(value = "/emails/{id}", method = RequestMethod.GET, produces = "application/json")
-	public Map<String,Email> findByEmailId(@PathVariable("id") String id) {
-		Map<String,Email> responseBody = new HashMap<String,Email>();			
-		Email email = emailService.findByEmailId(id);
-		responseBody.put("email", email);
+	@RequestMapping(value = "/email/sendConfirmation", method = RequestMethod.GET, produces = "application/json")
+	public Map<String, Member> sendConfirmation(@RequestParam(value="id", required=true) String id) {
+		Member member = memberService.findByMemberId(id);
+		Map<String, Member> responseBody = new HashMap<String, Member>();
+		if (member == null)
+			throw new ExistingMemberException("Unable to find this member!");
+		else {
+			responseBody.put("member", member);
+			emailService.notifyConfirmationToNewMember(member);
+		}		
 		return responseBody;
 	}
 		
-	// Update Email
-	@RequestMapping(value = "/emails/{id}", method = RequestMethod.PUT, produces = "application/json")
-	public Map<String, Email> updateEmail(@PathVariable("id") String id, @RequestBody EmailSideload updatedEmail){
-		Email savedEmail = emailService.updateEmail(id, updatedEmail.email);		
-		Map<String,Email> responseBody = new HashMap<String, Email>();
-		responseBody.put("email", savedEmail);
-		return responseBody;			
+	// Exception handler
+	@ExceptionHandler(ExistingMemberException.class)
+	public Map<String, String> handleExistingMemberHandler(ExistingMemberException ex, HttpServletResponse res) {
+		Map<String, String> responseBody = new HashMap<String, String>();
+		responseBody.put("error",ex.getErrMsg());
+		res.setStatus(422);
+		return responseBody;
 	}
-	
-	// Delete Email
-	@RequestMapping (value = "/emails/{id}", method = RequestMethod.DELETE, produces = "application/json")
-	public void deleteEmail(@PathVariable("id")String id) {
-		emailService.deleteEmail(id);
-	}	*/
 }
