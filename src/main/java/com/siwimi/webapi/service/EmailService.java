@@ -134,7 +134,13 @@ public class EmailService {
 	/** Notify Siwimi :  new feedback is added **/
 	public void notifyNewFeedbackToSiwimi(Feedback newFeedback) {	
 		
-		Member feedbackIssuer = memberRep.findByid(newFeedback.getCreator());	
+		Member feedbackIssuer = new Member();
+		if (newFeedback.getCreator() != null)
+			feedbackIssuer = memberRep.findByid(newFeedback.getCreator());
+		else {
+			feedbackIssuer.setEmail(newFeedback.getSenderEmail());
+		}
+				
 		// For child comment : find its parent comment
 		Feedback parentFeedback = new Feedback();
 		if (newFeedback.getParentType() == null)
@@ -207,7 +213,13 @@ public class EmailService {
 	
 	/** Notify answer to the replier **/
 	public void notifyNewFeedbackToReplier(Feedback newFeedback) {
-		Member feedbackIssuer = memberRep.findByid(newFeedback.getCreator());
+		
+		Member feedbackIssuer = new Member();
+		if (newFeedback.getCreator() != null)
+			feedbackIssuer = memberRep.findByid(newFeedback.getCreator());
+		else {
+			feedbackIssuer.setEmail(newFeedback.getSenderEmail());
+		}
 		
 		if (feedbackIssuer.getEmail() != null) {
 			
@@ -224,6 +236,7 @@ public class EmailService {
 				// parentType of parent-feedback is null : not allowed
 				return;
 			else if (parentFeedback.getParentType().equals("feedback")) {
+				// It is impossible to have repliers for "feedback"
 				return;
 			}
 			else if (parentFeedback.getParentType().equals("question")) {
@@ -268,7 +281,13 @@ public class EmailService {
 	
 	/** Notify answer to the question asker **/
 	public void notifyNewFeedbackToAsker(Feedback newFeedback) {
-		Member feedbackIssuer = memberRep.findByid(newFeedback.getCreator());
+		
+		Member feedbackIssuer = new Member();
+		if (newFeedback.getCreator() != null)
+			feedbackIssuer = memberRep.findByid(newFeedback.getCreator());
+		else {
+			feedbackIssuer.setEmail(newFeedback.getSenderEmail());
+		}
 		
 		// For child comment : find its parent comment
 		Feedback parentFeedback = new Feedback();
@@ -310,12 +329,14 @@ public class EmailService {
 		} else if (parentFeedback.getParentType().equals("question")) {
 			// Retrieve title, description, and original asker of Question object
 			Question question = questionRep.findByIdAndIsDeletedRecordIsFalse(parentFeedback.getParent());
+			// Important : question must have a creator
 			asker = memberRep.findByid(question.getCreator());
 			title = question.getTitle();
 			description = question.getDescription();
 		} else if (parentFeedback.getParentType().equals("tip")) {
 			// Retrieve title, description, and original asker of Tip object
 			Tip tip = tipRep.findByIdAndIsDeletedRecordIsFalse(parentFeedback.getParent());
+			// Important : tip must have a creator
 			asker = memberRep.findByid(tip.getCreator());
 			title = tip.getTitle();
 			description = tip.getDescription();

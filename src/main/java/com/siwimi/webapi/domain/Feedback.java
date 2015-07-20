@@ -14,6 +14,7 @@ public class Feedback {
 	private String id;
 	
 	private String creator;
+	private String senderEmail;
 	private String parent;
 	private String parentType;
 	private String description;
@@ -44,6 +45,14 @@ public class Feedback {
 		this.creator = creator;
 	}
 
+	public String getSenderEmail() {
+		return senderEmail;
+	}
+
+	public void setSenderEmail(String senderEmail) {
+		this.senderEmail = senderEmail;
+	}
+	
 	public String getDescription() {
 		return description;
 	}
