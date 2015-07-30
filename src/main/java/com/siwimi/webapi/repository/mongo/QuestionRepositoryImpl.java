@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.geo.Point;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.index.GeospatialIndex;
@@ -52,7 +53,10 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
 		}
 		
 		Criteria c = new Criteria().andOperator(criterias.toArray(new Criteria[criterias.size()]));
-		return mongoTemplate.find(new Query(c), Question.class, "Question");
+		Query q = new Query(c);
+		q = q.with(new Sort(Sort.DEFAULT_DIRECTION.DESC,"createdDate"));
+		
+		return mongoTemplate.find(q, Question.class, "Question");
 	}
 		
 	@Override
