@@ -55,6 +55,7 @@ public class FeedService {
 		if ((activities != null) && (!activities.isEmpty())) {
 			for (Activity activity : activities.subList(0, activities.size()<5 ? activities.size() : 5)) {
 				Feed feed = new Feed();
+				feed.setId(activity.getId());
 				feed.setcId(activity.getId());
 				feed.setType("activity");
 				feed.setCreator(activity.getCreator());
@@ -70,6 +71,7 @@ public class FeedService {
 		if ((questions != null) && (!questions.isEmpty())) { 
 			for (Question question : questions.subList(0, questions.size()<5 ? questions.size() : 5)) {
 				Feed feed = new Feed();
+				feed.setId(question.getId());
 				feed.setcId(question.getId());
 				feed.setType("question");
 				feed.setCreator(question.getCreator());
@@ -85,6 +87,7 @@ public class FeedService {
 		if ((tips != null) && (!tips.isEmpty())) { 
 			for (Tip tip : tips.subList(0, tips.size()<5 ? tips.size() : 5)) {
 				Feed feed = new Feed();
+				feed.setId(tip.getId());
 				feed.setcId(tip.getId());
 				feed.setType("tip");
 				feed.setCreator(tip.getCreator());
@@ -100,6 +103,7 @@ public class FeedService {
 		if ((items != null) && (!items.isEmpty())) { 
 			for (Item item : items.subList(0, items.size()<5 ? items.size() : 5)) {
 				Feed feed = new Feed();
+				feed.setId(item.getId());
 				feed.setcId(item.getId());
 				feed.setType("item");
 				feed.setCreator(item.getCreator());
