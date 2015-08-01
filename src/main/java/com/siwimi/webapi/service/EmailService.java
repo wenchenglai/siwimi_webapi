@@ -250,7 +250,9 @@ public class EmailService {
 				Tip tip = tipRep.findByIdAndIsDeletedRecordIsFalse(parentFeedback.getParent());
 				title = tip.getTitle();
 				description = tip.getDescription();
-			}				
+			} else
+				// No need to send emails for activity and item
+				return;
 						
 			// Sent email to the replier
 			String answer = newFeedback.getDescription();			
@@ -340,7 +342,9 @@ public class EmailService {
 			asker = memberRep.findByid(tip.getCreator());
 			title = tip.getTitle();
 			description = tip.getDescription();
-		}
+		} else
+			// No need to send emails for activity and item
+			return;
 		
 		String answer = newFeedback.getDescription();
 		// Sent email to asker

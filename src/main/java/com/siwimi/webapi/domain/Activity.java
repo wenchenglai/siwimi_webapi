@@ -39,6 +39,7 @@ public class Activity {
 	private Date createdDate;
 	
 	// User comments
+	@Transient
 	private List<String> replies = new ArrayList<String>();	
 	
 	//This field is only for front-end purpose

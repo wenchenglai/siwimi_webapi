@@ -1,6 +1,8 @@
 package com.siwimi.webapi.domain;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
@@ -39,6 +41,10 @@ public class Item {
 	private double[] location;
 	
 	private Boolean isDeletedRecord; 
+	
+	// This field is only for front-end purpose : User comments
+	@Transient
+	private List<String> replies = new ArrayList<String>();	
 	
 	@Transient
 	private boolean isFavorite = false;
@@ -260,6 +266,14 @@ public class Item {
 		this.queryCount = queryCount;
 	}
 
+	public List<String> getReplies() {
+		return replies;
+	}
+
+	public void setReplies(List<String> Replies) {
+		this.replies = Replies;
+	}
+	
 	@Override
 	public int hashCode() {
 	    return id.hashCode();

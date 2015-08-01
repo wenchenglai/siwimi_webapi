@@ -26,6 +26,7 @@ public class Question {
 	private String zipCode;
 	private double[] location;
 	
+	// This field is only for front-end purpose : User comments
 	@Transient
 	private List<String> replies = new ArrayList<String>();	
 	

@@ -37,9 +37,7 @@ public class FeedbackRepositoryImpl implements FeedbackRepositoryCustom{
 		
 		if (parentType != null) {
 			criterias.add(new Criteria().where("parentType").is(parentType));
-		} else {
-			criterias.add(new Criteria().where("parentType").is(null));
-		}
+		} 
 		
 		if (queryText != null) {
 			criterias.add(new Criteria().where("description").regex(queryText.trim(), "i"));

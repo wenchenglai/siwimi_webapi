@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.siwimi.webapi.domain.Feedback;
 import com.siwimi.webapi.domain.Member;
 import com.siwimi.webapi.domain.Tip;
+import com.siwimi.webapi.service.FeedbackService;
 import com.siwimi.webapi.service.MemberService;
 import com.siwimi.webapi.service.TipService;
 import com.siwimi.webapi.web.dto.PreviewWebPage;
@@ -31,6 +33,9 @@ public class TipController {
 	
 	@Autowired
 	private MemberService memberService;
+	
+	@Autowired
+	private FeedbackService feedbackService;
 	
 	// Get tips by type
 	@RequestMapping(value = "/tips", method = RequestMethod.GET, produces = "application/json")
@@ -58,6 +63,15 @@ public class TipController {
 				// we must return an empty object so Ember can pick up the json data format.  Return null will crash the ember client.
 				if (member!=null)
 					members.add(member);
+				// Populate replies
+				List<Feedback> feedbacks = feedbackService.find(null, tip.getId(), "tip", null);
+				if ((feedbacks!=null) && (!feedbacks.isEmpty())) {
+					for (Feedback feedback : feedbacks) {
+						List<String> replies = tip.getReplies();
+						replies.add(feedback.getId());
+						tip.setReplies(replies);
+					}
+				}
 			}
 		} else {
 			// we must return an empty array so Ember can pick up the json data format.  Return null will crash the ember client.

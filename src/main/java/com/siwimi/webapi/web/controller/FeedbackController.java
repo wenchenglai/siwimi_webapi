@@ -40,8 +40,7 @@ public class FeedbackController {
 	public FeedbackSideloadList find(
 			@RequestParam(value="creator", required=false) String creatorId,
 			@RequestParam(value="parent", required=false) String parentId,	
-			// It is necessary to specify parentType. If parentType = null, it means it is the sub-reply of a reply 
-			@RequestParam(value="parentType", required=true) String parentType,				
+			@RequestParam(value="parentType", required=false) String parentType,				
 			@RequestParam(value="queryText", required=false) String queryText) {
 		
 		FeedbackSideloadList responseBody = new FeedbackSideloadList();
@@ -53,7 +52,6 @@ public class FeedbackController {
 		Set <Feedback> feedbacks = new HashSet<Feedback>();
 		Map <String,Member> members = new HashMap<String,Member>();		
 		for (Feedback feedback : queryFeedbacks) {	
-
 			feedbacks.add(feedback);
 			// populate members
 			String key = feedback.getCreator();

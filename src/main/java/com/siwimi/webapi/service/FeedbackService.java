@@ -31,10 +31,12 @@ public class FeedbackService {
 
 		// Retrieve the sub-replies from feedbacks. Please note that we don't add view counts to the sub-replies
 		if ((feedbacks != null) && (!feedbacks.isEmpty()) && (parentType != null)) {
+			// Retrieve id of feedbacks
 			List<String> feedbacksId = new ArrayList<String>();
 			for (Feedback feedback : feedbacks) {
 				feedbacksId.add(feedback.getId());
 			}
+			// populate feedbacks with sub-replies
 			List<Feedback> subReplies = new ArrayList<Feedback>();
 			for (String subReplyId : feedbacksId) {
 				subReplies.addAll(feedbackRep.query(null, subReplyId, null, null)); 
