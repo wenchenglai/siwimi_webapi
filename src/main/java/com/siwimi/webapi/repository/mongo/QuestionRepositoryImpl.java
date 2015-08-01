@@ -2,7 +2,6 @@ package com.siwimi.webapi.repository.mongo;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -36,8 +35,7 @@ public class QuestionRepositoryImpl implements QuestionRepositoryCustom {
 		
 		if (queryText != null) {
 			criterias.add(new Criteria().orOperator(Criteria.where("title").regex(queryText.trim(), "i"),
-					                                Criteria.where("description").regex(queryText.trim(), "i"),
-                                                    Criteria.where("answers").in(Pattern.compile("(?)"+queryText.trim()))));
+					                                Criteria.where("description").regex(queryText.trim(), "i")));
 		}
 		
 		if ((longitude != null) && (latitude != null) && (qsDistance!= null)) {

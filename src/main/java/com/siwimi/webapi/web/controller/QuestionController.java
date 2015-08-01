@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.siwimi.webapi.domain.Feedback;
 import com.siwimi.webapi.domain.Member;
 import com.siwimi.webapi.domain.Question;
 import com.siwimi.webapi.service.EmailService;
+import com.siwimi.webapi.service.FeedbackService;
 import com.siwimi.webapi.service.MemberService;
 import com.siwimi.webapi.service.QuestionService;
 import com.siwimi.webapi.web.dto.QuestionSideload;
@@ -35,6 +37,9 @@ public class QuestionController {
 	@Autowired
 	private EmailService emailService;
 	
+	@Autowired
+	private FeedbackService feedbackService;
+	
 	// Get all questions
 	@RequestMapping(value = "/questions", method = RequestMethod.GET, produces = "application/json")
 	public QuestionSideloadList findQuestions(
@@ -47,12 +52,21 @@ public class QuestionController {
 		QuestionSideloadList responseBody = new QuestionSideloadList();
 		List<Question> questionList = questionService.findQuestions(creatorId,requesterId,longitude,latitude,qsDistance,queryText);
 		Set<Member> members = new HashSet<Member>();
-		if (questionList!=null) {
+		if ((questionList!=null) && (!questionList.isEmpty())) {
 			for (Question question : questionList) {
 				Member member = memberService.findByMemberId(question.getCreator());
 				// we must return an empty object so Ember can pick up the json data format.  Return null will crash the ember client.
 				if (member!=null)
 					members.add(member);
+				// Populate replies
+				List<Feedback> feedbacks = feedbackService.find(null, question.getId(), "question", null);
+				if ((feedbacks!=null) && (!feedbacks.isEmpty())) {
+					for (Feedback feedback : feedbacks) {
+						List<String> replies = question.getReplies();
+						replies.add(feedback.getId());
+						question.setReplies(replies);
+					}
+				}				
 			}
 		} else {
 			// we must return an empty array so Ember can pick up the json data format.  Return null will crash the ember client.

@@ -33,21 +33,20 @@ public class ItemService {
 								String sortBy) {					
 		List<Item> itemList = itemRep.queryItem(creatorId,status,type,condition,
 											    longitude,latitude,qsDistance,queryText,
-                                                page,per_page,sortBy);
-		
-		// increment viewcount by 1, and save it to MongoDB
-		for (int i=0; i<itemList.size(); i++) {
-			Item item = itemList.get(i);
-			// Populate isFavorite
-			if (favoriteRep.queryFavorite(requesterId, item.getId(), "item") != null) {
-				item.setIsFavorite(true);
-			}
-			itemList.set(i, item);
+                                                page,per_page,sortBy);		
+		if ((itemList != null) && (!itemList.isEmpty())) {
 			// increment viewcount by 1, and save it to MongoDB
-			item.setViewCount(item.getViewCount()+1);
-			itemRep.saveItem(item);
-		}
-		
+			for (int i=0; i<itemList.size(); i++) {
+				Item item = itemList.get(i);
+				// Populate isFavorite
+				if (favoriteRep.queryFavorite(requesterId, item.getId(), "item") != null) {
+					item.setIsFavorite(true);
+				}
+				// increment viewcount by 1, and save it to MongoDB
+				item.setViewCount(item.getViewCount()+1);
+				itemRep.saveItem(item);
+			}
+		}		
 		return itemList;
 	}
 	

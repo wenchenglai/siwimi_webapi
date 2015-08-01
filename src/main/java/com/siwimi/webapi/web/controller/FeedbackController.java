@@ -40,7 +40,8 @@ public class FeedbackController {
 	public FeedbackSideloadList find(
 			@RequestParam(value="creator", required=false) String creatorId,
 			@RequestParam(value="parent", required=false) String parentId,	
-			@RequestParam(value="parentType", required=false) String parentType,				
+			// It is necessary to specify parentType. If parentType = null, it means it is the sub-reply of a reply 
+			@RequestParam(value="parentType", required=true) String parentType,				
 			@RequestParam(value="queryText", required=false) String queryText) {
 		
 		FeedbackSideloadList responseBody = new FeedbackSideloadList();
@@ -77,6 +78,7 @@ public class FeedbackController {
 	}
 	
 	// Add New
+	/** Important : If this feedback is sub-reply, DO NOT specify parenType in JSON !!! **/
 	@RequestMapping(value = "/feedbacks", method = RequestMethod.POST, produces = "application/json")
 	public Map<String, Feedback> add(@RequestBody FeedbackSideload newObj){
 		Feedback savedObj = feedbackService.add(newObj.feedback);			

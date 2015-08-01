@@ -27,21 +27,20 @@ public class QuestionService {
 			 							String requesterId, 
 			                            Double longitude, Double latitude, String qsDistance, 
 			                            String queryText) {
-		List<Question> questionList = questionRep.queryQuestion(creatorId, longitude,latitude,qsDistance,queryText);
-		
-		// increment viewcount by 1, and save it to MongoDB
-		for (int i=0; i<questionList.size();i++) {
-			Question question = questionList.get(i);
-			// Populate isFavorite
-			if (favoriteRep.queryFavorite(requesterId, question.getId(), "question") != null) {
-				question.setIsFavorite(true);
-			}
-			questionList.set(i, question);
+		List<Question> questionList = questionRep.queryQuestion(creatorId, longitude,latitude,qsDistance,queryText);		
+		if ((questionList != null) && (!questionList.isEmpty())) {
 			// increment viewcount by 1, and save it to MongoDB
-			question.setViewCount(question.getViewCount()+1);
-			questionRep.saveQuestion(question);
-		}
-		
+			for (int i=0; i<questionList.size();i++) {
+				Question question = questionList.get(i);
+				// Populate isFavorite
+				if (favoriteRep.queryFavorite(requesterId, question.getId(), "question") != null) {
+					question.setIsFavorite(true);
+				}
+				// increment viewcount by 1, and save it to MongoDB
+				question.setViewCount(question.getViewCount()+1);
+				questionRep.saveQuestion(question);
+			}
+		}		
 		return questionList;
 	}
 	

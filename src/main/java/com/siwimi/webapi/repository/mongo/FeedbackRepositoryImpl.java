@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -36,14 +37,19 @@ public class FeedbackRepositoryImpl implements FeedbackRepositoryCustom{
 		
 		if (parentType != null) {
 			criterias.add(new Criteria().where("parentType").is(parentType));
+		} else {
+			criterias.add(new Criteria().where("parentType").is(null));
 		}
 		
 		if (queryText != null) {
 			criterias.add(new Criteria().where("description").regex(queryText.trim(), "i"));
 		}	
-		
+			
 		Criteria c = new Criteria().andOperator(criterias.toArray(new Criteria[criterias.size()]));
-		return mongoTemplate.find(new Query(c), Feedback.class, "Feedback");
+		Query q = new Query(c);
+		q = q.with(new Sort(Sort.DEFAULT_DIRECTION.ASC,"createdDate"));
+		
+		return mongoTemplate.find(q, Feedback.class, "Feedback");
 	}		
 }
 

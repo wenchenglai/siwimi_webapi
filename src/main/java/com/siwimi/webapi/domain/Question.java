@@ -19,14 +19,15 @@ public class Question {
 	private String description;
 	private Date createdDate;
 	private boolean isSolved;
-	private List<String> answers = new ArrayList<String>();	
 	private String status = "Open"; // Open, Closed
 	private int viewCount;
-	
 	private String city;
 	private String state;
 	private String zipCode;
 	private double[] location;
+	
+	@Transient
+	private List<String> replies = new ArrayList<String>();	
 	
 	@Transient
 	private int voteUp = 0;
@@ -109,15 +110,15 @@ public class Question {
 		this.isSolved = isSolved;
 	}	
 
-	public List<String> getAnswers() {
-		return answers;
+	public List<String> getReplies() {
+		return replies;
 	}
 
-	public void setAnswers(List<String> answers) {
-		this.answers = answers;
+	public void setReplies(List<String> Replies) {
+		this.replies = Replies;
 		//This is only for front-end only
-		if (this.answers.size()>0)
-			this.status = "Answered";
+		if (this.replies.size()>0)
+			this.status = "Replied";
 		else
 			this.status = "Open";
 	}

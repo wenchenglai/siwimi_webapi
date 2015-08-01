@@ -41,11 +41,13 @@ public class FeedController {
 			List<Feed> feedList = feedService.findFeeds(requesterId,longitude,latitude);
 			
 			Set<Member> members = new HashSet<Member>();
-			if (feedList!=null) {
+			if (feedList!=null) {			
+				for (Feed feed : feedList) {
+				Member member = memberService.findByMemberId(feed.getCreator());
 				// we must return an empty object so Ember can pick up the json data format.  Return null will crash the ember client.
-				Member member = memberService.findByMemberId(requesterId);
-					if (member!=null)
-						members.add(member);
+				if (member!=null)
+					members.add(member);
+				}
 			} else {
 				// we must return an empty array so Ember can pick up the json data format.  Return null will crash the ember client.
 				feedList = new ArrayList<Feed>();
