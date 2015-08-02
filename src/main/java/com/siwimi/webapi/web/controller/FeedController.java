@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.siwimi.webapi.domain.Feed;
+import com.siwimi.webapi.domain.Feedback;
 import com.siwimi.webapi.domain.Member;
 import com.siwimi.webapi.service.FeedService;
+import com.siwimi.webapi.service.FeedbackService;
 import com.siwimi.webapi.service.MemberService;
 import com.siwimi.webapi.web.dto.FeedSideload;
 import com.siwimi.webapi.web.dto.FeedSideloadList;
@@ -31,28 +33,37 @@ public class FeedController {
 	@Autowired
 	private MemberService memberService;
 	
+	@Autowired
+	private FeedbackService feedbackService;
+	
 	// Get feeds by criteria
-		@RequestMapping(value = "/feeds", method = RequestMethod.GET, produces = "application/json")
-		public FeedSideloadList findFeeds(
-				@RequestParam(value="requester", required=false) String requesterId,
-				@RequestParam(value="longitude", required=false) Double longitude,
-				@RequestParam(value="latitude", required=false) Double latitude) {
+	@RequestMapping(value = "/feeds", method = RequestMethod.GET, produces = "application/json")
+	public FeedSideloadList findFeeds(
+			@RequestParam(value="requester", required=false) String requesterId,
+			@RequestParam(value="longitude", required=false) Double longitude,
+			@RequestParam(value="latitude", required=false) Double latitude) {
 			FeedSideloadList responseBody = new FeedSideloadList();
-			List<Feed> feedList = feedService.findFeeds(requesterId,longitude,latitude);
-			
+			List<Feed> feedList = feedService.findFeeds(requesterId,longitude,latitude);			
 			Set<Member> members = new HashSet<Member>();
-			if (feedList!=null) {
-				// we must return an empty object so Ember can pick up the json data format.  Return null will crash the ember client.
-				Member member = memberService.findByMemberId(requesterId);
+			List<Feedback> feedbackList = new ArrayList<Feedback>();
+			if ((feedList!=null) && (!feedList.isEmpty())) {			
+				for (Feed feed : feedList) {
+					// populate members
+					Member member = memberService.findByMemberId(feed.getCreator());
 					if (member!=null)
 						members.add(member);
+					// populate feedbacks
+					List<Feedback> feedbacks = feedbackService.find(null, feed.getcId(), feed.getType(), null);
+					feedbackList.addAll(feedbacks);
+				}
 			} else {
 				// we must return an empty array so Ember can pick up the json data format.  Return null will crash the ember client.
 				feedList = new ArrayList<Feed>();
 			}
 			responseBody.feeds = feedList;
 			responseBody.members = new ArrayList<Member>(members);
-
+			responseBody.feedbacks = feedbackList;
+			
 			return responseBody;
 		}
 		

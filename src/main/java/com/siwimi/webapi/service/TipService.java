@@ -33,23 +33,22 @@ public class TipService {
 			                  String queryText,
 							  Integer page,
 							  Integer per_page,
-							  String sortBy) {
-		
+							  String sortBy) {		
 		List<Tip> tipList = tipRep.queryTip(creatorId, status, type, 
 											longitude, latitude, qsDistance, queryText,
                                             page,per_page,sortBy);
-		
-		for (int i=0; i<tipList.size(); i++) {
-			Tip tip = tipList.get(i);
-			// Populate isFavorite
-			if (favoriteRep.queryFavorite(requesterId, tip.getId(), "tip") != null) {
-				tip.setIsFavorite(true);
-			}
-			tipList.set(i, tip);
-			// increment viewcount by 1, and save it to MongoDB
-			tip.setViewCount(tip.getViewCount()+1);
-			tipRep.saveTip(tip);
-		}		
+		if ((tipList != null) && (!tipList.isEmpty())) {
+			for (int i=0; i<tipList.size(); i++) {
+				Tip tip = tipList.get(i);
+				// Populate isFavorite
+				if (favoriteRep.queryFavorite(requesterId, tip.getId(), "tip") != null) {
+					tip.setIsFavorite(true);
+				}
+				// increment viewcount by 1, and save it to MongoDB
+				tip.setViewCount(tip.getViewCount()+1);
+				tipRep.saveTip(tip);
+			}	
+		}	
 		return tipList;
 	}
 	

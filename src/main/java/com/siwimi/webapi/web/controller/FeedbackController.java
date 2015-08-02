@@ -52,7 +52,6 @@ public class FeedbackController {
 		Set <Feedback> feedbacks = new HashSet<Feedback>();
 		Map <String,Member> members = new HashMap<String,Member>();		
 		for (Feedback feedback : queryFeedbacks) {	
-
 			feedbacks.add(feedback);
 			// populate members
 			String key = feedback.getCreator();
@@ -77,6 +76,7 @@ public class FeedbackController {
 	}
 	
 	// Add New
+	/** Important : If this feedback is sub-reply, DO NOT specify parenType in JSON !!! **/
 	@RequestMapping(value = "/feedbacks", method = RequestMethod.POST, produces = "application/json")
 	public Map<String, Feedback> add(@RequestBody FeedbackSideload newObj){
 		Feedback savedObj = feedbackService.add(newObj.feedback);			

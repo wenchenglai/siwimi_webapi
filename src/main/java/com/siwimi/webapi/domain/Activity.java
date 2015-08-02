@@ -1,7 +1,9 @@
 package com.siwimi.webapi.domain;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
@@ -35,6 +37,10 @@ public class Activity {
 	private int toAge;
 	private float price;	
 	private Date createdDate;
+	
+	// User comments
+	@Transient
+	private List<String> replies = new ArrayList<String>();	
 	
 	//This field is only for front-end purpose
 	@Transient
@@ -298,6 +304,14 @@ public class Activity {
 		this.queryCount = queryCount;
 	}
 
+	public List<String> getReplies() {
+		return replies;
+	}
+
+	public void setReplies(List<String> Replies) {
+		this.replies = Replies;
+	}
+	
 	@Override
 	public int hashCode() {
 	    return id.hashCode();

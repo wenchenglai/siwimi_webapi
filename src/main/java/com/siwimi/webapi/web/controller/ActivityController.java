@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.siwimi.webapi.domain.Activity;
+import com.siwimi.webapi.domain.Feedback;
 import com.siwimi.webapi.domain.Member;
 import com.siwimi.webapi.service.ActivityService;
+import com.siwimi.webapi.service.FeedbackService;
 import com.siwimi.webapi.service.MemberService;
 import com.siwimi.webapi.web.dto.ActivitySideload;
 import com.siwimi.webapi.web.dto.ActivitySideloadList;
@@ -31,6 +33,9 @@ public class ActivityController {
 	@Autowired
 	private MemberService memberService;
 
+	@Autowired
+	private FeedbackService feedbackService;
+	
 	// Get activities by criteria
 	@RequestMapping(value = "/activities", method = RequestMethod.GET, produces = "application/json")
 	public ActivitySideloadList findActivities(
@@ -59,6 +64,15 @@ public class ActivityController {
 				// we must return an empty object so Ember can pick up the json data format.  Return null will crash the ember client.
 				if (member!=null)
 					members.add(member);
+				// Populate replies
+				List<Feedback> feedbacks = feedbackService.find(null, activity.getId(), "activity", null);
+				if ((feedbacks!=null) && (!feedbacks.isEmpty())) {
+					for (Feedback feedback : feedbacks) {
+						List<String> replies = activity.getReplies();
+						replies.add(feedback.getId());
+						activity.setReplies(replies);
+					}
+				}				
 			}
 		} else {
 			// we must return an empty array so Ember can pick up the json data format.  Return null will crash the ember client.
