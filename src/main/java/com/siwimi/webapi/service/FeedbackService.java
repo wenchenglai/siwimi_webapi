@@ -20,15 +20,6 @@ public class FeedbackService {
 	public List<Feedback> find(String creator, String parentId, String parentType, String queryText) {
 		List<Feedback> feedbacks = feedbackRep.query(creator, parentId, parentType, queryText);
 		
-		// increment viewcount by 1, and save it to MongoDB
-		if ((feedbacks != null) && (!feedbacks.isEmpty())) {
-			for (int i=0; i<feedbacks.size(); i++) {
-				Feedback feedback = feedbacks.get(i);
-				feedback.setViewCount(feedback.getViewCount()+1);
-				feedbackRep.save(feedback);
-			}
-		}
-
 		// Retrieve the sub-replies from feedbacks. Please note that we don't add view counts to the sub-replies
 		if ((feedbacks != null) && (!feedbacks.isEmpty()) && (parentType != null)) {
 			// Retrieve id of feedbacks
@@ -53,7 +44,6 @@ public class FeedbackService {
 	
 	public Feedback add(Feedback newObj) {
 		newObj.setIsDeletedRecord(false);
-		newObj.setViewCount(0);
 		newObj.setLikeCount(0);
 		Feedback saveObj = feedbackRep.save(newObj);
 		

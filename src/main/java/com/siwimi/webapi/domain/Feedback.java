@@ -20,7 +20,7 @@ public class Feedback {
 	private String description;
 	private Date createdDate;
 	private int likeCount;
-	private int viewCount;
+	//Feedback does not need "view counts".
 	private String city;
 	private String state;	
 	private String zipCode;
@@ -75,14 +75,6 @@ public class Feedback {
 
 	public void setIsDeletedRecord(Boolean isDeletedRecord) {
 		this.isDeletedRecord = isDeletedRecord;
-	}
-
-	public int getViewCount() {
-		return viewCount;
-	}
-
-	public void setViewCount(int viewCount) {
-		this.viewCount = viewCount;
 	}
 
 	public String getParent() {

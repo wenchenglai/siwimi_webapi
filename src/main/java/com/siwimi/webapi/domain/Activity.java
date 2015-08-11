@@ -127,11 +127,11 @@ public class Activity {
 
 	public void setFromDate(Date fromDate) {
 		if (fromDate != null) {
-			// Set HH:MM:SS = 00:00:00
+			// Set HH:MM:SS = 03:15:00
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(fromDate);
-			cal.set(Calendar.HOUR_OF_DAY, 0);
-			cal.set(Calendar.MINUTE, 0);
+			cal.set(Calendar.HOUR_OF_DAY, 3);
+			cal.set(Calendar.MINUTE, 15);
 			cal.set(Calendar.SECOND, 0);
 					
 			this.fromDate = cal.getTime();	
@@ -144,11 +144,11 @@ public class Activity {
 
 	public void setToDate(Date toDate) {
 		if (toDate != null) {
-			// Set HH:MM:SS = 23:59:59
+			// Set HH:MM:SS = 21:45:59
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(toDate);
-			cal.set(Calendar.HOUR_OF_DAY, 23);
-			cal.set(Calendar.MINUTE, 59);
+			cal.set(Calendar.HOUR_OF_DAY, 21);
+			cal.set(Calendar.MINUTE, 45);
 			cal.set(Calendar.SECOND, 59);
 
 			this.toDate = cal.getTime();	
