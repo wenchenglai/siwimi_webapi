@@ -144,10 +144,10 @@ public class Activity {
 
 	public void setToDate(Date toDate) {
 		if (toDate != null) {
-			// Set HH:MM:SS = 21:45:59
+			// Set HH:MM:SS = 20:45:59
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(toDate);
-			cal.set(Calendar.HOUR_OF_DAY, 21);
+			cal.set(Calendar.HOUR_OF_DAY, 20);
 			cal.set(Calendar.MINUTE, 45);
 			cal.set(Calendar.SECOND, 59);
 
