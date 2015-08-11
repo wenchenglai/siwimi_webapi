@@ -1,7 +1,6 @@
 package com.siwimi.webapi.domain;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -126,7 +125,7 @@ public class Activity {
 	}
 
 	public void setFromDate(Date fromDate) {
-		if (fromDate != null) {
+/*		if (fromDate != null) {
 			// Set HH:MM:SS = 03:15:00
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(fromDate);
@@ -135,7 +134,8 @@ public class Activity {
 			cal.set(Calendar.SECOND, 0);
 					
 			this.fromDate = cal.getTime();	
-		}
+		}*/
+		this.fromDate = fromDate;
 	}
 
 	public Date getToDate() {
@@ -143,7 +143,7 @@ public class Activity {
 	}
 
 	public void setToDate(Date toDate) {
-		if (toDate != null) {
+/*		if (toDate != null) {
 			// Set HH:MM:SS = 20:45:59
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(toDate);
@@ -152,7 +152,8 @@ public class Activity {
 			cal.set(Calendar.SECOND, 59);
 
 			this.toDate = cal.getTime();	
-		}
+		}*/
+		this.toDate = toDate;
 	}
 
 	public String getImageData() {
