@@ -1,8 +1,11 @@
 package com.siwimi.webapi.domain;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection="Feed")
@@ -17,6 +20,10 @@ public class Feed {
 	private String title;
 	private String description;
 	private Date createdDate;
+	
+	// This field is only for front-end purpose : User comments
+	@Transient
+	private List<String> replies = new ArrayList<String>();	
 	
 	//The default of the below field is set by backend
 	private Boolean isDeletedRecord;
@@ -76,6 +83,14 @@ public class Feed {
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
 	}	
+	
+	public List<String> getReplies() {
+		return replies;
+	}
+
+	public void setReplies(List<String> Replies) {
+		this.replies = Replies;
+	}
 	
 	public Boolean getIsDeletedRecord() {
 		return isDeletedRecord;

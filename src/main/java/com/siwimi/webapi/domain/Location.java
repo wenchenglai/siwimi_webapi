@@ -1,6 +1,7 @@
 package com.siwimi.webapi.domain;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -21,6 +22,13 @@ public class Location {
 	
 	private double longitude;
 	private double latitude;
+	
+	private String timeZone;
+	private String dst;
+	
+	// This field is only for front-end purpose : User comments
+	@Transient
+	private Boolean dayLightSaving;
 	
 	public String getId() {
 		return id;
@@ -73,6 +81,42 @@ public class Location {
 		return zipCode;
 	}
 	
+	@JsonIgnore
+	public String getTimeZone() {
+		return timeZone;
+	}
+
+	@JsonIgnore
+	public void setTimeZone(String timeZone) {
+		this.timeZone = timeZone;
+	}
+
+	@JsonIgnore
+	public String getDst() {
+		return dst;
+	}
+
+	@JsonIgnore
+	public void setDst(String dst) {
+		this.dst = dst;
+	}
+
+	@JsonIgnore
+	public Boolean getDayLightSaving() {
+		if (this.dst.equals("1"))
+			return true;
+		else
+			return false;
+	}
+
+	@JsonIgnore
+	public void setDayLightSaving(Boolean dayLightSaving) {
+		if (this.dst.equals("1"))
+			this.dayLightSaving = true;
+		else
+			this.dayLightSaving = false;
+	}
+
 	@Override
 	public int hashCode() {
 		if (township == null)

@@ -8,11 +8,13 @@ import org.springframework.stereotype.Service;
 
 import com.siwimi.webapi.domain.Activity;
 import com.siwimi.webapi.domain.Feed;
+import com.siwimi.webapi.domain.Feedback;
 import com.siwimi.webapi.domain.Item;
 import com.siwimi.webapi.domain.Question;
 import com.siwimi.webapi.domain.Tip;
 import com.siwimi.webapi.repository.ActivityRepository;
 import com.siwimi.webapi.repository.FeedRepository;
+import com.siwimi.webapi.repository.FeedbackRepository;
 import com.siwimi.webapi.repository.ItemRepository;
 import com.siwimi.webapi.repository.QuestionRepository;
 import com.siwimi.webapi.repository.TipRepository;
@@ -34,6 +36,9 @@ public class FeedService {
 	
 	@Autowired
 	private ItemRepository itemRep;
+	
+	@Autowired
+	private FeedbackRepository feedbackRep;
 	
 	public List<Feed> findFeeds(String requesterId, Double longitude, Double latitude) {
 		
@@ -62,6 +67,32 @@ public class FeedService {
 				feed.setTitle(activity.getTitle());
 				feed.setDescription(activity.getDescription());
 				feed.setCreatedDate(activity.getCreatedDate());
+				
+				/** Populate replies **/
+				// Retrieve the sub-replies from feedbacks. Please note that we don't add view counts to the sub-replies
+				List<Feedback> feedbacks = feedbackRep.query(null, activity.getId(), "activity", null);			
+				if ((feedbacks != null) && (!feedbacks.isEmpty())) {
+					// Retrieve id of feedbacks
+					List<String> feedbacksId = new ArrayList<String>();
+					for (Feedback feedback : feedbacks) {
+						feedbacksId.add(feedback.getId());
+					}
+					// populate feedbacks with sub-replies
+					List<Feedback> subReplies = new ArrayList<Feedback>();
+					for (String subReplyId : feedbacksId) {
+						subReplies.addAll(feedbackRep.query(null, subReplyId, null, null)); 
+					}
+					feedbacks.addAll(subReplies);
+				}
+				// Populate replies
+				if ((feedbacks!=null) && (!feedbacks.isEmpty())) {
+					for (Feedback feedback : feedbacks) {
+						List<String> replies = feed.getReplies();
+						replies.add(feedback.getId());
+						feed.setReplies(replies);
+					}
+				}
+				
 				feeds.add(feed);
 			}	
 		}
@@ -78,6 +109,32 @@ public class FeedService {
 				feed.setTitle(question.getTitle());
 				feed.setDescription(question.getDescription());
 				feed.setCreatedDate(question.getCreatedDate());
+				
+				/** Populate replies **/
+				// Retrieve the sub-replies from feedbacks. Please note that we don't add view counts to the sub-replies
+				List<Feedback> feedbacks = feedbackRep.query(null, question.getId(), "question", null);			
+				if ((feedbacks != null) && (!feedbacks.isEmpty())) {
+					// Retrieve id of feedbacks
+					List<String> feedbacksId = new ArrayList<String>();
+					for (Feedback feedback : feedbacks) {
+						feedbacksId.add(feedback.getId());
+					}
+					// populate feedbacks with sub-replies
+					List<Feedback> subReplies = new ArrayList<Feedback>();
+					for (String subReplyId : feedbacksId) {
+						subReplies.addAll(feedbackRep.query(null, subReplyId, null, null)); 
+					}
+					feedbacks.addAll(subReplies);
+				}
+				// Populate replies
+				if ((feedbacks!=null) && (!feedbacks.isEmpty())) {
+					for (Feedback feedback : feedbacks) {
+						List<String> replies = feed.getReplies();
+						replies.add(feedback.getId());
+						feed.setReplies(replies);
+					}
+				}
+								
 				feeds.add(feed);
 			}
 		}
@@ -94,6 +151,32 @@ public class FeedService {
 				feed.setTitle(tip.getTitle());
 				feed.setDescription(tip.getDescription());
 				feed.setCreatedDate(tip.getCreatedDate());
+				
+				/** Populate replies **/
+				// Retrieve the sub-replies from feedbacks. Please note that we don't add view counts to the sub-replies
+				List<Feedback> feedbacks = feedbackRep.query(null, tip.getId(), "tip", null);			
+				if ((feedbacks != null) && (!feedbacks.isEmpty())) {
+					// Retrieve id of feedbacks
+					List<String> feedbacksId = new ArrayList<String>();
+					for (Feedback feedback : feedbacks) {
+						feedbacksId.add(feedback.getId());
+					}
+					// populate feedbacks with sub-replies
+					List<Feedback> subReplies = new ArrayList<Feedback>();
+					for (String subReplyId : feedbacksId) {
+						subReplies.addAll(feedbackRep.query(null, subReplyId, null, null)); 
+					}
+					feedbacks.addAll(subReplies);
+				}
+				// Populate replies
+				if ((feedbacks!=null) && (!feedbacks.isEmpty())) {
+					for (Feedback feedback : feedbacks) {
+						List<String> replies = feed.getReplies();
+						replies.add(feedback.getId());
+						feed.setReplies(replies);
+					}
+				}
+				
 				feeds.add(feed);
 			}
 		}	
@@ -110,6 +193,32 @@ public class FeedService {
 				feed.setTitle(item.getTitle());
 				feed.setDescription(item.getDescription());
 				feed.setCreatedDate(item.getCreatedDate());
+				
+				/** Populate replies **/
+				// Retrieve the sub-replies from feedbacks. Please note that we don't add view counts to the sub-replies
+				List<Feedback> feedbacks = feedbackRep.query(null, item.getId(), "item", null);			
+				if ((feedbacks != null) && (!feedbacks.isEmpty())) {
+					// Retrieve id of feedbacks
+					List<String> feedbacksId = new ArrayList<String>();
+					for (Feedback feedback : feedbacks) {
+						feedbacksId.add(feedback.getId());
+					}
+					// populate feedbacks with sub-replies
+					List<Feedback> subReplies = new ArrayList<Feedback>();
+					for (String subReplyId : feedbacksId) {
+						subReplies.addAll(feedbackRep.query(null, subReplyId, null, null)); 
+					}
+					feedbacks.addAll(subReplies);
+				}
+				// Populate replies
+				if ((feedbacks!=null) && (!feedbacks.isEmpty())) {
+					for (Feedback feedback : feedbacks) {
+						List<String> replies = feed.getReplies();
+						replies.add(feedback.getId());
+						feed.setReplies(replies);
+					}
+				}
+				
 				feeds.add(feed);
 			}
 		}	
