@@ -22,6 +22,7 @@ public class Member {
 	private List<String> languages = new ArrayList<String>();
 	private String type;
 	private String gender;
+	private String role;
 	private String avatarUrl;
 	private String imageData;
 	private String family;	
@@ -127,6 +128,14 @@ public class Member {
 	public void setGender(String gender) {
 		this.gender = gender;
 	}
+	
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}	
 
 	public String getAvatarUrl() {
 		return avatarUrl;
