@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,9 @@ public class MemberController {
 
 	@Autowired
 	private EmailService emailService;
+	
+    @Autowired
+    private HttpServletRequest httpServletRequest;
 	
 	/**
 	Scenario #1 : Get member by queryText (firstname or lastname) 
@@ -146,7 +150,15 @@ public class MemberController {
 		else {
 			responseBody.put("member", savedMember);
 			emailService.notifyNewMemberToSiwimi(savedMember);
-			emailService.notifyConfirmationToNewMember(savedMember);
+			// This is for backend development at local machine purpose
+			String serverName = this.httpServletRequest.getServerName();
+			if (serverName != null) {
+				if (serverName.toLowerCase().contains("localhost"))
+					emailService.notifyConfirmationToNewMember(savedMember,true);
+				else
+					emailService.notifyConfirmationToNewMember(savedMember,false);				
+			} else
+				emailService.notifyConfirmationToNewMember(savedMember,false);
 		}		
 		return responseBody;
 	}	

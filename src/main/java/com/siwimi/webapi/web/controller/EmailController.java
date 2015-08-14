@@ -3,6 +3,7 @@ package com.siwimi.webapi.web.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,9 @@ public class EmailController {
 	@Autowired
 	private MemberService memberService;
 
+    @Autowired
+    private HttpServletRequest httpServletRequest;
+    
 	// Get Email by ID
 	@RequestMapping(value = "/email/sendConfirmation", method = RequestMethod.GET, produces = "application/json")
 	public Map<String, Member> sendConfirmation(@RequestParam(value="id", required=true) String id) {
@@ -35,7 +39,15 @@ public class EmailController {
 			throw new ExistingMemberException("Unable to find this member!");
 		else {
 			responseBody.put("member", member);
-			emailService.notifyConfirmationToNewMember(member);
+			// This is for backend development at local machine purpose
+			String serverName = this.httpServletRequest.getServerName();
+			if (serverName != null) {
+				if (serverName.toLowerCase().contains("localhost"))
+					emailService.notifyConfirmationToNewMember(member,true);
+				else
+					emailService.notifyConfirmationToNewMember(member,false);
+			} else
+				emailService.notifyConfirmationToNewMember(member,false);
 		}		
 		return responseBody;
 	}

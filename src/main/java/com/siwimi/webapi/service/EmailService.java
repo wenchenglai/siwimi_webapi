@@ -373,11 +373,15 @@ public class EmailService {
 	}		
 	
 	/** Email confirmation to the new member **/
-	public void notifyConfirmationToNewMember(Member newMember) {
+	public void notifyConfirmationToNewMember(Member newMember, Boolean localhost) {
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 		Properties properties = new Properties();
 		try {
-			properties.load(classLoader.getResourceAsStream("notifyConfirmationToNewMember.properties"));
+			// This is for backend development at local machine purpose
+			if (localhost)
+				properties.load(classLoader.getResourceAsStream("notifyConfirmationToNewMember_localhost.properties"));
+			else
+				properties.load(classLoader.getResourceAsStream("notifyConfirmationToNewMember.properties"));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
