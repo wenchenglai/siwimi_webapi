@@ -21,6 +21,7 @@ import com.siwimi.webapi.domain.Member;
 import com.siwimi.webapi.service.ActivityService;
 import com.siwimi.webapi.service.FeedbackService;
 import com.siwimi.webapi.service.MemberService;
+import com.siwimi.webapi.service.ParseEventService;
 import com.siwimi.webapi.web.dto.ActivitySideload;
 import com.siwimi.webapi.web.dto.ActivitySideloadList;
 
@@ -35,6 +36,9 @@ public class ActivityController {
 
 	@Autowired
 	private FeedbackService feedbackService;
+	
+	@Autowired
+	private ParseEventService parseEventService;
 	
 	// Get activities by criteria
 	@RequestMapping(value = "/activities", method = RequestMethod.GET, produces = "application/json")
@@ -80,7 +84,6 @@ public class ActivityController {
 		}
 		responseBody.activities = activityList;
 		responseBody.members = new ArrayList<Member>(members);
-
 		return responseBody;
 	}
 
@@ -103,6 +106,18 @@ public class ActivityController {
 		
 		return responseBody;		
 	}	
+	
+	// Add New Activities by robot
+	@RequestMapping(value = "/activities/robot", method = RequestMethod.POST, produces = "application/json")
+	public ActivitySideloadList addActivitybyRobot() {
+		ActivitySideloadList responseBody = new ActivitySideloadList();
+		// Get activity list from AADL
+		List<Activity> activityList = parseEventService.parseAADL();
+		
+		responseBody.activities = activityList;
+		responseBody.members = new ArrayList<Member>();
+		return responseBody;		
+	}
 	
 	// Update Activity
 	@RequestMapping(value = "/activities/{id}", method = RequestMethod.PUT, produces = "application/json")
