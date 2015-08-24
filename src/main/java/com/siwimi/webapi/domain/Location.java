@@ -93,29 +93,33 @@ public class Location {
 
 	@JsonIgnore
 	public String getDst() {
+		if (this.dst.equals("1"))
+			this.dayLightSaving = true;
+		else
+			this.dayLightSaving = false;
+		
 		return dst;
 	}
 
 	@JsonIgnore
 	public void setDst(String dst) {
+		if (dst.equals("1"))
+			this.dayLightSaving = true;
+		else
+			this.dayLightSaving = false;
+		
 		this.dst = dst;
 	}
 
 	@JsonIgnore
 	public Boolean getDayLightSaving() {
-		if (this.dst.equals("1"))
-			return true;
-		else
-			return false;
+		return this.dayLightSaving;
 	}
 
-	@JsonIgnore
+/*	@JsonIgnore
 	public void setDayLightSaving(Boolean dayLightSaving) {
-		if (this.dst.equals("1"))
-			this.dayLightSaving = true;
-		else
-			this.dayLightSaving = false;
-	}
+		this.dayLightSaving = dayLightSaving;
+	}*/
 
 	@Override
 	public int hashCode() {
