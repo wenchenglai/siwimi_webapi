@@ -95,23 +95,24 @@ public class ParseEventService {
 						activity.setDescription(content2);
 						if (content1 != null) {
 							String [] part1 = content1.split(":");
-							SimpleDateFormat formatter = new SimpleDateFormat("EEEE MMMM dd, yyyy");
-							Date fromDate = null;
-							try {
-								fromDate = formatter.parse(part1[0].trim());
-								// Populate activity : fromDate and toDate
-								activity.setFromDate(fromDate);
-								activity.setToDate(fromDate);
-							} catch (ParseException e1) {
-								e1.printStackTrace();
-							}
-							//populate fromTime, toTime
+							//populate fromTime
 							content1 = content1.replaceAll(part1[0]+":", "");
 							String [] part2 = content1.trim().split("to");
 							activity.setFromTime(part2[0].trim());
+							//populate toTime
 							content1 = content1.replaceAll(part2[0]+"to", "");
 							String [] part3 = content1.trim().split("--");		
 							activity.setToTime(part3[0].trim());
+							// Populate activity : fromDate and toDate
+							SimpleDateFormat formatter = new SimpleDateFormat("EEEE MMMM dd, yyyy hh:mm aaa");
+							try {
+								Date fromDate = formatter.parse(part1[0].trim()+" "+part2[0].trim());
+								activity.setFromDate(fromDate);
+								Date toDate = formatter.parse(part1[0].trim()+" "+part3[0].trim());
+								activity.setToDate(toDate);
+							} catch (ParseException e1) {
+								e1.printStackTrace();
+							}
 							// Populate activity : address and zipCode
 							if (part3[1].contains("Malletts Creek")) {
 								activity.setAddress("3090 E. Eisenhower Parkway (The Ann Arbor District Library, "
