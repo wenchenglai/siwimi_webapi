@@ -52,41 +52,23 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
 		return mongoTemplate.find(q, Member.class, "Member");			
 	}
 
-	// Search member id from DB id or facebook id.
+	// Search member from DB id, facebook id, or email.
 	@SuppressWarnings("static-access")
 	@Override
-	public Member findByid(String id) {
-		List<Criteria> criterias = new ArrayList<Criteria>();
-
-		criterias.add(new Criteria().where("isDeletedRecord").is(false));
-		criterias.add(new Criteria().orOperator(Criteria.where("id").is(id),
-				                                Criteria.where("facebookId").is(id)));
-		
-		Criteria c = new Criteria().andOperator(criterias.toArray(new Criteria[criterias.size()]));		
-		return mongoTemplate.findOne(new Query(c), Member.class, "Member");
-	}
-	
-	
-	@SuppressWarnings("static-access")
-	@Override
-	public Member findExistingMember(String email) {
-		
-		// If both input parameters are null, no need to query the existing member
-		if (email == null) {
-			return null;
-		} else {
+	public Member queryExistingMember(String id) {		
+		if (id != null) {
 			List<Criteria> criterias = new ArrayList<Criteria>();
 
 			criterias.add(new Criteria().where("isDeletedRecord").is(false));
+			criterias.add(new Criteria().orOperator(Criteria.where("id").is(id),
+					                                Criteria.where("facebookId").is(id),
+					                                Criteria.where("email").regex(id.trim(), "i")));
 			
-			if (email != null) {
-				criterias.add(new Criteria().where("email").regex(email.trim(), "i"));
-			}
-		
-			Criteria c = new Criteria().andOperator(criterias.toArray(new Criteria[criterias.size()]));
-		
+			Criteria c = new Criteria().andOperator(criterias.toArray(new Criteria[criterias.size()]));		
 			return mongoTemplate.findOne(new Query(c), Member.class, "Member");
-		}
+		} else
+			return null;
+
 	}
 	
 	@SuppressWarnings("static-access")
@@ -100,7 +82,7 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
 			List<Criteria> criterias = new ArrayList<Criteria>();
 
 			criterias.add(new Criteria().where("isDeletedRecord").is(false));
-			criterias.add(new Criteria().where("email").is(email));
+			criterias.add(new Criteria().where("email").regex(email.trim(), "i"));
 			criterias.add(new Criteria().where("password").is(password));
 		
 			Criteria c = new Criteria().andOperator(criterias.toArray(new Criteria[criterias.size()]));

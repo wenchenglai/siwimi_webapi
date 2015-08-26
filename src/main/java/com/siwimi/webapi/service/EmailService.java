@@ -114,7 +114,7 @@ public class EmailService {
 		
 		// subject and recipient of the emails
 		String subject = properties.getProperty("subject");	
-		Member asker = memberRep.findByid(newQuestion.getCreator());
+		Member asker = memberRep.queryExistingMember(newQuestion.getCreator());
 		
 		// Sent email to Siwimi founders
 		String questionInfo = MessageFormat.format(properties.getProperty("questionInfo"), 
@@ -136,7 +136,7 @@ public class EmailService {
 		
 		Member feedbackIssuer = new Member();
 		if (newFeedback.getCreator() != null)
-			feedbackIssuer = memberRep.findByid(newFeedback.getCreator());
+			feedbackIssuer = memberRep.queryExistingMember(newFeedback.getCreator());
 		else {
 			feedbackIssuer.setEmail(newFeedback.getSenderEmail());
 		}
@@ -183,7 +183,7 @@ public class EmailService {
 	
 	/** Notify question asker **/
 	public void notifyNewQuestionToAsker(Question newQuestion) {
-		Member asker = memberRep.findByid(newQuestion.getCreator());
+		Member asker = memberRep.queryExistingMember(newQuestion.getCreator());
 		
 		if (asker.getEmail() != null) {
 			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
@@ -216,7 +216,7 @@ public class EmailService {
 		
 		Member feedbackIssuer = new Member();
 		if (newFeedback.getCreator() != null)
-			feedbackIssuer = memberRep.findByid(newFeedback.getCreator());
+			feedbackIssuer = memberRep.queryExistingMember(newFeedback.getCreator());
 		else {
 			feedbackIssuer.setEmail(newFeedback.getSenderEmail());
 		}
@@ -286,7 +286,7 @@ public class EmailService {
 		
 		Member feedbackIssuer = new Member();
 		if (newFeedback.getCreator() != null)
-			feedbackIssuer = memberRep.findByid(newFeedback.getCreator());
+			feedbackIssuer = memberRep.queryExistingMember(newFeedback.getCreator());
 		else {
 			feedbackIssuer.setEmail(newFeedback.getSenderEmail());
 		}
@@ -332,14 +332,14 @@ public class EmailService {
 			// Retrieve title, description, and original asker of Question object
 			Question question = questionRep.findByIdAndIsDeletedRecordIsFalse(parentFeedback.getParent());
 			// Important : question must have a creator
-			asker = memberRep.findByid(question.getCreator());
+			asker = memberRep.queryExistingMember(question.getCreator());
 			title = question.getTitle();
 			description = question.getDescription();
 		} else if (parentFeedback.getParentType().equals("tip")) {
 			// Retrieve title, description, and original asker of Tip object
 			Tip tip = tipRep.findByIdAndIsDeletedRecordIsFalse(parentFeedback.getParent());
 			// Important : tip must have a creator
-			asker = memberRep.findByid(tip.getCreator());
+			asker = memberRep.queryExistingMember(tip.getCreator());
 			title = tip.getTitle();
 			description = tip.getDescription();
 		} else
