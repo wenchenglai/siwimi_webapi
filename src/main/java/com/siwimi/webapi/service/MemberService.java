@@ -40,8 +40,11 @@ public class MemberService {
 	**/
 	
 	public Member addMember(Member newMember){		
-		// If newMember is a duplicated member, don't save it.
-		if (memberRep.findExistingMember(newMember.getEmail())!=null) {
+		if (memberRep.queryExistingMember(newMember.getEmail())!=null) {
+			// If newMember is a duplicated member, don't save it.
+			return null;
+		} else if (memberRep.queryExistingMember(newMember.getFacebookId())!=null) {
+			// If newMember is a duplicated member from facebook, don't save it.
 			return null;
 		} else {
 			newMember.setIsDeletedRecord(false);
@@ -66,7 +69,7 @@ public class MemberService {
 	}
 	
 	public Member findByMemberId(String id) {		
-		return memberRep.findByid(id);			
+		return memberRep.queryExistingMember(id);			
 	}	
 	
 	public List<Member> find(String familyId, String queryText) {
@@ -74,7 +77,7 @@ public class MemberService {
 	}
 
 	public Member setConfirmedMember(String id, String action) {
-		Member member = memberRep.findByid(id);
+		Member member = memberRep.queryExistingMember(id);
 		if (action.equals("confirm"))
 			if (member != null) {
 				member.setIsConfirmedMember(true);

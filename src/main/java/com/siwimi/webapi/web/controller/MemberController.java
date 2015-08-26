@@ -146,19 +146,23 @@ public class MemberController {
 		Member savedMember = memberService.addMember(member.member);
 		Map<String, Member> responseBody = new HashMap<String, Member>();
 		if (savedMember == null)
-			throw new ExistingMemberException("This email is already on our system");
+			throw new ExistingMemberException("This user has already signed up at Siwimi.com");
 		else {
 			responseBody.put("member", savedMember);
-			emailService.notifyNewMemberToSiwimi(savedMember);
-			// This is for backend development at local machine purpose
-			String serverName = this.httpServletRequest.getServerName();
-			if (serverName != null) {
-				if (serverName.toLowerCase().contains("localhost"))
-					emailService.notifyConfirmationToNewMember(savedMember,true);
-				else
-					emailService.notifyConfirmationToNewMember(savedMember,false);				
-			} else
-				emailService.notifyConfirmationToNewMember(savedMember,false);
+			// For the non facebook user (user who signes up by email), send confirmation email.
+			if ((savedMember.getFacebookId()==null) || 
+				(((savedMember.getFacebookId()!=null)) && (savedMember.getFacebookId().isEmpty()))) {
+				emailService.notifyNewMemberToSiwimi(savedMember);
+				// This is for backend development at local machine purpose
+				String serverName = this.httpServletRequest.getServerName();
+				if (serverName != null) {
+					if (serverName.toLowerCase().contains("localhost"))
+						emailService.notifyConfirmationToNewMember(savedMember,true);
+					else
+						emailService.notifyConfirmationToNewMember(savedMember,false);				
+				} else
+					emailService.notifyConfirmationToNewMember(savedMember,false);
+			}
 		}		
 		return responseBody;
 	}	
