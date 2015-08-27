@@ -14,7 +14,7 @@ public class Email {
 	private String id;
 	
 	public Email() {
-		this.sentFrom = "admin@siwimi.com";
+		this.sentFrom = "The Siwimi Team <customer@siwimi.com>";
 	}
 	
 	private String sentFrom;
