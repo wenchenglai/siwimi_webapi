@@ -147,30 +147,25 @@ public class MemberController {
 		Map<String, Member> responseBody = new HashMap<String, Member>();
 		if (savedMember == null)
 			throw new ExistingMemberException("This user has already signed up at Siwimi.com");
-		else {
-			responseBody.put("member", savedMember);
-			// For the non facebook user (user who signes up by email), send confirmation email.
-			if ((savedMember.getFacebookId()==null) || 
-				(((savedMember.getFacebookId()!=null)) && (savedMember.getFacebookId().isEmpty()))) {
-				emailService.notifyNewMemberToSiwimi(savedMember);
-				// This is for backend development at local machine purpose
-				String serverName = this.httpServletRequest.getServerName();
-				if (serverName != null) {
-					if (serverName.toLowerCase().contains("localhost"))
-						emailService.notifyConfirmationToNewMember(savedMember,true);
-					else
-						emailService.notifyConfirmationToNewMember(savedMember,false);				
-				} else
-					emailService.notifyConfirmationToNewMember(savedMember,false);
-			}
-		}		
+		responseBody.put("member", savedMember);
+		// For the non facebook user (user who signes up by email), send confirmation email.
+		if ((savedMember.getFacebookId()==null) || 
+			(((savedMember.getFacebookId()!=null)) && (savedMember.getFacebookId().isEmpty()))) {
+			emailService.notifyNewMemberToSiwimi(savedMember);
+			// This is for backend development at local machine purpose
+			String serverName = this.httpServletRequest.getServerName();
+			if (serverName != null) {
+				emailService.notifyConfirmationToNewMember(savedMember,serverName.toLowerCase().contains("localhost"));
+		
+			} else
+				emailService.notifyConfirmationToNewMember(savedMember,false);
+			}	
 		return responseBody;
 	}	
 	
 	// Update Member
 	@RequestMapping(value = "/members/{id}", method = RequestMethod.PUT, produces = "application/json")
-	public Map<String, Member> updateMember(@PathVariable("id") String id, @RequestBody MemberSideload member) {		
-		
+	public Map<String, Member> updateMember(@PathVariable("id") String id, @RequestBody MemberSideload member) {				
 		Member savedMember = memberService.updateMember(id, member.member);
 		Map<String, Member> responseBody = new HashMap<String, Member>();
 		responseBody.put("member", savedMember);

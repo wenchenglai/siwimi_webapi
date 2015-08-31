@@ -373,12 +373,12 @@ public class EmailService {
 	}		
 	
 	/** Email confirmation to the new member **/
-	public void notifyConfirmationToNewMember(Member newMember, Boolean localhost) {
+	public void notifyConfirmationToNewMember(Member newMember, Boolean isLocalhost) {
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 		Properties properties = new Properties();
 		try {
 			// This is for backend development at local machine purpose
-			if (localhost)
+			if (isLocalhost)
 				properties.load(classLoader.getResourceAsStream("notifyConfirmationToNewMember_localhost.properties"));
 			else
 				properties.load(classLoader.getResourceAsStream("notifyConfirmationToNewMember.properties"));
@@ -401,4 +401,42 @@ public class EmailService {
 		sentEmail(notifyMember);
 		addEmail(notifyMember);
 	}
+	
+	/** Email reset password to the existing member **/
+	public Member resetEmail(String email, Boolean isLocalhost) {
+		
+		Member member = memberRep.queryExistingMember(email);
+		
+		if (member!=null) {
+			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+			Properties properties = new Properties();
+			try {
+				// This is for backend development at local machine purpose
+				if (isLocalhost)
+					properties.load(classLoader.getResourceAsStream("resetPasswordToNewMembe_localhost.properties"));
+				else
+					properties.load(classLoader.getResourceAsStream("resetPasswordToNewMember.properties"));
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			String subject = properties.getProperty("subject");
+			String body = MessageFormat.format(properties.getProperty("body"),member.getId());
+			List<String> sentTo = new ArrayList<String>();
+			sentTo.add(member.getEmail());	
+			
+			Email notifyMember = new Email();
+			notifyMember.setSentTo(sentTo);
+			notifyMember.setSubject(subject);
+			notifyMember.setEmailText(body);
+			notifyMember.setSentTime(new Date());	
+			
+			sentEmail(notifyMember);
+			addEmail(notifyMember);			
+		}		
+		
+		return member;
+	}		
 }
+

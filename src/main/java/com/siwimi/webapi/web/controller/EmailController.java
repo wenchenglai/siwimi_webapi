@@ -42,16 +42,32 @@ public class EmailController {
 			// This is for backend development at local machine purpose
 			String serverName = this.httpServletRequest.getServerName();
 			if (serverName != null) {
-				if (serverName.toLowerCase().contains("localhost"))
-					emailService.notifyConfirmationToNewMember(member,true);
-				else
-					emailService.notifyConfirmationToNewMember(member,false);
+				emailService.notifyConfirmationToNewMember(member,serverName.toLowerCase().contains("localhost"));
 			} else
 				emailService.notifyConfirmationToNewMember(member,false);
 		}		
 		return responseBody;
 	}
+
+	// Reset Email
+	@RequestMapping(value = "/email/forgetpassword", method = RequestMethod.GET, produces = "application/json")
+	public Map<String, Member> resetEmail(@RequestParam(value="email", required=true) String email) {
+		Map<String, Member> responseBody = new HashMap<String, Member>();
+		Member member = null;
+		// This is for backend development at local machine purpose
+		String serverName = this.httpServletRequest.getServerName();
+		if (serverName != null) {
+			member = emailService.resetEmail(email,serverName.toLowerCase().contains("localhost"));
+		} else
+			member = emailService.resetEmail(email,false);
+
+		if (member == null)
+			throw new ExistingMemberException("Unable to match this email to any existing members!");
 		
+		responseBody.put("member", member);		
+		return responseBody;
+	}
+	
 	// Exception handler
 	@ExceptionHandler(ExistingMemberException.class)
 	public Map<String, String> handleExistingMemberHandler(ExistingMemberException ex, HttpServletResponse res) {
