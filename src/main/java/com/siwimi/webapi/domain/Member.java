@@ -40,6 +40,10 @@ public class Member {
 	private String state;
 	private double[] location;
 	
+	// features
+	private List<String> toys = new ArrayList<String>();
+	private List<String> needs = new ArrayList<String>();
+	
 	//The default of the below field is set by back end
 	private boolean isDeletedRecord;
 	
@@ -314,5 +318,21 @@ public class Member {
 	          return false;
 	       
 	    return true;
+	}
+
+	public List<String> getToys() {
+		return toys;
+	}
+
+	public void setToys(List<String> toys) {
+		this.toys = toys;
+	}
+
+	public List<String> getNeeds() {
+		return needs;
+	}
+
+	public void setNeeds(List<String> needs) {
+		this.needs = needs;
 	}
 }
