@@ -413,7 +413,7 @@ public class EmailService {
 			try {
 				// This is for backend development at local machine purpose
 				if (isLocalhost)
-					properties.load(classLoader.getResourceAsStream("resetPasswordToNewMembe_localhost.properties"));
+					properties.load(classLoader.getResourceAsStream("resetPasswordToNewMember_localhost.properties"));
 				else
 					properties.load(classLoader.getResourceAsStream("resetPasswordToNewMember.properties"));
 			} catch (FileNotFoundException e) {
@@ -437,6 +437,60 @@ public class EmailService {
 		}		
 		
 		return member;
+	}		
+	
+	
+	/** Invite new member by email **/
+	public Member inviteByEmail(String email,Member existingMember, Boolean isLocalhost) {
+		// This is for backend development at local machine purpose
+		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+		Properties properties = new Properties();
+		try {
+			if (isLocalhost)
+				properties.load(classLoader.getResourceAsStream("inviteNewMember_localhost.properties"));
+			else
+				properties.load(classLoader.getResourceAsStream("inviteNewMember.properties"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+			
+		String existingMemberName = null;
+		if (existingMember.getFirstName() != null) {
+			existingMemberName = existingMember.getFirstName();
+		}
+		if (existingMember.getLastName() != null) {
+			if (existingMemberName == null)
+				existingMemberName = existingMember.getLastName();
+			else
+				existingMemberName = existingMemberName + " " +existingMember.getLastName();
+		}
+			
+		Member newMember = memberRep.queryExistingMember(email);
+		if (existingMemberName!=null) {			
+			if (newMember == null) {
+				newMember = new Member();
+				newMember.setEmail(email);
+				newMember = memberRep.save(newMember);
+			}
+			
+			String subject = MessageFormat.format(properties.getProperty("subject"),existingMemberName);
+			String body = MessageFormat.format(properties.getProperty("body"),existingMemberName,newMember.getId());
+			List<String> sentTo = new ArrayList<String>();
+			sentTo.add(email);	
+			
+			Email notifyMember = new Email();
+			notifyMember.setSentTo(sentTo);
+			notifyMember.setSubject(subject);
+			notifyMember.setEmailText(body);
+			notifyMember.setSentTime(new Date());	
+				
+			sentEmail(notifyMember);
+			addEmail(notifyMember);				
+			}
+		
+		return newMember;
 	}		
 }
 
