@@ -49,7 +49,7 @@ public class EmailController {
 		return responseBody;
 	}
 
-	// Reset Email
+	// Resent Email
 	@RequestMapping(value = "/email/forgetpassword", method = RequestMethod.GET, produces = "application/json")
 	public Map<String, Member> resetEmail(@RequestParam(value="email", required=true) String email) {
 		Map<String, Member> responseBody = new HashMap<String, Member>();
@@ -65,6 +65,28 @@ public class EmailController {
 			throw new ExistingMemberException("Unable to match this email to any existing members!");
 		
 		responseBody.put("member", member);		
+		return responseBody;
+	}
+	
+	// Invite friends by Email
+	@RequestMapping(value = "/email/invite", method = RequestMethod.GET, produces = "application/json")
+	public Map<String, Member> invite(@RequestParam(value="email", required=true) String email,
+									  @RequestParam(value="userid", required=true) String userId,
+									  @RequestParam(value="groupid", required=true) String groupId) {
+		Map<String, Member> responseBody = new HashMap<String, Member>();
+		Member existingMember = memberService.findByMemberId(userId);
+		if (existingMember == null)
+			throw new ExistingMemberException("This member does not exist in the database!");
+		
+		Member newMember = null;
+		// This is for backend development at local machine purpose
+		String serverName = this.httpServletRequest.getServerName();
+		if (serverName != null) {
+			newMember = emailService.inviteByEmail(email,existingMember,serverName.toLowerCase().contains("localhost"));
+		} else
+			newMember = emailService.inviteByEmail(email,existingMember,false);
+	
+		responseBody.put("member", newMember);		
 		return responseBody;
 	}
 	

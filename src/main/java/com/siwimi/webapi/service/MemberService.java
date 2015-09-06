@@ -40,7 +40,7 @@ public class MemberService {
 	**/
 	
 	public Member addMember(Member newMember){		
-		if (memberRep.queryExistingMember(newMember.getEmail())!=null) {
+		if ((memberRep.queryExistingMember(newMember.getEmail())!=null) && (newMember.getIsConfirmedMember())) {
 			// If newMember is a duplicated member, don't save it.
 			return null;
 		} else if (memberRep.queryExistingMember(newMember.getFacebookId())!=null) {
