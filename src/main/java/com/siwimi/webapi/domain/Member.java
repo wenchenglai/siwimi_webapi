@@ -38,6 +38,7 @@ public class Member {
 	private String zipCode;
 	private String city;
 	private String state;
+	private String invitedBy;
 	private double[] location;
 	
 	//The default of the below field is set by back end
@@ -286,7 +287,14 @@ public class Member {
 		this.isConfirmedMember = isConfirmedMember;
 	}
 	
-	
+	public String getInvitedBy() {
+		return invitedBy;
+	}
+
+	public void setInvitedBy(String invitedBy) {
+		this.invitedBy = invitedBy;
+	}
+
 	public boolean getIsInSignUpProcess() {
 		return isInSignUpProcess;
 	}

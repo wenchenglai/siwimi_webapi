@@ -472,6 +472,7 @@ public class EmailService {
 			if (newMember == null) {
 				newMember = new Member();
 				newMember.setEmail(email);
+				newMember.setInvitedBy(existingMember.getId());
 				newMember = memberRep.save(newMember);
 			}
 			
