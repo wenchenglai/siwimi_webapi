@@ -19,8 +19,8 @@ public class Activity {
 	private String description;
 	private Date fromDate;
 	private Date toDate;	
-	private String fromTime; // e.g. 12:30pm
-	private String toTime;	// e.g. 12:30pm
+	private String fromTime; 
+	private String toTime;	
 	private String address;
 	private String city;
 	private String state;

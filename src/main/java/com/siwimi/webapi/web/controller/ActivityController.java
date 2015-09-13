@@ -1,7 +1,6 @@
 package com.siwimi.webapi.web.controller;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -92,51 +91,14 @@ public class ActivityController {
 	@RequestMapping(value = "/activities/{id}", method = RequestMethod.GET, produces = "application/json")
 	public Map<String,Activity> findByActivityId(@PathVariable("id") String id) {
 		Map<String,Activity> responseBody = new HashMap<String,Activity>();			
-		Activity activity = activityService.findByActivityId(id);
-		responseBody.put("activity", activity);
+		responseBody.put("activity", activityService.findByActivityId(id));
 		return responseBody;
 	}
 	
 	// Manually add new activity
 	@RequestMapping(value = "/activities", method = RequestMethod.POST, produces = "application/json")
-	public Map<String, Activity> addActivity(@RequestBody ActivitySideload newActivity) {
-		Activity activity = newActivity.activity;
-		
-		// Front-end does not combine day/hr/min in the Date object.
-		// Backend need to append hr/min into Date object		
-		if ((activity.getFromTime() != null) && (activity.getFromDate() != null)) {
-			String [] part1 = activity.getFromTime().split(" ");
-			String [] part2 = part1[0].split(":");
-			String hour = part2[0];
-			String min = part2[1];			
-			Calendar cal = Calendar.getInstance();
-			cal.setTime(activity.getFromDate());
-			cal.set(Calendar.HOUR, Integer.parseInt(hour));
-			cal.set(Calendar.MINUTE, Integer.parseInt(min));
-			if (part1[1].contains("am"))
-				cal.set(Calendar.AM_PM, Calendar.AM);
-			else
-				cal.set(Calendar.AM_PM, Calendar.PM);
-			activity.setFromDate(cal.getTime());			
-		}
-	
-		if ((activity.getToTime() != null) && (activity.getToDate() != null)) {
-			String [] part1 = activity.getToTime().split(" ");
-			String [] part2 = part1[0].split(":");
-			String hour = part2[0];
-			String min = part2[1];			
-			Calendar cal = Calendar.getInstance();
-			cal.setTime(activity.getFromDate());
-			cal.set(Calendar.HOUR, Integer.parseInt(hour));
-			cal.set(Calendar.MINUTE, Integer.parseInt(min));
-			if (part1[1].contains("am"))
-				cal.set(Calendar.AM_PM, Calendar.AM);
-			else
-				cal.set(Calendar.AM_PM, Calendar.PM);
-			activity.setToDate(cal.getTime());			
-		}
-		
-		Activity savedActivity = activityService.addActivity(activity);		
+	public Map<String, Activity> addActivity(@RequestBody ActivitySideload newActivity) {	
+		Activity savedActivity = activityService.addActivity(newActivity.activity);		
 		Map<String, Activity> responseBody = new HashMap<String, Activity>();
 		responseBody.put("activity", savedActivity);		
 		return responseBody;		
@@ -147,8 +109,7 @@ public class ActivityController {
 	public ActivitySideloadList addActivitybyRobot() {
 		ActivitySideloadList responseBody = new ActivitySideloadList();
 		// Get activity list from AADL
-		List<Activity> activityList = parseEventService.parseAADL();
-		
+		List<Activity> activityList = parseEventService.parseAADL();		
 		responseBody.activities = activityList;
 		responseBody.members = new ArrayList<Member>();
 		return responseBody;		
@@ -157,10 +118,8 @@ public class ActivityController {
 	// Update Activity
 	@RequestMapping(value = "/activities/{id}", method = RequestMethod.PUT, produces = "application/json")
 	public Map<String, Activity> updateActivity(@PathVariable("id") String id, @RequestBody ActivitySideload updatedActivity) {
-		Activity savedActivity = activityService.updateActivity(id, updatedActivity.activity);
 		Map<String, Activity> responseBody = new HashMap<String, Activity>();
-		responseBody.put("activity", savedActivity);
-		
+		responseBody.put("activity", activityService.updateActivity(id, updatedActivity.activity));
 		return responseBody;			
 	}
 	

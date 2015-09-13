@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
@@ -145,7 +146,7 @@ public class ParseEventService {
 						}												
 						activity.setIsDeletedRecord(false);
 						activity.setViewCount(0);
-						activity = updateLocation(activity);
+						activity = updateLocationAndTime(activity);
 						activities.add(activityRep.saveActivity(activity));
 					}										
 				}				
@@ -155,7 +156,7 @@ public class ParseEventService {
 		return activities;
 	}
 
-	public Activity updateLocation(Activity activity) {
+	public Activity updateLocationAndTime(Activity activity) {
 		// lookup location from the collection Location;
 		Location thisLocation = locationRep.queryLocation(activity.getZipCode(), activity.getCity(), activity.getState());
 		// set longitude and latitude 
@@ -167,6 +168,27 @@ public class ParseEventService {
 			activity.setState(thisLocation.getStateCode());
 		}
 
+		SimpleDateFormat formatter = new SimpleDateFormat("EEEE MMMM dd, yyyy hh:mm aaa");
+	    String fromDateString = formatter.format(activity.getFromDate());	 
+	    String toDateString = formatter.format(activity.getToDate());
+	    if (thisLocation.getTimezone() != null) {
+	    	if (thisLocation.getTimezone().contains("-5"))
+	    		formatter.setTimeZone(TimeZone.getTimeZone("America/New_York"));
+	    	else if (thisLocation.getTimezone().contains("-6"))
+	    		formatter.setTimeZone(TimeZone.getTimeZone("America/Winnipeg"));
+	    	else if (thisLocation.getTimezone().contains("-7"))
+	    		formatter.setTimeZone(TimeZone.getTimeZone("America/Phoenix"));
+	    	else if (thisLocation.getTimezone().contains("-8"))
+	    		formatter.setTimeZone(TimeZone.getTimeZone("America/Vancouver"));		    	
+	    } else {
+	    	formatter.setTimeZone(TimeZone.getTimeZone("America/New_York"));
+	    }	    
+	   try {
+		   activity.setFromDate(formatter.parse(fromDateString));
+		   activity.setToDate(formatter.parse(toDateString));
+	   } catch (ParseException e) {
+		   e.printStackTrace();
+	   }								
 		return activity;
 	}	
 }

@@ -23,7 +23,7 @@ public class Location {
 	private double longitude;
 	private double latitude;
 	
-	private String timeZone;
+	private String timezone;
 	private String dst;
 	
 	// This field is only for front-end purpose : User comments
@@ -82,13 +82,8 @@ public class Location {
 	}
 	
 	@JsonIgnore
-	public String getTimeZone() {
-		return timeZone;
-	}
-
-	@JsonIgnore
-	public void setTimeZone(String timeZone) {
-		this.timeZone = timeZone;
+	public String getTimezone() {
+		return timezone;
 	}
 
 	@JsonIgnore
@@ -102,24 +97,9 @@ public class Location {
 	}
 
 	@JsonIgnore
-	public void setDst(String dst) {
-		if (dst.equals("1"))
-			this.dayLightSaving = true;
-		else
-			this.dayLightSaving = false;
-		
-		this.dst = dst;
-	}
-
-	@JsonIgnore
 	public Boolean getDayLightSaving() {
 		return this.dayLightSaving;
 	}
-
-/*	@JsonIgnore
-	public void setDayLightSaving(Boolean dayLightSaving) {
-		this.dayLightSaving = dayLightSaving;
-	}*/
 
 	@Override
 	public int hashCode() {
