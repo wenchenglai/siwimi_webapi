@@ -83,8 +83,8 @@ public class ActivityRepositoryImpl implements ActivityRepositoryCustom {
 		
 		if (period != null) {
 			Date now = new Date();
-			Date periodBegin = new Date();
-			Date periodEnd = new Date();
+			Date periodBegin = null;
+			Date periodEnd = null;
 			
 			switch (period.intValue()) {
 				case 1: // Today
@@ -111,16 +111,12 @@ public class ActivityRepositoryImpl implements ActivityRepositoryCustom {
 					try {
 						if (fromTime != null)
 							periodBegin = shiftDateWithoutTime(format.parse(fromTime),0);
-						else
-							periodBegin = shiftDateWithoutTime(now,0);
 					} catch (ParseException e) {
 						e.printStackTrace();
 					}
 					try {
 						if (toTime != null)
 							periodEnd = shiftDateWithoutTime(format.parse(toTime),0);
-						else
-							periodEnd = shiftDateWithoutTime(now,365);
 					} catch (ParseException e) {
 						e.printStackTrace();
 					}
@@ -129,16 +125,20 @@ public class ActivityRepositoryImpl implements ActivityRepositoryCustom {
 					periodBegin = shiftDateWithoutTime(now,0);
 					periodEnd = shiftDateWithoutTime(now,1);
 					break;
-			}									
-			Criteria c1 = new Criteria().andOperator(Criteria.where("fromDate").lte(periodEnd),
-					                                 Criteria.where("toDate").gte(periodBegin));
-			Criteria c2 = new Criteria().andOperator(Criteria.where("fromDate").is(null),
-                    								 Criteria.where("toDate").gte(periodBegin));
-			Criteria c3 = new Criteria().andOperator(Criteria.where("fromDate").lte(periodEnd),
-					 								 Criteria.where("toDate").is(null));
-			Criteria c4 = new Criteria().andOperator(Criteria.where("fromDate").is(null),
-					                                 Criteria.where("toDate").is(null));	
-			criterias.add(new Criteria().orOperator(c1,c2,c3,c4));
+			}					
+			
+			if ((periodBegin!=null) && (periodEnd!=null))
+				criterias.add(new Criteria().andOperator(Criteria.where("fromDate").lte(periodEnd),
+                                                         Criteria.where("toDate").gte(periodBegin)));
+			if ((periodBegin!=null) && (periodEnd==null))
+				criterias.add(new Criteria().andOperator(Criteria.where("fromDate").is(null),
+						                                 Criteria.where("toDate").gte(periodBegin)));
+			if ((periodBegin==null) && (periodEnd!=null))
+				criterias.add(new Criteria().andOperator(Criteria.where("fromDate").lte(periodEnd),
+						 								 Criteria.where("toDate").is(null)));
+			if ((periodBegin==null) && (periodEnd==null))
+				criterias.add(new Criteria().andOperator(Criteria.where("fromDate").is(null),
+                                                         Criteria.where("toDate").is(null)));			
 		}
 		
 		Criteria c = new Criteria().andOperator(criterias.toArray(new Criteria[criterias.size()]));
