@@ -489,7 +489,7 @@ public class EmailService {
 				
 			sentEmail(notifyMember);
 			addEmail(notifyMember);				
-			}
+		}
 		
 		return newMember;
 	}		

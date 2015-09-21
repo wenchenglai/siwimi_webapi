@@ -81,10 +81,16 @@ public class EmailController {
 		Member newMember = null;
 		// This is for backend development at local machine purpose
 		String serverName = this.httpServletRequest.getServerName();
-		if (serverName != null) {
-			newMember = emailService.inviteByEmail(email,existingMember,serverName.toLowerCase().contains("localhost"));
-		} else
-			newMember = emailService.inviteByEmail(email,existingMember,false);
+		
+//		if (serverName != null) {
+//			newMember = emailService.inviteByEmail(email,existingMember,serverName.toLowerCase().contains("localhost"));
+//		} else
+//			newMember = emailService.inviteByEmail(email,existingMember,false);
+		
+		boolean isLocalhost = serverName == null ? false : serverName.toLowerCase().contains("localhost");
+		
+		newMember = emailService.inviteByEmail(email,existingMember,isLocalhost);
+		
 	
 		responseBody.put("member", newMember);		
 		return responseBody;
