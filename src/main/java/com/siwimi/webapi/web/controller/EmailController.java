@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.siwimi.webapi.domain.Member;
 import com.siwimi.webapi.exception.ExistingMemberException;
 import com.siwimi.webapi.service.EmailService;
+import com.siwimi.webapi.service.GroupService;
 import com.siwimi.webapi.service.MemberService;
 
 @RestController
@@ -27,6 +28,9 @@ public class EmailController {
 	@Autowired
 	private MemberService memberService;
 
+	@Autowired
+	private GroupService groupService;
+	
     @Autowired
     private HttpServletRequest httpServletRequest;
     
@@ -80,18 +84,15 @@ public class EmailController {
 		
 		Member newMember = null;
 		// This is for backend development at local machine purpose
-		String serverName = this.httpServletRequest.getServerName();
-		
-//		if (serverName != null) {
-//			newMember = emailService.inviteByEmail(email,existingMember,serverName.toLowerCase().contains("localhost"));
-//		} else
-//			newMember = emailService.inviteByEmail(email,existingMember,false);
-		
+		String serverName = this.httpServletRequest.getServerName();	
 		boolean isLocalhost = serverName == null ? false : serverName.toLowerCase().contains("localhost");
-		
+		// send email to friends, and create member for this new friend.
 		newMember = emailService.inviteByEmail(email,existingMember,isLocalhost);
+		// add this new friend into creator's group
+		if (newMember!=null) {
+			groupService.addMemberIntoGroup(groupId,newMember.getId());
+		}
 		
-	
 		responseBody.put("member", newMember);		
 		return responseBody;
 	}

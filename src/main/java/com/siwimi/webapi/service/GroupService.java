@@ -22,6 +22,16 @@ public class GroupService {
 		return groupRep.findByIdAndIsDeletedRecordIsFalse(id);
 	}
 	
+	public void addMemberIntoGroup(String groupId, String memberId) {
+		Group group = groupRep.findByIdAndIsDeletedRecordIsFalse(groupId);
+		if (group!=null) {
+			List<String> members = group.getMembers();
+			members.add(memberId);
+			//group.setMembers(members);	
+			groupRep.save(group);
+		}
+	}
+	
 	public Group addGroup(Group newGroup) {
 		newGroup.setIsDeletedRecord(false);
 		// add creator into the member list
