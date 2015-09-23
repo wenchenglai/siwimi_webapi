@@ -27,7 +27,8 @@ public class GroupService {
 		if (group!=null) {
 			List<String> members = group.getMembers();
 			members.add(memberId);
-			group.setMembers(members);	
+			//group.setMembers(members);	
+			groupRep.save(group);
 		}
 	}
 	
