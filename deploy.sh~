@@ -1,7 +1,7 @@
 mkdir siwimi
 cd siwimi
-git clone https://kuentingshiu@github.com/kuentingshiu/siwimi-rest.git
-cd siwimi-rest
+git clone https://github.com/wenchenglai/siwimi_webapi.git
+cd siwimi_webapi
 gradle wrapper
 ./gradlew build	
 cd /usr/local/tomcat8/webapps

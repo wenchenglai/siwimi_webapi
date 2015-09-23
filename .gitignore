@@ -10,6 +10,7 @@ build/
 *.bak
 *.swp
 *~.nib
+*.sh~
 local.properties
 .settings/
 .loadpath
