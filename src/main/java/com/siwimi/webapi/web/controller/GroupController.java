@@ -35,10 +35,11 @@ public class GroupController {
 	@RequestMapping(value = "/groups", method = RequestMethod.GET, produces = "application/json")
 	public GroupSideloadList findGroups(
 			@RequestParam(value="creator", required=false) String creatorId,
+			@RequestParam(value="memberId", required=false) String groupMemberId,
 			@RequestParam(value="queryText", required=false) String queryText) {
 		
 		GroupSideloadList responseBody = new GroupSideloadList();
-		List<Group> groupList = groupService.findGroups(creatorId,queryText);
+		List<Group> groupList = groupService.findGroups(creatorId,groupMemberId,queryText);
 		Set<Member> members = new HashSet<Member>();
 		if (groupList!=null) {
 			for (Group group : groupList) {

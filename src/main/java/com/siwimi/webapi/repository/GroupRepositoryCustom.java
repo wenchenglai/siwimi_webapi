@@ -5,6 +5,6 @@ import java.util.List;
 import com.siwimi.webapi.domain.Group;
 
 public interface GroupRepositoryCustom {
-	List<Group> queryGroup(String creatorId,String queryText);
+	List<Group> queryGroup(String creatorId, String memberId, String queryText);
 
 }
