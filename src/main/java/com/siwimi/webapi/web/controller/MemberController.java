@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.siwimi.webapi.domain.JqueryObject;
 import com.siwimi.webapi.domain.Member;
-import com.siwimi.webapi.exception.ExistingMemberException;
+import com.siwimi.webapi.exception.ExistingEntityException;
 import com.siwimi.webapi.service.EmailService;
 import com.siwimi.webapi.service.FamilyService;
 import com.siwimi.webapi.service.MemberService;
@@ -146,7 +146,7 @@ public class MemberController {
 		Member savedMember = memberService.addMember(member.member);
 		Map<String, Member> responseBody = new HashMap<String, Member>();
 		if (savedMember == null)
-			throw new ExistingMemberException("This user has already signed up at Siwimi.com");
+			throw new ExistingEntityException("This user has already signed up at Siwimi.com");
 		responseBody.put("member", savedMember);
 		// For the non facebook user (user who signes up by email), send confirmation email.
 		if ((savedMember.getFacebookId()==null) || 
@@ -180,8 +180,8 @@ public class MemberController {
 	}	
 	
 	// Exception handler
-	@ExceptionHandler(ExistingMemberException.class)
-	public Map<String, Map<String, String>> handleExistingMemberHandler(ExistingMemberException ex, HttpServletResponse res) {
+	@ExceptionHandler(ExistingEntityException.class)
+	public Map<String, Map<String, String>> handleExistingMemberHandler(ExistingEntityException ex, HttpServletResponse res) {
 		Map<String, Map<String, String>> responseBody = new HashMap<String, Map<String, String>>();
 		Map<String, String> response = new HashMap<String, String>();
 		response.put("email",ex.getErrMsg());

@@ -13,8 +13,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.siwimi.webapi.domain.Activity;
+import com.siwimi.webapi.domain.Group;
 import com.siwimi.webapi.domain.Member;
-import com.siwimi.webapi.exception.ExistingMemberException;
+import com.siwimi.webapi.exception.ExistingEntityException;
+import com.siwimi.webapi.service.ActivityService;
 import com.siwimi.webapi.service.EmailService;
 import com.siwimi.webapi.service.GroupService;
 import com.siwimi.webapi.service.MemberService;
@@ -31,16 +34,22 @@ public class EmailController {
 	@Autowired
 	private GroupService groupService;
 	
+	@Autowired
+	private ActivityService activityService;
+	
     @Autowired
     private HttpServletRequest httpServletRequest;
     
 	// Get Email by ID
 	@RequestMapping(value = "/email/sendConfirmation", method = RequestMethod.GET, produces = "application/json")
 	public Map<String, Member> sendConfirmation(@RequestParam(value="id", required=true) String id) {
-		Member member = memberService.findByMemberId(id);
+		Member member = null;
+		if (id != null)
+			if (!id.isEmpty())
+				member = memberService.findByMemberId(id);
 		Map<String, Member> responseBody = new HashMap<String, Member>();
 		if (member == null)
-			throw new ExistingMemberException("Unable to find this member!");
+			throw new ExistingEntityException("Unable to find this member!");
 		else {
 			responseBody.put("member", member);
 			// This is for backend development at local machine purpose
@@ -66,7 +75,7 @@ public class EmailController {
 			member = emailService.resetEmail(email,false);
 
 		if (member == null)
-			throw new ExistingMemberException("Unable to match this email to any existing members!");
+			throw new ExistingEntityException("Unable to match this email to any existing members!");
 		
 		responseBody.put("member", member);		
 		return responseBody;
@@ -78,9 +87,12 @@ public class EmailController {
 									  @RequestParam(value="userid", required=true) String userId,
 									  @RequestParam(value="groupid", required=true) String groupId) {
 		Map<String, Member> responseBody = new HashMap<String, Member>();
-		Member existingMember = memberService.findByMemberId(userId);
+		Member existingMember = null;
+		if (userId != null)
+			if (!userId.isEmpty())
+				existingMember = memberService.findByMemberId(userId);
 		if (existingMember == null)
-			throw new ExistingMemberException("This member does not exist in the database!");
+			throw new ExistingEntityException("This member does not exist in the database!");
 		
 		Member newMember = null;
 		// This is for backend development at local machine purpose
@@ -97,12 +109,63 @@ public class EmailController {
 		return responseBody;
 	}
 	
+	// Notify friends on events
+	@RequestMapping(value = "/email/notify-events", method = RequestMethod.GET, produces = "application/json")
+	public Map<String, Member> notifyActivity(@RequestParam(value="eventId", required=true) String eventId,
+									          @RequestParam(value="userId", required=false) String userId,
+									          @RequestParam(value="groupId", required=false) String groupId) {
+		Map<String, Member> responseBody = new HashMap<String, Member>();
+		
+		if ((userId == null) && (groupId == null))
+			throw new ExistingEntityException("User ID and event ID are both null!");
+
+		if (userId.isEmpty() && (groupId.isEmpty()))
+			throw new ExistingEntityException("User ID and event ID are both missing!");
+		
+		Activity existingActivity = null;
+		if (eventId != null) {
+			if (!eventId.isEmpty()) {
+				existingActivity = activityService.findByActivityId(eventId);
+				if (existingActivity == null)
+					throw new ExistingEntityException("This event does not exist in the database!");
+			}
+		}
+		
+		Member existingMember = null;
+		if (userId != null) {
+			if (!userId.isEmpty()) {
+				existingMember = memberService.findByMemberId(userId);
+				if (existingMember == null)
+					throw new ExistingEntityException("This member does not exist in the database!");	
+			}
+		}
+	
+		Group existingGroup = null;
+		if (groupId != null) {
+			if (!groupId.isEmpty()) {
+				existingGroup = groupService.findByGroupId(groupId);
+				if (existingGroup == null)
+					throw new ExistingEntityException("This group does not exist in the database!");
+			}
+		}
+		
+		// This is for backend development at local machine purpose
+		String serverName = this.httpServletRequest.getServerName();	
+		boolean isLocalhost = serverName == null ? false : serverName.toLowerCase().contains("localhost");
+		// send email to notify friends about this new event
+		emailService.notifyEvents(existingActivity,existingMember,existingGroup,isLocalhost);
+		
+		responseBody.put("member", existingMember);		
+		return responseBody;
+	}
+	
 	// Exception handler
-	@ExceptionHandler(ExistingMemberException.class)
-	public Map<String, String> handleExistingMemberHandler(ExistingMemberException ex, HttpServletResponse res) {
+	@ExceptionHandler(ExistingEntityException.class)
+	public Map<String, String> handleExistingEntityHandler(ExistingEntityException ex, HttpServletResponse res) {
 		Map<String, String> responseBody = new HashMap<String, String>();
 		responseBody.put("error",ex.getErrMsg());
 		res.setStatus(422);
 		return responseBody;
 	}
+	
 }

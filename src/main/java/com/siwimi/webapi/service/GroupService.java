@@ -14,8 +14,8 @@ public class GroupService {
 	@Autowired
 	private GroupRepository groupRep;
 	
-	public List<Group> findGroups(String creatorId,String queryText) {
-		return groupRep.queryGroup(creatorId, queryText);
+	public List<Group> findGroups(String creatorId,String memberId, String queryText) {
+		return groupRep.queryGroup(creatorId, memberId, queryText);
 	}
 		
 	public Group findByGroupId(String id) {

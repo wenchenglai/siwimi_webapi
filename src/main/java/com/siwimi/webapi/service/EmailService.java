@@ -12,13 +12,16 @@ import java.util.Properties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.siwimi.webapi.domain.Activity;
 import com.siwimi.webapi.domain.Email;
 import com.siwimi.webapi.domain.Feedback;
+import com.siwimi.webapi.domain.Group;
 import com.siwimi.webapi.domain.Member;
 import com.siwimi.webapi.domain.Question;
 import com.siwimi.webapi.domain.Tip;
 import com.siwimi.webapi.repository.EmailRepository;
 import com.siwimi.webapi.repository.FeedbackRepository;
+import com.siwimi.webapi.repository.GroupRepository;
 import com.siwimi.webapi.repository.MemberRepository;
 import com.siwimi.webapi.repository.QuestionRepository;
 import com.siwimi.webapi.repository.TipRepository;
@@ -41,6 +44,9 @@ public class EmailService {
 	
 	@Autowired
 	private FeedbackRepository feedbackRep;
+	
+	@Autowired
+	private GroupRepository groupRep;
 	
 	public Email sentEmail(Email newEmail) {
 		Emailer sendEmail = new Emailer(newEmail);
@@ -457,6 +463,7 @@ public class EmailService {
 		}
 			
 		String existingMemberName = null;
+		// If the email sender has no name, don't send email.
 		if (existingMember.getFirstName() != null) {
 			existingMemberName = existingMember.getFirstName();
 		}
@@ -493,5 +500,86 @@ public class EmailService {
 		
 		return newMember;
 	}		
+	
+	/** Notify events to friends in the same group **/
+	public void notifyEvents(Activity activity,Member creator, Group group, Boolean isLocalhost) {
+		// This is for backend development at local machine purpose
+		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+		Properties properties = new Properties();
+		try {
+			if (isLocalhost)
+				properties.load(classLoader.getResourceAsStream("notifyEventsToMember_localhost.properties"));
+			else
+				properties.load(classLoader.getResourceAsStream("notifyEventsToMember.properties"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+			
+		// if group is specified, ignore creator 
+		String existingMemberName = null;
+		if (group != null)
+			creator = memberRep.queryExistingMember(group.getCreator());
+
+		if (creator != null) {
+			if (creator.getFirstName() != null) {
+				existingMemberName = creator.getFirstName();
+			}
+			if (creator.getLastName() != null) {
+				if (existingMemberName == null)
+					existingMemberName = creator.getLastName();
+				else
+					existingMemberName = existingMemberName + " " +creator.getLastName();
+			}
+		}
+			
+		// If the email sender has no name, don't send email.
+		if (existingMemberName!=null) {			
+			// if groupId is specified, ignore userId 
+			if (group != null) {
+				List <String> groupMemberId = group.getMembers();
+				for (String memberId : groupMemberId) {
+					String subject = MessageFormat.format(properties.getProperty("subject"),existingMemberName);
+					String body = MessageFormat.format(properties.getProperty("body"),existingMemberName);
+					List<String> sentTo = new ArrayList<String>();
+					String email = memberRep.queryExistingMember(memberId).getEmail();
+					if ((email != null) && (!email.isEmpty())) {
+						sentTo.add(email);							
+						Email notifyEventtoMember = new Email();
+						notifyEventtoMember.setSentTo(sentTo);
+						notifyEventtoMember.setSubject(subject);
+						notifyEventtoMember.setEmailText(body);
+						notifyEventtoMember.setSentTime(new Date());								
+						sentEmail(notifyEventtoMember);
+						addEmail(notifyEventtoMember);	
+					}
+				}
+			} else {
+				List <Group> groups = groupRep.queryGroup(creator.getId(), null, null);
+				for (Group myGroup : groups) {
+					List <String> groupMemberId = myGroup.getMembers();
+					for (String memberId : groupMemberId) {
+						String subject = MessageFormat.format(properties.getProperty("subject"),existingMemberName);
+						String body = MessageFormat.format(properties.getProperty("body"),existingMemberName);
+						List<String> sentTo = new ArrayList<String>();
+						String email = memberRep.queryExistingMember(memberId).getEmail();
+						if ((email != null) && (!email.isEmpty())) {
+							sentTo.add(email);							
+							Email notifyEventtoMember = new Email();
+							notifyEventtoMember.setSentTo(sentTo);
+							notifyEventtoMember.setSubject(subject);
+							notifyEventtoMember.setEmailText(body);
+							notifyEventtoMember.setSentTime(new Date());								
+							sentEmail(notifyEventtoMember);
+							addEmail(notifyEventtoMember);	
+						}
+					}
+				}
+			}						
+		}
+	}		
+	
+	
 }
 

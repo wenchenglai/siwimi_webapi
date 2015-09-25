@@ -1,12 +1,12 @@
 package com.siwimi.webapi.exception;
 
-public class ExistingMemberException extends RuntimeException{
+public class ExistingEntityException extends RuntimeException{
 
 	private static final long serialVersionUID = 1L;
 	
 	private String errMsg;
 	
-	public ExistingMemberException(String errMsg) {
+	public ExistingEntityException(String errMsg) {
 		super();
 		this.errMsg = errMsg;
 	}
