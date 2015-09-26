@@ -55,7 +55,7 @@ public class ActivityRepositoryImpl implements ActivityRepositoryCustom {
 			criterias.add(new Criteria().where("location").nearSphere(new Point(longitude,latitude)).maxDistance(distance));
 		}
 		
-		if ((status != null) && (!status.equals("all"))) {		
+		if (status != null) {		
 			Date now = new Date();
 			if (status.equals("past")) {
 				criterias.add(new Criteria().where("toDate").lt(now));
@@ -74,6 +74,9 @@ public class ActivityRepositoryImpl implements ActivityRepositoryCustom {
 			} else if (status.equals("timeless")) {
 				criterias.add(new Criteria().andOperator(Criteria.where("fromDate").is(null),
                                                          Criteria.where("toDate").is(null)));
+			} else if (status.equals("all")) {
+				// only list current + future events
+				criterias.add(new Criteria().where("toDate").gte(now));
 			}
 		}
 	
