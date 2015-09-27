@@ -1,6 +1,9 @@
 package com.siwimi.webapi.service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,9 +28,10 @@ public class GroupService {
 	public void addMemberIntoGroup(String groupId, String memberId) {
 		Group group = groupRep.findByIdAndIsDeletedRecordIsFalse(groupId);
 		if (group!=null) {
-			List<String> members = group.getMembers();
+			// cannot add duplicated members in the group
+			Set<String> members = new HashSet<String>(group.getMembers());
 			members.add(memberId);
-			//group.setMembers(members);	
+			group.setMembers(new ArrayList<String>(members));	
 			groupRep.save(group);
 		}
 	}
