@@ -507,7 +507,7 @@ public class EmailService {
 	}		
 	
 	/** Notify events to friends in the same group **/
-	public void notifyEvents(Activity activity,Member creator, Group group, Boolean isLocalhost) {
+	public void notifyEvents(Activity activity,Member creator, List<Group> existingGroups, Boolean isLocalhost) {
 		// This is for backend development at local machine purpose
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 		Properties properties = new Properties();
@@ -522,36 +522,26 @@ public class EmailService {
 			e.printStackTrace();
 		}
 			
-		// if group is specified, ignore creator sent from front-end
-		String existingMemberName = null;
-		if (group != null)
-			creator = memberRep.queryExistingMember(group.getCreator());
-
 		// populate creator's name.
-		if (creator != null) {
-			if (creator.getFirstName() != null) {
-				existingMemberName = creator.getFirstName();
-			}
-			if (creator.getLastName() != null) {
-				if (existingMemberName == null)
-					existingMemberName = creator.getLastName();
-				else
-					existingMemberName = existingMemberName + " " +creator.getLastName();
-			}
+		String existingMemberName = null;
+		if (creator.getFirstName() != null) {
+			existingMemberName = creator.getFirstName();
+		}
+		if (creator.getLastName() != null) {
+			if (existingMemberName == null)
+				existingMemberName = creator.getLastName();
+			else
+				existingMemberName = existingMemberName + " " +creator.getLastName();
 		}
 			
 		// If the email sender has no name, don't send email.
-		if (existingMemberName!=null) {			
-			List <Group> groups = new ArrayList<Group>();
-			if (group != null)
-				// if groupId is specified, we only need to send email to this group members. 
-				groups.add(group);
-			else 
-				// if groupId is not specified, we send emails to every groups belong to this creator
-				groups = groupRep.queryGroup(creator.getId(), null, null);
+		if (existingMemberName!=null) {
+			// If groupIds are not provided, we send email to every groups belong to this creator.
+			if (existingGroups == null)
+				existingGroups = groupRep.queryGroup(creator.getId(), null, null);
 			
-			if (!groups.isEmpty()) {
-				for (Group myGroup : groups) {
+			if ((existingGroups != null) && (!existingGroups.isEmpty())) {
+				for (Group myGroup : existingGroups) {
 					List <String> groupMemberId = myGroup.getMembers();
 					for (String memberId : groupMemberId) {
 						String subject = MessageFormat.format(properties.getProperty("subject"),existingMemberName);
