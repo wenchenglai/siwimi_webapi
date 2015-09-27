@@ -1,6 +1,8 @@
 package com.siwimi.webapi.web.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -112,7 +114,7 @@ public class EmailController {
 	// Notify friends on events
 	@RequestMapping(value = "/email/notify-events", method = RequestMethod.GET, produces = "application/json")
 	public Map<String, Member> notifyActivity(@RequestParam(value="eventId", required=true) String eventId,
-									          @RequestParam(value="userId", required=false) String userId,
+									          @RequestParam(value="userId", required=true) String userId,
 									          @RequestParam(value="groupId", required=false) String[] groupId) {
 		Map<String, Member> responseBody = new HashMap<String, Member>();
 		
@@ -127,7 +129,7 @@ public class EmailController {
 			if (!eventId.isEmpty()) {
 				existingActivity = activityService.findByActivityId(eventId);
 				if (existingActivity == null)
-					throw new ExistingEntityException("This event does not exist in the database!");
+					throw new ExistingEntityException("This event " + eventId + " does not exist in the database!");
 			}
 		}
 		
@@ -136,16 +138,23 @@ public class EmailController {
 			if (!userId.isEmpty()) {
 				existingMember = memberService.findByMemberId(userId);
 				if (existingMember == null)
-					throw new ExistingEntityException("This member does not exist in the database!");	
+					throw new ExistingEntityException("This member " +  userId + " does not exist in the database!");	
 			}
 		}
 	
-		Group existingGroup = null;
+		List<Group> existingGroups = null;
 		if (groupId != null) {
-			if (groupId.length >= 0) {
-				existingGroup = groupService.findByGroupId(groupId[0]);
-				if (existingGroup == null)
-					throw new ExistingEntityException("This group does not exist in the database!");
+			if (groupId.length > 0) {
+				existingGroups = new ArrayList<Group>();
+				for (int i=0; i<groupId.length; i++) {
+					Group existingGroup = groupService.findByGroupId(groupId[i]);
+					if (existingGroup == null)
+						throw new ExistingEntityException("This group " + groupId[i] + " does not exist in the database!");
+					if (!existingGroup.getCreator().equals(userId))
+						throw new ExistingEntityException("This group " + groupId[i] + " does not belong to this creator " 
+					                                      + userId + " !");
+					existingGroups.add(existingGroup);
+				}
 			}
 		}
 		
@@ -153,7 +162,7 @@ public class EmailController {
 		String serverName = this.httpServletRequest.getServerName();	
 		boolean isLocalhost = serverName == null ? false : serverName.toLowerCase().contains("localhost");
 		// send email to notify friends about this new event
-		emailService.notifyEvents(existingActivity,existingMember,existingGroup,isLocalhost);
+		emailService.notifyEvents(existingActivity,existingMember,existingGroups,isLocalhost);
 		
 		responseBody.put("member", existingMember);		
 		return responseBody;
