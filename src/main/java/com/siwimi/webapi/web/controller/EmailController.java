@@ -113,13 +113,13 @@ public class EmailController {
 	@RequestMapping(value = "/email/notify-events", method = RequestMethod.GET, produces = "application/json")
 	public Map<String, Member> notifyActivity(@RequestParam(value="eventId", required=true) String eventId,
 									          @RequestParam(value="userId", required=false) String userId,
-									          @RequestParam(value="groupId", required=false) String groupId) {
+									          @RequestParam(value="groupId", required=false) String[] groupId) {
 		Map<String, Member> responseBody = new HashMap<String, Member>();
 		
 		if ((userId == null) && (groupId == null))
 			throw new ExistingEntityException("User ID and event ID are both null!");
-
-		if (userId.isEmpty() && (groupId.isEmpty()))
+		
+		if (userId.isEmpty() && (groupId.length == 0))
 			throw new ExistingEntityException("User ID and event ID are both missing!");
 		
 		Activity existingActivity = null;
@@ -142,8 +142,8 @@ public class EmailController {
 	
 		Group existingGroup = null;
 		if (groupId != null) {
-			if (!groupId.isEmpty()) {
-				existingGroup = groupService.findByGroupId(groupId);
+			if (groupId.length >= 0) {
+				existingGroup = groupService.findByGroupId(groupId[0]);
 				if (existingGroup == null)
 					throw new ExistingEntityException("This group does not exist in the database!");
 			}
