@@ -483,6 +483,11 @@ public class EmailService {
 				newMember = memberRep.save(newMember);
 			}
 			
+			// If this email is already a signed-up user, no need to send invitation to this email.
+			if (newMember.getIsConfirmedMember()) {
+				return null;
+			}
+			
 			String subject = MessageFormat.format(properties.getProperty("subject"),existingMemberName);
 			String body = MessageFormat.format(properties.getProperty("body"),existingMemberName,newMember.getId());
 			List<String> sentTo = new ArrayList<String>();
@@ -517,11 +522,12 @@ public class EmailService {
 			e.printStackTrace();
 		}
 			
-		// if group is specified, ignore creator 
+		// if group is specified, ignore creator sent from front-end
 		String existingMemberName = null;
 		if (group != null)
 			creator = memberRep.queryExistingMember(group.getCreator());
 
+		// populate creator's name.
 		if (creator != null) {
 			if (creator.getFirstName() != null) {
 				existingMemberName = creator.getFirstName();
@@ -536,32 +542,20 @@ public class EmailService {
 			
 		// If the email sender has no name, don't send email.
 		if (existingMemberName!=null) {			
-			// if groupId is specified, ignore userId 
-			if (group != null) {
-				List <String> groupMemberId = group.getMembers();
-				for (String memberId : groupMemberId) {
-					String subject = MessageFormat.format(properties.getProperty("subject"),existingMemberName);
-					String body = MessageFormat.format(properties.getProperty("body"),existingMemberName);
-					List<String> sentTo = new ArrayList<String>();
-					String email = memberRep.queryExistingMember(memberId).getEmail();
-					if ((email != null) && (!email.isEmpty())) {
-						sentTo.add(email);							
-						Email notifyEventtoMember = new Email();
-						notifyEventtoMember.setSentTo(sentTo);
-						notifyEventtoMember.setSubject(subject);
-						notifyEventtoMember.setEmailText(body);
-						notifyEventtoMember.setSentTime(new Date());								
-						sentEmail(notifyEventtoMember);
-						addEmail(notifyEventtoMember);	
-					}
-				}
-			} else {
-				List <Group> groups = groupRep.queryGroup(creator.getId(), null, null);
+			List <Group> groups = new ArrayList<Group>();
+			if (group != null)
+				// if groupId is specified, we only need to send email to this group members. 
+				groups.add(group);
+			else 
+				// if groupId is not specified, we send emails to every groups belong to this creator
+				groups = groupRep.queryGroup(creator.getId(), null, null);
+			
+			if (!groups.isEmpty()) {
 				for (Group myGroup : groups) {
 					List <String> groupMemberId = myGroup.getMembers();
 					for (String memberId : groupMemberId) {
 						String subject = MessageFormat.format(properties.getProperty("subject"),existingMemberName);
-						String body = MessageFormat.format(properties.getProperty("body"),existingMemberName);
+						String body = MessageFormat.format(properties.getProperty("body"),existingMemberName,activity.getId());
 						List<String> sentTo = new ArrayList<String>();
 						String email = memberRep.queryExistingMember(memberId).getEmail();
 						if ((email != null) && (!email.isEmpty())) {
@@ -576,7 +570,7 @@ public class EmailService {
 						}
 					}
 				}
-			}						
+			}	
 		}
 	}		
 	
