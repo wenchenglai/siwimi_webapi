@@ -20,15 +20,21 @@ public class VoteRepositoryImpl implements VoteRepositoryCustom{
 	
 	@SuppressWarnings("static-access")
 	@Override
-	public Vote queryVote(String creator, String targetObject, String objectType) {
+	public List<Vote> queryVote(String creator, String targetObject, String objectType) {
 		
 		List<Criteria> criterias = new ArrayList<Criteria>();		
 		criterias.add(new Criteria().where("isDeletedRecord").is(false));	
-		criterias.add(new Criteria().where("creator").is(creator));
-		criterias.add(new Criteria().where("targetObject").is(targetObject));
-		criterias.add(new Criteria().where("objectType").is(objectType));
+		
+		if (creator != null)
+			criterias.add(new Criteria().where("creator").is(creator));
+		
+		if (targetObject != null)
+			criterias.add(new Criteria().where("targetObject").is(targetObject));
+		
+		if (objectType != null)
+			criterias.add(new Criteria().where("objectType").is(objectType));
 		
 		Criteria c = new Criteria().andOperator(criterias.toArray(new Criteria[criterias.size()]));
-		return mongoTemplate.findOne(new Query(c), Vote.class, "Vote");
+		return mongoTemplate.find(new Query(c), Vote.class, "Vote");
 	}	
 }
