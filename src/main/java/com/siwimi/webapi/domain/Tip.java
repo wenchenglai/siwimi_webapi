@@ -29,6 +29,7 @@ public class Tip implements Comparable<Tip>{
 	private String state;
 	private String zipCode;
 	private double[] location;
+	private Boolean isGeoNeeded; // User specifies if this tip needs location information
 		
 	// The default of the below field is set by backend
 	private Boolean isDeletedRecord;
@@ -248,5 +249,13 @@ public class Tip implements Comparable<Tip>{
 	          return false;
 	       
 	    return true;
+	}
+
+	public Boolean getIsGeoNeeded() {
+		return isGeoNeeded;
+	}
+
+	public void setIsGeoNeeded(Boolean isGeoNeeded) {
+		this.isGeoNeeded = isGeoNeeded;
 	}
 }
