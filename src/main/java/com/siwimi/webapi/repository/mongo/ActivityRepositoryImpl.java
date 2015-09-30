@@ -76,7 +76,9 @@ public class ActivityRepositoryImpl implements ActivityRepositoryCustom {
                                                          Criteria.where("toDate").is(null)));
 			} else if (status.equals("all")) {
 				// only list current + future events
-				criterias.add(new Criteria().where("toDate").gte(now));
+				Criteria c1 = new Criteria().where("toDate").gte(now);
+				Criteria c2 = new Criteria().where("fromDate").gte(now);
+				criterias.add(new Criteria().orOperator(c1,c2));
 			}
 		}
 	
