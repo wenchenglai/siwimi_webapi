@@ -5,12 +5,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -45,6 +47,7 @@ public class SurveyController {
 	
 	// Delete a survey
 	@RequestMapping(value = "/surveys/delete", method = RequestMethod.POST, produces = "application/json")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public ModelAndView deleteSurvey(@RequestParam String id, Model model) {
 		surveyService.deleteSurvey(id);
 		return new ModelAndView("redirect:/surveys");
