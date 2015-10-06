@@ -61,11 +61,18 @@ public class MemberService {
 		return savedMember;
 	}
 		
-	public void deleteMember(String id) {
+	public Member deleteMember(String id) {
 		// For Member collection
 		Member member = memberRep.findOne(id);
-		member.setIsDeletedRecord(true);
-		memberRep.save(member);
+		if (member == null)
+			return null;
+		else {
+			if (!member.getIsDeletedRecord()) {
+				member.setIsDeletedRecord(true);
+				return memberRep.save(member);	
+			} else
+				return null;
+		}
 	}
 	
 	public Member findByMemberId(String id) {		

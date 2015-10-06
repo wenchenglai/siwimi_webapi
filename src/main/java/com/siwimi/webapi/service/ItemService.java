@@ -68,10 +68,16 @@ public class ItemService {
 		return itemRep.saveItem(updatedItem);
 	}
 	
-	public void deleteItem(String id) {
+	public Item deleteItem(String id) {
 		Item item = itemRep.findOne(id);
-		item.setIsDeletedRecord(true);
-		itemRep.saveItem(item);
+		if (item == null)
+			return null;
+		else if (!item.getIsDeletedRecord()) {
+			item.setIsDeletedRecord(true);
+			return itemRep.saveItem(item);
+		} else
+			return null;
+
 	}
 	
 	public Item updateLocation(Item item) {

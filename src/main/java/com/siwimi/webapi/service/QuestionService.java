@@ -61,10 +61,15 @@ public class QuestionService {
 		return questionRep.saveQuestion(updatedQuestion);
 	}
 	
-	public void deleteQuestion(String id) {
+	public Question deleteQuestion(String id) {
 		Question question = questionRep.findOne(id);
-		question.setIsDeletedRecord(true);
-		questionRep.saveQuestion(question);
+		if (question == null)
+			return null;
+		else if (!question.getIsDeletedRecord()) {
+			question.setIsDeletedRecord(true);
+			return questionRep.saveQuestion(question);			
+		} else
+			return null;
 	}
 	
 	public Question updateLocation(Question question) {

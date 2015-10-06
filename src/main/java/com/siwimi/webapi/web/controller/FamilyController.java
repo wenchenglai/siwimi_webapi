@@ -5,14 +5,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.siwimi.webapi.domain.Family;
@@ -113,14 +113,15 @@ public class FamilyController {
 	// Delete Family
 	// 2015-02-14 front end needs the deleted object to make sure the deletion is a success
 	@RequestMapping (value = "/families/{id}", method = RequestMethod.DELETE, produces = "application/json")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public Map<String, Family> deleteFamily(@PathVariable("id")String id) {
-		familyService.deleteFamily(id);
-		Family family = familyService.findByFamilyId(id);
-
+	public Map<String, Family> deleteFamily(@PathVariable("id")String id, HttpServletResponse response) {
+		Family family = familyService.deleteFamily(id);
 		Map<String, Family> responseBody = new HashMap<String, Family>();
 		responseBody.put("family", family);
-	
+		if (family != null) 
+			response.setStatus(HttpServletResponse.SC_OK);
+		else
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+		
 		return responseBody;			
 	}	
 }

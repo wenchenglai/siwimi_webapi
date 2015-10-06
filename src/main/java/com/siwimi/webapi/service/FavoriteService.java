@@ -39,9 +39,14 @@ public class FavoriteService {
 		return favoriteRep.save(updatedFavorite);
 	}
 	
-	public void deleteFavorite(String id) {
-		Favorite Favorite = favoriteRep.findOne(id);
-		Favorite.setIsDeletedRecord(true);
-		favoriteRep.save(Favorite);
+	public Favorite deleteFavorite(String id) {
+		Favorite favorite = favoriteRep.findOne(id);
+		if (favorite == null)
+			return null;
+		else if (!favorite.getIsDeletedRecord()) {
+			favorite.setIsDeletedRecord(true);
+			return favoriteRep.save(favorite);
+		} else
+			return null;
 	}	
 }

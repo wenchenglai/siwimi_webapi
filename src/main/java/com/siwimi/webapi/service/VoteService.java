@@ -56,9 +56,15 @@ public class VoteService {
 		return voteRep.save(updatedVote);
 	}
 	
-	public void deleteVote(String id) {
+	public Vote deleteVote(String id) {
 		Vote vote = voteRep.findOne(id);
-		vote.setIsDeletedRecord(true);
-		voteRep.save(vote);
+		if (vote == null)
+			return null;
+		else if (!vote.getIsDeletedRecord()) {
+			vote.setIsDeletedRecord(true);
+			return voteRep.save(vote);
+		} else
+			return null;
+
 	}
 }

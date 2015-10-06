@@ -69,10 +69,16 @@ public class TipService {
 		return tipRep.saveTip(updatedTip);
 	}
 	
-	public void deleteTip(String id) {
+	public Tip deleteTip(String id) {
 		Tip tip = tipRep.findOne(id);
-		tip.setIsDeletedRecord(true);
-		tipRep.saveTip(tip);
+		if (tip == null)
+			return null;
+		else if (!tip.getIsDeletedRecord()) {
+			tip.setIsDeletedRecord(true);
+			return tipRep.saveTip(tip);
+		} else
+			return null;
+
 	}
 	
 	public Tip updateLocation(Tip tip) {

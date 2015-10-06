@@ -9,14 +9,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.siwimi.webapi.domain.JqueryObject;
@@ -52,10 +50,8 @@ public class MemberController {
 	public Map<String, List<Member>> findMembers(
 			@RequestParam(value="queryText", required=false) String queryText,
 			@RequestParam(value="id", required=false) String id,
-            @RequestParam(value="action", required=false) String action) {		
-		
-		Map<String, List<Member>> responseBody = new HashMap<String, List<Member>>();
-		
+            @RequestParam(value="action", required=false) String action) {				
+		Map<String, List<Member>> responseBody = new HashMap<String, List<Member>>();	
 		if (action == null) {
 			/** Query Member **/
 			List<Member> members = memberService.find(null,queryText);
@@ -81,12 +77,10 @@ public class MemberController {
 
 	**/
 	@RequestMapping(value = "/membersjquery", method = RequestMethod.GET, produces = "application/json")
-	public List<JqueryObject> findFuzzyMembers(
-			@RequestParam(value="queryText", required=false) String queryText) {			
+	public List<JqueryObject> findFuzzyMembers(@RequestParam(value="queryText", required=false) String queryText) {			
 		List<Member> members = memberService.find(null,queryText);
 		if (members==null)
-			members = new ArrayList<Member>();
-		
+			members = new ArrayList<Member>();		
 		List<JqueryObject> jqueryObjects = new ArrayList<JqueryObject>();
 		for (Member member : members) {
 			String memberName = member.getFirstName() + " " + member.getLastName();
@@ -106,8 +100,7 @@ public class MemberController {
 			@RequestParam(value="queryText", required=false) String queryText) {			
 		List<Member> members = memberService.find(null,queryText);
 		if (members==null)
-			members = new ArrayList<Member>();
-		
+			members = new ArrayList<Member>();	
 		List<String> obj = new ArrayList<String>();
 		for (Member member : members) {
 			String memberName = member.getFirstName() + " " + member.getLastName();
@@ -170,16 +163,17 @@ public class MemberController {
 	public Map<String, Member> updateMember(@PathVariable("id") String id, @RequestBody MemberSideload member) {				
 		Member savedMember = memberService.updateMember(id, member.member);
 		Map<String, Member> responseBody = new HashMap<String, Member>();
-		responseBody.put("member", savedMember);
-		
+		responseBody.put("member", savedMember);		
 		return responseBody;		
 	}
 	
 	// Delete Member
 	@RequestMapping (value = "/members/{id}", method = RequestMethod.DELETE, produces = "application/json")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void deleteMember(@PathVariable("id")String id) {
-		memberService.deleteMember(id);
+	public void deleteMember(@PathVariable("id")String id, HttpServletResponse response) {
+		if (memberService.deleteMember(id) != null)
+			response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+		else
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 	}	
 	
 	// Exception handler
