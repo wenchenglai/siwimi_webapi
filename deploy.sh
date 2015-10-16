@@ -3,7 +3,7 @@ sudo rm -rf siwimi_webapi
 git clone https://github.com/wenchenglai/siwimi_webapi.git
 cd siwimi_webapi
 gradle wrapper
-./gradlew build	
+./gradlew build -x test
 cd /usr/local/tomcat8/webapps
 sudo /etc/init.d/tomcat8 stop
 sleep 3
