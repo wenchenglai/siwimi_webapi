@@ -48,7 +48,7 @@ public class FamilyService {
 		return savedFamily;
 	}
 	
-	public void deleteFamily(String id) {		
+	public Family deleteFamily(String id) {		
 		//Delete members which belongs both "non-user" and this family
 		List<Member> memberList = memberRep.query(id,null);
 		for (Member member:memberList) {
@@ -56,12 +56,15 @@ public class FamilyService {
 				member.setIsDeletedRecord(true);
 				memberRep.save(member);
 			}				
-		}
-		
+		}		
 		Family family = familyRep.findOne(id);
-		family.setIsDeletedRecord(true);
-		familyRep.save(family);		
-		
+		if (family == null)
+			return null;
+		else if (!family.getIsDeletedRecord()) {
+			family.setIsDeletedRecord(true);
+			return familyRep.save(family);	
+		} else
+			return null;		
 	}
 	
 	public Family updateLocation(Family family) {

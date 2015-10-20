@@ -7,14 +7,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.siwimi.webapi.domain.Favorite;
@@ -81,15 +81,16 @@ public class FavoriteController {
 	public Map<String, Favorite> updateFavorite(@PathVariable("id") String id, @RequestBody FavoriteSideload updatedFavorite) {
 		Favorite savedFavorite = favoriteService.updateFavorite(id, updatedFavorite.favorite);
 		Map<String, Favorite> responseBody = new HashMap<String, Favorite>();
-		responseBody.put("favorite", savedFavorite);
-		
+		responseBody.put("favorite", savedFavorite);		
 		return responseBody;			
 	}
 	
 	// Delete Favorite
 	@RequestMapping (value = "/favorites/{id}", method = RequestMethod.DELETE, produces = "application/json")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void deleteFavorite(@PathVariable("id")String id) {
-		favoriteService.deleteFavorite(id);
+	public void deleteFavorite(@PathVariable("id")String id, HttpServletResponse response) {
+		if (favoriteService.deleteFavorite(id) != null)
+			response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+		else
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 	}	
 }

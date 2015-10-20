@@ -80,10 +80,15 @@ public class ActivityService {
 		return activityRep.saveActivity(updatedActivity);
 	}
 	
-	public void deleteActivity(String id) {
+	public Activity deleteActivity(String id) {
 		Activity activity = activityRep.findOne(id);
-		activity.setIsDeletedRecord(true);
-		activityRep.saveActivity(activity);
+		if (activity == null)
+			return null;
+		else if (!activity.getIsDeletedRecord()) {
+			activity.setIsDeletedRecord(true);
+			return activityRep.saveActivity(activity);
+		} else
+			return null;		
 	}
 	
 	public Activity updateLocationAndTime(Activity activity) {

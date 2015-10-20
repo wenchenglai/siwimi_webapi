@@ -239,9 +239,14 @@ public class FeedService {
 		return feedRep.save(updatedFeed);
 	}
 	
-	public void deleteFeed(String id){
+	public Feed deleteFeed(String id){
 		Feed feed = feedRep.findOne(id);
-		feed.setIsDeletedRecord(true);
-		feedRep.save(feed);
+		if (feed == null)
+			return null;
+		else if (!feed.getIsDeletedRecord()) {
+			feed.setIsDeletedRecord(true);
+			return feedRep.save(feed);
+		} else
+			return null;
 	}
 }

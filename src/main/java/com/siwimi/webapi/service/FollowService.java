@@ -32,9 +32,14 @@ public class FollowService {
 		return followRep.save(updatedFollow);
 	}
 	
-	public void deleteFollow (String id) {
+	public Follow deleteFollow (String id) {
 		Follow follow = followRep.findOne(id);
-		follow.setIsDeletedRecord(true);
-		followRep.save(follow);
+		if (follow == null)
+			return null;
+		else if (!follow.getIsDeletedRecord()) {
+			follow.setIsDeletedRecord(true);
+			return followRep.save(follow);				
+		} else
+			return null;		
 	}
 }

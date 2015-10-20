@@ -51,9 +51,14 @@ public class GroupService {
 		return groupRep.save(updatedGroup);
 	}
 	
-	public void deleteGroup(String id) {
+	public Group deleteGroup(String id) {
 		Group group = groupRep.findOne(id);
-		group.setIsDeletedRecord(true);
-		groupRep.save(group);
+		if (group == null) {
+			return null;
+		} else if (!group.getIsDeletedRecord()) {
+			group.setIsDeletedRecord(true);
+			return groupRep.save(group);
+		} else
+			return null;
 	}
 }

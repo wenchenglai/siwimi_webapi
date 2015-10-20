@@ -34,10 +34,16 @@ public class MessageService {
 		return repo.save(updatedObj);
 	}
 	
-	public void delete(String id) {
+	public Message delete(String id) {
 		Message obj = repo.findOne(id);
-		obj.setIsDeletedRecord(true);
-		repo.save(obj);
+		if (obj == null)
+			return null;
+		else if (!obj.getIsDeletedRecord()) {
+			obj.setIsDeletedRecord(true);
+			return repo.save(obj);
+		} else
+			return null;
+
 	}
 }
 

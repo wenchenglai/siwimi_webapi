@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -114,7 +116,10 @@ public class QuestionController {
 	// Delete Question
 	@RequestMapping (value = "/questions/{id}", method = RequestMethod.DELETE, produces = "application/json")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void deleteQuestion(@PathVariable("id")String id) {
-		questionService.deleteQuestion(id);
+	public void deleteQuestion(@PathVariable("id")String id, HttpServletResponse response) {
+		if (questionService.deleteQuestion(id)!= null)
+			response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+		else
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 	}	
 }

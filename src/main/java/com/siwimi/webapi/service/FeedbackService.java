@@ -76,10 +76,15 @@ public class FeedbackService {
 		return feedbackRep.save(updatedObj);
 	}
 	
-	public void delete(String id) {
+	public Feedback delete(String id) {
 		Feedback obj = feedbackRep.findOne(id);
-		obj.setIsDeletedRecord(true);
-		feedbackRep.save(obj);
+		if (obj == null)
+			return null;
+		else if (!obj.getIsDeletedRecord()) {				
+			obj.setIsDeletedRecord(true);
+			return feedbackRep.save(obj);
+		} else
+			return null;
 	}
 }
 
