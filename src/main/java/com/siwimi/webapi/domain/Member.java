@@ -39,6 +39,7 @@ public class Member {
 	private String city;
 	private String state;
 	private String invitedBy;
+	private String notification;
 	private double[] location;
 	
 	// features
@@ -297,6 +298,14 @@ public class Member {
 
 	public void setInvitedBy(String invitedBy) {
 		this.invitedBy = invitedBy;
+	}
+
+	public String getNotification() {
+		return notification;
+	}
+
+	public void setNotification(String notification) {
+		this.notification = notification;
 	}
 
 	public boolean getIsInSignUpProcess() {
