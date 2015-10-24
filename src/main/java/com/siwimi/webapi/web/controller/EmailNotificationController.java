@@ -22,7 +22,7 @@ public class EmailNotificationController {
 	private EmailNotificationService emailNotificationService;
 	
 	// Get emailNotification from creator Id
-	@RequestMapping(value = "/emailnotification/{creatorId}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/emailNotification/{creatorId}", method = RequestMethod.GET, produces = "application/json")
 	public Map<String,EmailNotification> findEmailNotification(@PathVariable("creatorId") String creatorId) {
 		Map<String,EmailNotification> responseBody = new HashMap<String,EmailNotification>();
 		responseBody.put("emailNotification", emailNotificationService.findByCreator(creatorId));
@@ -31,7 +31,7 @@ public class EmailNotificationController {
 	
 	
 	// Update emailNotification
-	@RequestMapping(value = "/emailnotification/{creatorId}", method = RequestMethod.PUT, produces = "application/json")
+	@RequestMapping(value = "/emailNotifications/{creatorId}", method = RequestMethod.PUT, produces = "application/json")
 	public Map<String, EmailNotification> updateEmailNotification(@PathVariable("creatorId") String creatorId, 
 			                                                      @RequestBody EmailNotificationSideload updatedEmailNotification){
 		Map<String,EmailNotification> responseBody = new HashMap<String, EmailNotification>();
@@ -41,7 +41,7 @@ public class EmailNotificationController {
 	}
 	
 	// Add New emailNotification
-	@RequestMapping(value = "/email-notification", method = RequestMethod.POST, produces = "application/json")
+	@RequestMapping(value = "/emailNotifications", method = RequestMethod.POST, produces = "application/json")
 	public Map<String, EmailNotification> addEmailNotification(@RequestBody EmailNotificationSideload newEmailNotification) {		
 		Map<String,EmailNotification> responseBody = new HashMap<String, EmailNotification>();
 		responseBody.put("emailNotification", emailNotificationService.addEmailNotification(newEmailNotification.emailNotification));
