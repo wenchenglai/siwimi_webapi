@@ -32,7 +32,7 @@ public class Tip implements Comparable<Tip>{
 	private Boolean isGeoNeeded; // User specifies if this tip needs location information
 		
 	// The default of the below field is set by backend
-	private Boolean isDeletedRecord;
+	private Boolean isDeletedRecord = false;
 	
 	// This field is only for front-end purpose : User comments
 	@Transient

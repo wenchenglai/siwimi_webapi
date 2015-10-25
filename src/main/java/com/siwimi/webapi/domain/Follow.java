@@ -13,7 +13,7 @@ public class Follow {
 	private String follower; // member Id
 	private String followee; // member Id
 	private Date createdDate;
-	private Boolean isDeletedRecord;
+	private Boolean isDeletedRecord = false;
 	
 	public String getId() {
 		return id;

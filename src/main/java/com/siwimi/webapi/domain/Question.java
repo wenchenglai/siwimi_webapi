@@ -40,7 +40,7 @@ public class Question {
 	private boolean isFavorite = false; // from requester's perspective
 	
 	//The default of the below field is set by backend
-	private Boolean isDeletedRecord;
+	private Boolean isDeletedRecord = false;
 
 	public String getId() {
 		return id;

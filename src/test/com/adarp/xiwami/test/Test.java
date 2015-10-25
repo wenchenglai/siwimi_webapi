@@ -1,6 +1,6 @@
 package com.adarp.xiwami.test;
 
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
+/*import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -19,14 +19,14 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.siwimi.webapi.Application;
+import com.siwimi.webapi.Application;*/
 
-@RunWith(SpringJUnit4ClassRunner.class)
+/*@RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
-@WebAppConfiguration
+@WebAppConfiguration*/
 public class Test {
 	
-    private MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
+/*    private MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
             MediaType.APPLICATION_JSON.getSubtype());
     
     @SuppressWarnings("rawtypes")
@@ -57,5 +57,5 @@ public class Test {
         this.mappingJackson2HttpMessageConverter.write(
                 o, MediaType.APPLICATION_JSON, mockHttpOutputMessage);
         return mockHttpOutputMessage.getBodyAsString();
-    }
+    }*/
 }

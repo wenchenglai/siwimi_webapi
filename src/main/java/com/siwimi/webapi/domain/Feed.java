@@ -26,7 +26,7 @@ public class Feed {
 	private List<String> replies = new ArrayList<String>();	
 	
 	//The default of the below field is set by backend
-	private Boolean isDeletedRecord;
+	private Boolean isDeletedRecord = false;
 	
 	public String getId() {
 		return id;

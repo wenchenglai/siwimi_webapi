@@ -23,7 +23,7 @@ public class EmailNotification {
 	private boolean groupAddMember = false;
 		
 	//The default of the below field is set by back end
-	private boolean isDeletedRecord;
+	private boolean isDeletedRecord = false;
 
 	public String getId() {
 		return id;
