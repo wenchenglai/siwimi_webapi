@@ -47,7 +47,7 @@ public class Member {
 	private List<String> needs = new ArrayList<String>();
 	
 	//The default of the below field is set by back end
-	private boolean isDeletedRecord;
+	private boolean isDeletedRecord = false;
 	
 	// need email confirmation from the user,
 	private boolean isConfirmedMember = false;

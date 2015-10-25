@@ -83,6 +83,7 @@ public class FamilyControllerTest {
         
         /** Setup family **/
     	Family family = new Family();  	
+    	family.setIsDeletedRecord(false);
     	
 /*    	family.setZipCode("08540");
     	family.setDescription("AAA");
@@ -101,9 +102,8 @@ public class FamilyControllerTest {
  
     	family.setZipCode("10606");
     	family.setDescription("DDD");
-    	family.setFamilyName("Family D");  	    	
+    	family.setFamilyName("Family D");  
     	this.familySideload4.family = family;
-    	
     	
         /** Setup member **/
 /*    	Member member = new Member();
@@ -178,28 +178,24 @@ public class FamilyControllerTest {
     	
     	// update family4	
     	this.familySideload4.family.setZipCode("27705");
-    	MvcResult result2 = mockMvc.perform(put("/families/"+ this.familySideload4.family.getId()).content(this.json(familySideload4))
-    	.accept(contentType).contentType(contentType))
-        .andExpect(status().isOk()).andReturn();
-    	String content2 = result2.getResponse().getContentAsString(); 
+    	mockMvc.perform(put("/families/"+ this.familySideload4.family.getId())
+    	.content(this.json(familySideload4)).accept(contentType).contentType(contentType))
+    	.andExpect(status().isOk());
     	
     	// check updated family4 
-    	MvcResult result3 = mockMvc.perform(get("/families/"+ this.familySideload4.family.getId()))
-    			.andReturn();
-    	String content3 = result3.getResponse().getContentAsString(); 
-/*    	mockMvc.perform(get("/families/"+ this.familySideload4.family.getId()))
-        .andExpect(status().isOk())
-        .andExpect(content().contentType(contentType))
-        .andExpect(jsonPath("$.family.description", is(this.familySideload4.family.getDescription())))
-        .andExpect(jsonPath("$.family.familyName", is(this.familySideload4.family.getFamilyName())))
-        .andExpect(jsonPath("$.family.city", is("Durham")))
-        .andExpect(jsonPath("$.family.state", is("NC")));*/
+    	mockMvc.perform(get("/families/"+ this.familySideload4.family.getId()))
+    	.andExpect(status().isOk())
+    	.andExpect(content().contentType(contentType))
+    	.andExpect(jsonPath("$.family.description", is(this.familySideload4.family.getDescription())))
+    	.andExpect(jsonPath("$.family.familyName", is(this.familySideload4.family.getFamilyName())))
+    	.andExpect(jsonPath("$.family.city", is("Durham")))
+        .andExpect(jsonPath("$.family.state", is("NC")));
     	
     	// delete non-existed family
     	mockMvc.perform(delete("/families/siwimi_noFamily")).andExpect(status().isNotFound());
     	
     	// delete family4
-    	mockMvc.perform(delete("/families/"+ this.familySideload4.family.getId())).andExpect(status().isNoContent());
+    	mockMvc.perform(delete("/families/"+ this.familySideload4.family.getId())).andExpect(status().isOk());
     	Family deletedFamily = familyRepository.findOne(this.familySideload4.family.getId());
     	assertTrue(deletedFamily.getIsDeletedRecord());
     	
@@ -207,7 +203,7 @@ public class FamilyControllerTest {
     
     @After
     public void clean() throws Exception {
-    	if (this.memberSideload1.member != null)
+/*    	if (this.memberSideload1.member != null)
     		memberRepository.delete(this.memberSideload1.member.getId());
     	if (this.memberSideload2.member != null)
     		memberRepository.delete(this.memberSideload2.member.getId());
@@ -222,7 +218,7 @@ public class FamilyControllerTest {
     	if (this.familySideload2.family != null)
     		familyRepository.delete(this.familySideload2.family.getId());
     	if (this.familySideload3.family != null)
-    		familyRepository.delete(this.familySideload3.family.getId());
+    		familyRepository.delete(this.familySideload3.family.getId());*/
     	if (this.familySideload4.family != null)
     		familyRepository.delete(this.familySideload4.family.getId());
     }

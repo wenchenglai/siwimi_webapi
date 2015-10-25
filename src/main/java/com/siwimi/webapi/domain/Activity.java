@@ -53,7 +53,7 @@ public class Activity {
 	private boolean isFavorite = false;
 	
 	//The default of the below field is set by backend
-	private Boolean isDeletedRecord;
+	private Boolean isDeletedRecord = false;
 	
 	public String getFromTime() {
 		return fromTime;

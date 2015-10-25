@@ -75,6 +75,7 @@ public class MemberControllerTest {
         mockMember1.setFacebookId("1234");
         mockMember1.setZipCode("08540");
         mockMember1.setLanguages(new ArrayList<String>(Arrays.asList(new String[] {"Chinese", "English"})));
+        mockMember1.setIsDeletedRecord(false);
         this.member1 = memberRepository.save(mockMember1);   
     }
     
@@ -102,6 +103,7 @@ public class MemberControllerTest {
     	this.member2.setFacebookId("Siwimi_1234");
     	this.member2.setLanguages(new ArrayList<String>(Arrays.asList(new String[] {"Chinese", "English"})));
     	this.member2.setZipCode("08540");
+    	this.member2.setIsDeletedRecord(false);
     	MemberSideload memberSideload = new MemberSideload();
     	memberSideload.member = this.member2;
 
@@ -164,6 +166,7 @@ public class MemberControllerTest {
     	this.member3.setFirstName("a");
     	this.member3.setLastName("Lai_3");
     	this.member3.setFacebookId("Siwimi_3abc");
+    	this.member3.setIsDeletedRecord(false);
     	MemberSideload memberSideload3 = new MemberSideload();
     	memberSideload3.member = this.member3;
     	MvcResult result3 = mockMvc.perform(post("/members")
@@ -177,6 +180,7 @@ public class MemberControllerTest {
     	this.member4.setFirstName("c");
     	this.member4.setLastName("Lai_3");
     	this.member4.setFacebookId("Siwimi_4abc");
+    	this.member4.setIsDeletedRecord(false);
     	MemberSideload memberSideload4 = new MemberSideload();
     	memberSideload4.member = this.member4;
     	MvcResult result4 = mockMvc.perform(post("/members")
@@ -190,6 +194,7 @@ public class MemberControllerTest {
     	this.member5.setFirstName("a");
     	this.member5.setLastName("Shiu_3");
     	this.member5.setFacebookId("Siwimi_5abc");
+    	this.member5.setIsDeletedRecord(false);
     	MemberSideload memberSideload5 = new MemberSideload();
     	memberSideload5.member = this.member5;
     	MvcResult result5 = mockMvc.perform(post("/members")

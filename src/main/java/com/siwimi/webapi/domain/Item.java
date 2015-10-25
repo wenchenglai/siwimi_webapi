@@ -40,7 +40,7 @@ public class Item {
 	private String zipCode;
 	private double[] location;
 	
-	private Boolean isDeletedRecord; 
+	private Boolean isDeletedRecord = false; 
 	
 	// This field is only for front-end purpose : User comments
 	@Transient

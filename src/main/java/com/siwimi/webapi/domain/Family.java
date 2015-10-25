@@ -25,7 +25,7 @@ public class Family {
 	
 	//The defaults of the below fields are set by backend
 	private double[] location;
-	private Boolean isDeletedRecord;
+	private Boolean isDeletedRecord = false;
 
 	public String getId() {
 		return id;

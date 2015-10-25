@@ -20,7 +20,7 @@ public class Group {
 	private List<String> members = new ArrayList<String>();
 	
 	//The default of the below field is set by backend
-	private Boolean isDeletedRecord;
+	private Boolean isDeletedRecord = false;
 
 	public String getId() {
 		return id;
