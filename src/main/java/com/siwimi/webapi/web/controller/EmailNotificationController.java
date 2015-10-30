@@ -22,7 +22,7 @@ public class EmailNotificationController {
 	private EmailNotificationService emailNotificationService;
 	
 	// Get emailNotification from creator Id
-	@RequestMapping(value = "/emailNotification/{creatorId}", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value = "/emailNotifications/{creatorId}", method = RequestMethod.GET, produces = "application/json")
 	public Map<String,EmailNotification> findEmailNotification(@PathVariable("creatorId") String creatorId) {
 		Map<String,EmailNotification> responseBody = new HashMap<String,EmailNotification>();
 		responseBody.put("emailNotification", emailNotificationService.findByCreator(creatorId));
