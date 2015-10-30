@@ -88,8 +88,7 @@ public class MemberControllerTest {
         .andExpect(jsonPath("$.member.facebookId", is(this.member1.getFacebookId())))
         .andExpect(jsonPath("$.member.lastName", is(this.member1.getLastName())))
         .andExpect(jsonPath("$.member.firstName", is(this.member1.getFirstName())))
-        .andExpect(jsonPath("$.member.languages", is(this.member1.getLanguages())))
-        .andReturn();
+        .andExpect(jsonPath("$.member.languages", is(this.member1.getLanguages())));
     }
     
     /** Test : add, update, and delete member **/

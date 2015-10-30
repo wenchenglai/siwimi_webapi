@@ -43,7 +43,7 @@ public class Family {
 	public void setZipCode(String zipCode) {
 		if (zipCode != null) {
 			if (Integer.parseInt(zipCode)<10000)
-				zipCode = "0"+zipCode;	
+				zipCode = "0"+Integer.toString(Integer.parseInt(zipCode));	
 		}
 		this.zipCode = zipCode;
 	}
