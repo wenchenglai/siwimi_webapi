@@ -49,6 +49,9 @@ public class MemberService {
 		} else {
 			newMember.setIsDeletedRecord(false);
 			newMember = updateLocation(newMember);
+			// In case that this user was invited by someone else...
+			if (memberRep.queryExistingMember(newMember.getEmail())!=null)
+				newMember.setId(memberRep.queryExistingMember(newMember.getEmail()).getId());
 			Member member = memberRep.save(newMember);	
 			return member;	
 		}
