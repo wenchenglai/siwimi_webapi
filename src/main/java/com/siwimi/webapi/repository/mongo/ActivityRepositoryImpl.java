@@ -174,7 +174,10 @@ public class ActivityRepositoryImpl implements ActivityRepositoryCustom {
 					                   .and(new Sort(Sort.DEFAULT_DIRECTION.ASC,"createdDate")));
 				}
 			} else {
-				q = q.with(new Sort(Sort.DEFAULT_DIRECTION.ASC,"fromDate").and(new Sort(Sort.DEFAULT_DIRECTION.ASC,"createdDate")));
+				if ((status!=null) && (status.equals("past")))
+					q = q.with(new Sort(Sort.DEFAULT_DIRECTION.DESC,"fromDate").and(new Sort(Sort.DEFAULT_DIRECTION.DESC,"createdDate")));
+				else
+					q = q.with(new Sort(Sort.DEFAULT_DIRECTION.ASC,"fromDate").and(new Sort(Sort.DEFAULT_DIRECTION.ASC,"createdDate")));
 			}
 		
 			// Queried result with pagination
