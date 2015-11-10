@@ -227,8 +227,7 @@ public class EmailService {
 			feedbackIssuer.setEmail(newFeedback.getSenderEmail());
 		}
 		
-		if (feedbackIssuer.getEmail() != null) {
-			
+		if (feedbackIssuer.getEmail() != null) {		
 			// For child comment : find its parent comment
 			Feedback parentFeedback = new Feedback();
 			if (newFeedback.getParentType() == null)
@@ -290,12 +289,12 @@ public class EmailService {
 	/** Notify answer to the question asker **/
 	public void notifyNewFeedbackToAsker(Feedback newFeedback) {
 		
-		Member feedbackIssuer = new Member();
-		if (newFeedback.getCreator() != null)
-			feedbackIssuer = memberRep.queryExistingMember(newFeedback.getCreator());
-		else {
-			feedbackIssuer.setEmail(newFeedback.getSenderEmail());
-		}
+		//Member feedbackIssuer = new Member();
+		//if (newFeedback.getCreator() != null)
+		//	feedbackIssuer = memberRep.queryExistingMember(newFeedback.getCreator());
+		//else {
+		//	feedbackIssuer.setEmail(newFeedback.getSenderEmail());
+		//}
 		
 		// For child comment : find its parent comment
 		Feedback parentFeedback = new Feedback();
@@ -312,7 +311,7 @@ public class EmailService {
 		if (parentFeedback.getParentType() == null)
 			// parentType of parent-feedback is null : not allowed
 			return;
-		else if (parentFeedback.getParentType().equals("feedback")) {
+		else if (parentFeedback.getParentType().equals("feedback") && newFeedback.getSenderEmail()!=null) {
 			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 			Properties properties = new Properties();
 			try {
@@ -325,7 +324,8 @@ public class EmailService {
 			String subject = properties.getProperty("subject");
 			String body = properties.getProperty("body");	        			
 			List<String> recipent = new ArrayList<String> ();
-			recipent.add(feedbackIssuer.getEmail());
+//			recipent.add(feedbackIssuer.getEmail());
+			recipent.add(newFeedback.getSenderEmail());
 			Email notifyReplier = new Email();
 			notifyReplier.setSentTo(recipent);
 			notifyReplier.setSubject(subject);
@@ -414,34 +414,32 @@ public class EmailService {
 		Member member = memberRep.queryExistingMember(email);
 		
 		if (member!=null) {
-			if (member.getIsConfirmedMember()) {
-				ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-				Properties properties = new Properties();
-				try {
-					// This is for backend development at local machine purpose
-					if (isLocalhost)
-						properties.load(classLoader.getResourceAsStream("resetPasswordToNewMember_localhost.properties"));
-					else
-						properties.load(classLoader.getResourceAsStream("resetPasswordToNewMember.properties"));
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				String subject = properties.getProperty("subject");
-				String body = MessageFormat.format(properties.getProperty("body"),member.getId());
-				List<String> sentTo = new ArrayList<String>();
-				sentTo.add(member.getEmail());	
+			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+			Properties properties = new Properties();
+			try {
+				// This is for backend development at local machine purpose
+				if (isLocalhost)
+					properties.load(classLoader.getResourceAsStream("resetPasswordToNewMember_localhost.properties"));
+				else
+					properties.load(classLoader.getResourceAsStream("resetPasswordToNewMember.properties"));
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			String subject = properties.getProperty("subject");
+			String body = MessageFormat.format(properties.getProperty("body"),member.getId());
+			List<String> sentTo = new ArrayList<String>();
+			sentTo.add(member.getEmail());	
 				
-				Email notifyMember = new Email();
-				notifyMember.setSentTo(sentTo);
-				notifyMember.setSubject(subject);
-				notifyMember.setEmailText(body);
-				notifyMember.setSentTime(new Date());	
-				
-				sentEmail(notifyMember);
-				addEmail(notifyMember);			
-			}	
+			Email notifyMember = new Email();
+			notifyMember.setSentTo(sentTo);
+			notifyMember.setSubject(subject);
+			notifyMember.setEmailText(body);
+			notifyMember.setSentTime(new Date());	
+			
+			sentEmail(notifyMember);
+			addEmail(notifyMember);			
 		}		
 		
 		return member;
