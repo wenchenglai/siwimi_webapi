@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "Tip")
@@ -15,11 +16,14 @@ public class Tip implements Comparable<Tip>{
 	private String id;
 
 	private String creator;
+	@Indexed
 	private String title;
 	private String description;
 	private String url;
+	@Indexed
 	private Date createdDate;
 	private Date expiredDate;
+	@Indexed
 	private String type;
 	private int viewCount;
 	private String imageData;

@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection="Item")
@@ -16,9 +17,11 @@ public class Item {
 	
 	private String creator;
 	private String buyer;
+	@Indexed
 	private String title;
 	private String description;
 	private String status; // active, inactive, sold, swapped, gave away
+	@Indexed
 	private Date createdDate;
 	private String size;
 	private float width;
@@ -27,6 +30,7 @@ public class Item {
 	private int fromAge;
 	private int toAge;
 	private String condition; // new, used
+	@Indexed
 	private String type; // toy, cloth, book, equipment, furniture, misc
 	private String transactionType; // Sale, Swap, Loan, Free
 	private float price;
