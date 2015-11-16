@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection="Activity")
@@ -15,8 +16,10 @@ public class Activity {
 	private String id;
 	
 	private String creator;
+	@Indexed
 	private String title;
 	private String description;
+	@Indexed
 	private Date fromDate;
 	private Date toDate;	
 	private String fromTime; 
@@ -28,6 +31,7 @@ public class Activity {
 	private String url;
 	private String imageData;
 	private String imageUrl;
+	@Indexed
 	private String type;
 	private int like;
 	private int viewCount;
