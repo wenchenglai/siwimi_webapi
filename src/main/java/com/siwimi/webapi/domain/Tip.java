@@ -6,24 +6,27 @@ import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
-import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "Tip")
+@CompoundIndexes({
+    @CompoundIndex(name = "title_createdDate", def = "{'title': 1, 'createdDate': 1}"),
+    @CompoundIndex(name = "type_createdDate", def = "{'type': 1, 'createdDate': 1}"),
+    @CompoundIndex(name = "createdDate_expiredDate", def = "{'createdDate': -1, 'expiredDate': -1}")
+})
 public class Tip implements Comparable<Tip>{
 
 	@Id
 	private String id;
 
 	private String creator;
-	@Indexed
 	private String title;
 	private String description;
 	private String url;
-	@Indexed
 	private Date createdDate;
 	private Date expiredDate;
-	@Indexed
 	private String type;
 	private int viewCount;
 	private String imageData;
