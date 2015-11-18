@@ -6,10 +6,16 @@ import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection="Item")
+@CompoundIndexes({
+    @CompoundIndex(name = "title_createdDate", def = "{'title': 1, 'createdDate': -1}"),
+    @CompoundIndex(name = "type_createdDate", def = "{'type': 1, 'createdDate': -1}")
+})
 public class Item {
 
 	@Id
@@ -17,7 +23,6 @@ public class Item {
 	
 	private String creator;
 	private String buyer;
-	@Indexed
 	private String title;
 	private String description;
 	private String status; // active, inactive, sold, swapped, gave away
@@ -30,7 +35,6 @@ public class Item {
 	private int fromAge;
 	private int toAge;
 	private String condition; // new, used
-	@Indexed
 	private String type; // toy, cloth, book, equipment, furniture, misc
 	private String transactionType; // Sale, Swap, Loan, Free
 	private float price;
