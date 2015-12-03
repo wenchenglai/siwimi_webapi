@@ -95,25 +95,54 @@ public class ParseEventService {
 						// Populate activity : description
 						activity.setDescription(content2);
 						if (content1 != null) {
-							String [] part1 = content1.split(":");
-							//populate fromTime
-							content1 = content1.replaceAll(part1[0]+":", "");
-							String [] part2 = content1.trim().split("to");
-							activity.setFromTime(part2[0].trim());
-							//populate toTime
-							content1 = content1.replaceAll(part2[0]+"to", "");
-							String [] part3 = content1.trim().split("--");		
-							activity.setToTime(part3[0].trim());
-							// Populate activity : fromDate and toDate
-							SimpleDateFormat formatter = new SimpleDateFormat("EEEE MMMM dd, yyyy hh:mm aaa");
-							try {
-								Date fromDate = formatter.parse(part1[0].trim()+" "+part2[0].trim());
-								activity.setFromDate(fromDate);
-								Date toDate = formatter.parse(part1[0].trim()+" "+part3[0].trim());
-								activity.setToDate(toDate);
-							} catch (ParseException e1) {
-								e1.printStackTrace();
+							String [] part1;
+							String [] part2;
+							String [] part3;
+							if (content1.contains("through")) {
+								part1 = content1.split("through");
+								SimpleDateFormat formatter = new SimpleDateFormat("MMMM dd, yyyy hh:mm aaa");
+								//populate fromDate
+								if (part1[0].toLowerCase().contains("now")) {
+									activity.setFromDate(new Date());
+								} else {
+									try {
+										Date fromDate = formatter.parse(part1[0].trim()+" 8:00 am");
+										activity.setFromDate(fromDate);
+									} catch (ParseException e1) {
+										e1.printStackTrace();
+									}
+								}
+								//populate toDate
+								part2 = part1[1].split("--");
+								try {
+									Date toDate = formatter.parse(part2[0].trim()+" 8:00 pm");
+									activity.setToDate(toDate);
+								} catch (ParseException e1) {
+									e1.printStackTrace();
+								}
+								part3 = part2;		
+							} else {
+								part1 = content1.split(":");
+								//populate fromTime
+								content1 = content1.replaceAll(part1[0]+":", "");
+								part2 = content1.trim().split("to");
+								activity.setFromTime(part2[0].trim());
+								//populate toTime
+								content1 = content1.replaceAll(part2[0]+"to", "");
+								part3 = content1.trim().split("--");		
+								activity.setToTime(part3[0].trim());
+								// Populate activity : fromDate and toDate
+								SimpleDateFormat formatter = new SimpleDateFormat("EEEE MMMM dd, yyyy hh:mm aaa");
+								try {
+									Date fromDate = formatter.parse(part1[0].trim()+" "+part2[0].trim());
+									activity.setFromDate(fromDate);
+									Date toDate = formatter.parse(part1[0].trim()+" "+part3[0].trim());
+									activity.setToDate(toDate);
+								} catch (ParseException e1) {
+									e1.printStackTrace();
+								}
 							}
+								
 							// Populate activity : address and zipCode
 							if (part3[1].contains("Malletts Creek")) {
 								activity.setAddress("3090 E. Eisenhower Parkway (The Ann Arbor District Library, "

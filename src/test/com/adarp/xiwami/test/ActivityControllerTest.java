@@ -1,10 +1,8 @@
 package com.adarp.xiwami.test;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
+//import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -18,7 +16,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.mock.http.MockHttpOutputMessage;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.web.servlet.MockMvc;
+//import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.siwimi.webapi.Application;
@@ -31,8 +29,7 @@ import com.siwimi.webapi.repository.MemberRepository;
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
 public class ActivityControllerTest {
-	private MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
-    MediaType.APPLICATION_JSON.getSubtype());
+//	private MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),MediaType.APPLICATION_JSON.getSubtype());
 
 	@SuppressWarnings("rawtypes")
 	private HttpMessageConverter mappingJackson2HttpMessageConverter;
@@ -40,7 +37,7 @@ public class ActivityControllerTest {
 	@Autowired
 	private WebApplicationContext webApplicationContext;
 
-	private MockMvc mockMvc;
+//	private MockMvc mockMvc;
 
 	private Member member1,member2,member3,member4,member5;
 	
@@ -62,7 +59,7 @@ public class ActivityControllerTest {
 
 	@Before
 	public void setup() throws Exception {
-		this.mockMvc = webAppContextSetup(webApplicationContext).build();
+//		this.mockMvc = webAppContextSetup(webApplicationContext).build();
 		
 	       /** Setup member **/    
 	    	member1 = new Member();
