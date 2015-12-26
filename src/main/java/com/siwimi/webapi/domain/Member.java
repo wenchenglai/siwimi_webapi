@@ -22,11 +22,23 @@ public class Member {
 	private List<String> languages = new ArrayList<String>();
 	private String type;
 	private String gender;
-	private String role;
 	private String avatarUrl;
 	private String imageData;
 	private String family;	
-	private boolean isUser;
+	
+	// privilege is the software application user authorization level
+	// by default, this is 0.  256 is Admin
+	// 0: Anonymous User, 1: User, 2: Super User, 4: Content Editor, 8: Reserved, 16: Reserved, 32: Reserved, 64: Reserved, 128: Reserved, 256: Admin 
+	private int privilege;
+	
+    // used to see if current user is considered a regular user with confirmed account.
+    // TODO: might be able to merge this field to the above privilege	
+	private boolean isUser;	
+	
+    // TODO: role should be merged with the privilege field, privilege better reflects the application authroization level, while role could be used for Father, Mother etc
+    // authorization [admin, user, anonymous]	
+	private String role;	
+	
 	private String facebookId;
 	private String highSchool;
 	private String college;
@@ -351,5 +363,13 @@ public class Member {
 
 	public void setNeeds(List<String> needs) {
 		this.needs = needs;
+	}
+
+	public int getPrivilege() {
+		return privilege;
+	}
+
+	public void setPrivilege(int privilege) {
+		this.privilege = privilege;
 	}
 }

@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Base64.Encoder;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
@@ -16,7 +18,8 @@ import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import sun.misc.BASE64Encoder;
+
+
 
 import com.siwimi.webapi.domain.Activity;
 import com.siwimi.webapi.domain.Location;
@@ -82,8 +85,8 @@ public class ParseEventService {
 							activity.setImageUrl(imageUrl);		
 							// Populate activity : imageData
 							Response resultImageResponse = Jsoup.connect(imageUrl).ignoreContentType(true).execute();
-							BASE64Encoder encoder = new BASE64Encoder();
-							String imageData = encoder.encode(resultImageResponse.bodyAsBytes());
+							Encoder encoder = Base64.getEncoder();
+							String imageData = encoder.encodeToString(resultImageResponse.bodyAsBytes());
 							//System.out.println(imageData);
 							if (imageUrl.contains(".jpg")) {
 								imageData = "data:image/jpeg;base64," + imageData;
