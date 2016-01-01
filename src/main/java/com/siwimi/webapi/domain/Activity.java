@@ -44,6 +44,10 @@ public class Activity {
 	private float price;	
 	private Date createdDate;
 	
+	// 0: good data, 1: missing fromDate, 2: missing fromTime, 4: missing title, 8: missing description
+	// 16: missing base64Image
+	private int errorCode;	
+	
 	// User comments
 	@Transient
 	private List<String> replies = new ArrayList<String>();	
@@ -339,6 +343,14 @@ public class Activity {
 	          return false;
 	       
 	    return true;
+	}
+
+	public int getErrorCode() {
+		return errorCode;
+	}
+
+	public void setErrorCode(int errorCode) {
+		this.errorCode = errorCode;
 	}
 
 }
