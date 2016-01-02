@@ -47,6 +47,7 @@ public class Activity {
 	// 0: good data, 1: missing fromDate, 2: missing fromTime, 4: missing title, 8: missing description
 	// 16: missing base64Image
 	private int errorCode;	
+	private String parser;
 	
 	// User comments
 	@Transient
@@ -351,6 +352,14 @@ public class Activity {
 
 	public void setErrorCode(int errorCode) {
 		this.errorCode = errorCode;
+	}
+
+	public String getParser() {
+		return parser;
+	}
+
+	public void setParser(String parser) {
+		this.parser = parser;
 	}
 
 }
