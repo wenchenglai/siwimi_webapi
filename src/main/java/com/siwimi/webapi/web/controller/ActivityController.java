@@ -68,7 +68,7 @@ public class ActivityController {
 			for (Activity activity : activityList) {
 				Member member = memberService.findByMemberId(activity.getCreator());
 				// we must return an empty object so Ember can pick up the json data format.  Return null will crash the ember client.
-				if (member!=null)
+				if (member != null)
 					members.add(member);
 				// Populate replies
 				List<Feedback> feedbacks = feedbackService.find(null, activity.getId(), "activity", null);
