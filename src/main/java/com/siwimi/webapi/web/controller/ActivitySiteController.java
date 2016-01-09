@@ -71,5 +71,6 @@ public class ActivitySiteController {
 	@RequestMapping (value = "/activitySites/{id}", method = RequestMethod.DELETE, produces = "application/json")
 	public void deleteActivitySite(@PathVariable("id")String id, HttpServletResponse response) {
 		activitySiteRep.delete(id);
+		response.setStatus(HttpServletResponse.SC_NO_CONTENT);
 	}	
 }
