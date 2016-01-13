@@ -46,11 +46,18 @@ public class ActivityRepositoryImpl implements ActivityRepositoryCustom {
 		
 		if ((longitude != null) && (latitude != null) && (qsDistance!= null)) {			
 			double distance = 0.0;
-			String [] parts = qsDistance.split(" ");
-			if (parts[1].toLowerCase().contains("mile"))
-				distance = Double.parseDouble(parts[0])/3959;
-			else	
-				distance = Double.parseDouble(parts[0])/6371;
+			
+			// 2016-01-13 temporary commented out due to changes in distance filter design
+//			String [] parts = qsDistance.split(" ");
+//			if (parts[1].toLowerCase().contains("mile"))
+//				distance = Double.parseDouble(parts[0])/3959;
+//			else	
+//				distance = Double.parseDouble(parts[0])/6371;
+			
+			if (qsDistance.equals("all"))
+				distance = 1000.0/3959;
+			else 
+				distance = Double.parseDouble(qsDistance)/3959;
 					
 			criterias.add(new Criteria().where("location").nearSphere(new Point(longitude,latitude)).maxDistance(distance));
 		}

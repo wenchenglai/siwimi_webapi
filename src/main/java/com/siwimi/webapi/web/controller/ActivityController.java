@@ -59,10 +59,14 @@ public class ActivityController {
 			@RequestParam(value="pageNumber", required=false) Integer pageNumber, 
 			@RequestParam(value="pageSize", required=false) Integer pageSize,
 			@RequestParam(value="sortBy", required=false) String sortBy) {
+				
 		ActivitySideloadList responseBody = new ActivitySideloadList();
-		List<Activity> activityList = activityService.findActivities(creatorId,requesterId,status,type,period,fromTime,toTime,
-                                                                     longitude,latitude,qsDistance,queryText,
-                                                                     pageNumber,pageSize,sortBy);
+		
+		List<Activity> activityList = activityService.findActivities(
+				creatorId,requesterId,status,type,period,fromTime,toTime,
+                longitude,latitude,qsDistance,queryText,
+                pageNumber,pageSize,sortBy);
+		
 		Set<Member> members = new HashSet<Member>();
 		if (activityList!=null) {
 			for (Activity activity : activityList) {
