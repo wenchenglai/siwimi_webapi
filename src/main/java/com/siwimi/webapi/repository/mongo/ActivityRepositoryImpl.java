@@ -54,12 +54,10 @@ public class ActivityRepositoryImpl implements ActivityRepositoryCustom {
 //			else	
 //				distance = Double.parseDouble(parts[0])/6371;
 			
-			if (qsDistance.equals("all"))
-				distance = 1000.0/3959;
-			else 
-				distance = Double.parseDouble(qsDistance)/3959;
-					
-			criterias.add(new Criteria().where("location").nearSphere(new Point(longitude,latitude)).maxDistance(distance));
+			if (!qsDistance.equals("all")) {
+				distance = Double.parseDouble(qsDistance)/3959;		
+				criterias.add(new Criteria().where("location").nearSphere(new Point(longitude,latitude)).maxDistance(distance));
+			}
 		}
 		
 		if (status != null) {		
