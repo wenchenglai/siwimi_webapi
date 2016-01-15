@@ -6,7 +6,7 @@ import com.siwimi.webapi.domain.Activity;
 
 public interface ActivityRepositoryCustom {
 	List<Activity> queryActivity(String creatorId,String status,String type,Integer period,String fromTime, String toTime,
-			                     Double queryLongitude,Double queryLatitude,String qsDistance,String queryText,
+			                     Double queryLongitude,Double queryLatitude,String qsDistance,String ageGroup,boolean isFree,String queryText,
 			                     Integer page, Integer per_page,String sortBy);
 	Activity saveActivity(Activity newActivity);
 }

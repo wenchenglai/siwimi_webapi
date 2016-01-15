@@ -23,7 +23,6 @@ import com.siwimi.webapi.domain.Member;
 import com.siwimi.webapi.service.ActivityService;
 import com.siwimi.webapi.service.FeedbackService;
 import com.siwimi.webapi.service.MemberService;
-import com.siwimi.webapi.service.ParseEventService;
 import com.siwimi.webapi.web.dto.ActivitySideload;
 import com.siwimi.webapi.web.dto.ActivitySideloadList;
 
@@ -39,9 +38,6 @@ public class ActivityController {
 	@Autowired
 	private FeedbackService feedbackService;
 	
-	@Autowired
-	private ParseEventService parseEventService;
-	
 	// Get activities by criteria
 	@RequestMapping(value = "/activities", method = RequestMethod.GET, produces = "application/json")
 	public ActivitySideloadList findActivities(
@@ -56,6 +52,8 @@ public class ActivityController {
 			@RequestParam(value="latitude", required=false) Double latitude,
 			@RequestParam(value="distance", required=false) String qsDistance, 
 			@RequestParam(value="queryText", required=false) String queryText,
+			@RequestParam(value="ageGroup", required=false) String ageGroup,
+			@RequestParam(value="isFree", required=false) boolean isFree,
 			@RequestParam(value="pageNumber", required=false) Integer pageNumber, 
 			@RequestParam(value="pageSize", required=false) Integer pageSize,
 			@RequestParam(value="sortBy", required=false) String sortBy) {
@@ -64,7 +62,7 @@ public class ActivityController {
 		
 		List<Activity> activityList = activityService.findActivities(
 				creatorId,requesterId,status,type,period,fromTime,toTime,
-                longitude,latitude,qsDistance,queryText,
+                longitude,latitude,qsDistance,ageGroup,isFree,queryText,
                 pageNumber,pageSize,sortBy);
 		
 		Set<Member> members = new HashSet<Member>();
@@ -109,17 +107,6 @@ public class ActivityController {
 		responseBody.put("activity", savedActivity);		
 		return responseBody;		
 	}	
-	
-	// Add New Activities by robot
-	@RequestMapping(value = "/activities/robot", method = RequestMethod.POST, produces = "application/json")
-	public ActivitySideloadList addActivitybyRobot() {
-		ActivitySideloadList responseBody = new ActivitySideloadList();
-		// Get activity list from AADL
-		List<Activity> activityList = parseEventService.parseAADL();		
-		responseBody.activities = activityList;
-		responseBody.members = new ArrayList<Member>();
-		return responseBody;		
-	}
 	
 	// Update Activity
 	@RequestMapping(value = "/activities/{id}", method = RequestMethod.PUT, produces = "application/json")

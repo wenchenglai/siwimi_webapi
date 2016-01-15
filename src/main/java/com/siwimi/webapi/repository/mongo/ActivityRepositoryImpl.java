@@ -28,7 +28,7 @@ public class ActivityRepositoryImpl implements ActivityRepositoryCustom {
 	@SuppressWarnings("static-access")
 	@Override
 	public List<Activity> queryActivity(String creatorId,String status,String type,Integer period,String fromTime, String toTime,
-			                            Double longitude,Double latitude,String qsDistance,String queryText,
+			                            Double longitude,Double latitude,String qsDistance,String ageGroup,boolean isFree,String queryText,
 			                            Integer page, Integer per_page, String sortBy) {
 			
 		List<Criteria> criterias = new ArrayList<Criteria>();
@@ -58,6 +58,28 @@ public class ActivityRepositoryImpl implements ActivityRepositoryCustom {
 				distance = Double.parseDouble(qsDistance)/3959;		
 				criterias.add(new Criteria().where("location").nearSphere(new Point(longitude,latitude)).maxDistance(distance));
 			}
+		}
+		
+		if (ageGroup != null) {
+			if (ageGroup.equals("infant"))
+				criterias.add(new Criteria().andOperator(Criteria.where("fromAge").lte(1),
+						                                 Criteria.where("toAge").gte(0)));
+			else if (ageGroup.equals("toddler"))
+				criterias.add(new Criteria().andOperator(Criteria.where("fromAge").lte(3),
+                        								 Criteria.where("toAge").gte(2)));			
+			else if (ageGroup.equals("pre-school"))
+				criterias.add(new Criteria().andOperator(Criteria.where("fromAge").lte(5),
+                        								 Criteria.where("toAge").gte(4)));
+			else if (ageGroup.equals("school-age"))
+				criterias.add(new Criteria().andOperator(Criteria.where("fromAge").lte(11),
+                        								 Criteria.where("toAge").gte(6)));
+			else if (ageGroup.equals("pre-teen"))
+				criterias.add(new Criteria().andOperator(Criteria.where("fromAge").lte(14),
+                        								 Criteria.where("toAge").gte(12)));
+		}
+		
+		if (isFree == false) {
+			criterias.add(new Criteria().andOperator(Criteria.where("price").is(0)));
 		}
 		
 		if (status != null) {		
@@ -137,9 +159,24 @@ public class ActivityRepositoryImpl implements ActivityRepositoryCustom {
 					break;
 			}					
 			
-			if ((periodBegin!=null) && (periodEnd!=null))
-				criterias.add(new Criteria().andOperator(Criteria.where("fromDate").lte(periodEnd),
-                                                         Criteria.where("toDate").gte(periodBegin)));
+			if ((periodBegin!=null) && (periodEnd!=null)) {
+				// Both fromDate and toDate are not null
+				Criteria c1 = new Criteria().andOperator(Criteria.where("fromDate").lte(periodEnd),
+                                                         Criteria.where("toDate").gte(periodBegin));
+				// toDate is null
+				Criteria c2 = new Criteria().andOperator(Criteria.where("fromDate").lte(periodEnd),
+						                                 Criteria.where("fromDate").gte(periodBegin),
+                                                         Criteria.where("toDate").is(null));
+				// fromDate is null
+				Criteria c3 = new Criteria().andOperator(Criteria.where("toDate").lte(periodEnd),
+						                                 Criteria.where("toDate").gte(periodBegin),
+                                                         Criteria.where("fromDate").is(null));
+				// Both fromDate and toDate are null
+				Criteria c4 = new Criteria().andOperator(Criteria.where("fromDate").is(null),
+                                                         Criteria.where("toDate").is(null));
+				criterias.add(new Criteria().orOperator(c1,c2,c3,c4));
+			}
+
 			if ((periodBegin!=null) && (periodEnd==null))
 				criterias.add(new Criteria().andOperator(Criteria.where("fromDate").is(null),
 						                                 Criteria.where("toDate").gte(periodBegin)));

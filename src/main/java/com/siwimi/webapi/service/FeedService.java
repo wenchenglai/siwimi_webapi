@@ -56,7 +56,7 @@ public class FeedService {
 				
 		// Convert Activities (Events) to Feeds
 		List<Activity> activities = activityRep.queryActivity(null,"upcoming",null,null,null,null,
-				                                              longitude,latitude,"15 mile",null,page,per_page,null);
+				                                              longitude,latitude,"15 mile",null,false,null,page,per_page,null);
 		if ((activities != null) && (!activities.isEmpty())) {
 			for (Activity activity : activities.subList(0, activities.size()<5 ? activities.size() : 5)) {
 				Feed feed = new Feed();
