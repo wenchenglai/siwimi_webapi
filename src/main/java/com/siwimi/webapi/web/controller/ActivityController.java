@@ -53,7 +53,7 @@ public class ActivityController {
 			@RequestParam(value="distance", required=false) String qsDistance, 
 			@RequestParam(value="queryText", required=false) String queryText,
 			@RequestParam(value="ageGroup", required=false) String ageGroup,
-			@RequestParam(value="isFree", required=false) boolean isFree,
+			@RequestParam(value="isFree", required=false, defaultValue="false") boolean isFree,
 			@RequestParam(value="pageNumber", required=false) Integer pageNumber, 
 			@RequestParam(value="pageSize", required=false) Integer pageSize,
 			@RequestParam(value="sortBy", required=false) String sortBy) {

@@ -78,7 +78,7 @@ public class ActivityRepositoryImpl implements ActivityRepositoryCustom {
                         								 Criteria.where("toAge").gte(12)));
 		}
 		
-		if (isFree == false) {
+		if (isFree) {
 			criterias.add(new Criteria().andOperator(Criteria.where("price").is(0)));
 		}
 		
