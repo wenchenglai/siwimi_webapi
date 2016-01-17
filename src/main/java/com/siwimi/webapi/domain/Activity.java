@@ -42,8 +42,8 @@ public class Activity {
 	private String imageData;
 	private String imageUrl;
 	private String type;
-	private int like;
-	private int viewCount;
+	private int like = 0;
+	private int viewCount = 0;
 	private double[] location;
 	private int fromAge;
 	private int toAge;
