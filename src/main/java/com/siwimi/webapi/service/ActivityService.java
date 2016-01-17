@@ -1,9 +1,16 @@
 package com.siwimi.webapi.service;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 import java.util.TimeZone;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +60,7 @@ public class ActivityService {
 			}
 			activityList.set(i, activity);
 			// increment viewcount by 1, and save it to MongoDB
-			activity.setViewCount(activity.getViewCount()+1);
+			activity.setViewCount(activity.getViewCount()+1);			
 			activityRep.saveActivity(activity);		
 		}
 		
@@ -67,17 +74,21 @@ public class ActivityService {
 	public Activity addActivity(Activity newActivity) {			
 		newActivity.setIsDeletedRecord(false);
 		newActivity.setViewCount(0);
+		// update location and time
 		newActivity = updateLocationAndTime(newActivity);
-		
-		/** We cannot use activityRep.save()
-			Because Spring repository does not provide geospatial indexing : db.location.ensureIndex( {location: "2d"} )
-		**/
+		// retreive id from mongoDB
+		newActivity = activityRep.saveActivity(newActivity);
+		// update imageData and imageURL
+		newActivity = saveImage(newActivity);
 		return activityRep.saveActivity(newActivity);
 	}
 	
 	public Activity updateActivity(String id, Activity updatedActivity) {
 		updatedActivity.setId(id);
+		// update location and time
 		updatedActivity = updateLocationAndTime(updatedActivity);
+		// update imageData and imageURL
+		updatedActivity = saveImage(updatedActivity);
 		return activityRep.saveActivity(updatedActivity);
 	}
 	
@@ -86,7 +97,7 @@ public class ActivityService {
 		if (activity == null)
 			return null;
 		else if (!activity.getIsDeletedRecord()) {
-			activity.setIsDeletedRecord(true);
+			activity.setIsDeletedRecord(true);			
 			return activityRep.saveActivity(activity);
 		} else
 			return null;		
@@ -174,6 +185,55 @@ public class ActivityService {
 		   }			
 		}
 		
+		return activity;
+	}
+	
+	// update imageURL and imageData
+	public Activity saveImage(Activity activity) {		
+		if (activity.getImageData() != null) {			
+			// get image path
+			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+			Properties properties = new Properties();
+			try {
+				properties.load(classLoader.getResourceAsStream("eventImagePath.properties"));
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			// get image type
+			String type = ".png";
+			String [] parts = activity.getImageData().split(",");
+			if (parts[0].contains("jpeg"))
+				type = ".jpg";
+			else if (parts[0].contains("gif"))
+				type = ".gif";
+			
+			// Decode image from String
+			byte[] decodedData = Base64.getDecoder().decode(parts[1]);
+			
+			// Save image to file			
+	        if (decodedData != null) {
+	            try {
+	            	String rootPath = System.getProperty("user.home");
+	            	File dir = new File(rootPath + properties.getProperty("path"));
+	                if (!dir.exists())
+	                    dir.mkdirs();
+	                File serverFile = new File(dir.getAbsolutePath() + File.separator + activity.getId()+type);
+	                
+	                BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
+	                stream.write(decodedData);
+	                stream.close();
+	                
+	                // update imageURL and save to DB
+	                activity.setImageUrl(rootPath+properties.getProperty("path")+activity.getId()+type);
+	            } catch (Exception e) {
+	            	e.printStackTrace();
+	            }
+	        } 
+	    }
+				
 		return activity;
 	}
 }
