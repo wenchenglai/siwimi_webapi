@@ -69,7 +69,7 @@ public class ActivityController {
 		if (activityList!=null) {
 			for (Activity activity : activityList) {
 				// delete image data for each events to increase website performance
-				activity.setImageData(null);
+				//activity.setImageData(null);
 				
 				Member member = memberService.findByMemberId(activity.getCreator());
 				// we must return an empty object so Ember can pick up the json data format.  Return null will crash the ember client.
