@@ -11,8 +11,9 @@ public class CustomWebMvcAutoConfig extends WebMvcConfigurerAdapter {
         	"classpath:/META-INF/resources/", "classpath:/resources/",
         	"classpath:/static/", "classpath:/public/"};
 	
+	//, "file:/home/siwimi/image/events/"
 	private static final String[] CLASSPATH_RESOURCE_LOCATIONS_from_file = {
-    	"file:/root/image/events/",  "file:/Users/wen/image/events/", "file:/home/siwimi/image/events/"};
+    	"file:/root/image/events/",  "file:/Users/wen/image/events/"};
 	
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
