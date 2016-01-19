@@ -227,7 +227,7 @@ public class ActivityService {
 	                stream.close();
 	                
 	                // update imageURL and save to DB
-	                activity.setImageUrl(rootPath+properties.getProperty("path")+activity.getId()+type);
+	                activity.setImageUrl(properties.getProperty("path") + activity.getId() + type);
 	            } catch (Exception e) {
 	            	e.printStackTrace();
 	            }

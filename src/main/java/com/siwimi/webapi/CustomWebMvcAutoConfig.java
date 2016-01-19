@@ -12,7 +12,7 @@ public class CustomWebMvcAutoConfig extends WebMvcConfigurerAdapter {
         	"classpath:/static/", "classpath:/public/"};
 	
 	private static final String[] CLASSPATH_RESOURCE_LOCATIONS_from_file = {
-    	"file:/home/siwimi/image/events/", "file:///C:/image/events/"};
+    	"file:/home/siwimi/image/events/",  "file:/Users/wen/image/events/"};
 	
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
