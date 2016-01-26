@@ -28,6 +28,11 @@ war {
     version =  '0.0.1'
 }
 
+jar {
+    baseName = 'siwimi-webapi'
+    version =  '0.0.1'
+}
+
 repositories {
 	mavenCentral()
 	maven { url "http://repo.spring.io/release" }
@@ -79,3 +84,5 @@ task createPom << {
         }
     }.writeTo("pom.xml")
 }
+
+defaultTasks 'run'
