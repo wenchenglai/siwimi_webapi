@@ -16,12 +16,32 @@ import org.springframework.data.mongodb.core.mapping.Document;
     @CompoundIndex(name = "type_createdDate", def = "{'type': 1, 'createdDate': -1}"),
     @CompoundIndex(name = "fromDate_createdDate", def = "{'fromDate': 1, 'createdDate': 1}")
 })
+
 public class Activity {
 
 	public enum LifeStage {
 		Submitted,
 		Approved,
 		Rejected
+	}
+	
+	public enum Category {
+		animal,
+		art,
+		concert,
+		farm,
+		festival,
+		game,
+		movie, 
+		museum,
+		parent,
+		playdate,
+		science,
+		show,
+		sport, 
+		storytelling,
+		zoo,
+		misc
 	}
 	
 	@Id
@@ -41,7 +61,7 @@ public class Activity {
 	private String url;
 	private String imageData;
 	private String imageUrl;
-	private String type;
+	private Category type;
 	private int like = 0;
 	private int viewCount = 0;
 	private double[] location;
@@ -225,11 +245,11 @@ public class Activity {
 		this.url = url;
 	}
 	
-	public String getType() {
+	public Category getType() {
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(Category type) {
 		this.type = type;
 	}
 

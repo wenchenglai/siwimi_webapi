@@ -236,6 +236,26 @@ public class ActivityRepositoryImpl implements ActivityRepositoryCustom {
 			return queryResults;
 		}					
 	}
+	
+	@SuppressWarnings("static-access")
+	@Override
+	public Boolean isExisted(String customData, String parser) {
+		if (customData == null) {
+			return false;
+		}
+		
+		List<Criteria> criterias = new ArrayList<Criteria>();
+		
+		criterias.add(new Criteria().where("isDeletedRecord").is(false));
+		criterias.add(new Criteria().where("customData").is(customData));
+		criterias.add(new Criteria().where("parser").is(parser));
+		
+		Criteria c = new Criteria().andOperator(criterias.toArray(new Criteria[criterias.size()]));
+		
+		Activity one = mongoTemplate.findOne(new Query(c), Activity.class, "Activity");
+		
+		return one != null;
+	}
 		
 	// Need to create geospatial index for events before saving
 	@Override
