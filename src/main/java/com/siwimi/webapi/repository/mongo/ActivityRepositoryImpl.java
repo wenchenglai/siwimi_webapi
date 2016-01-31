@@ -28,7 +28,8 @@ public class ActivityRepositoryImpl implements ActivityRepositoryCustom {
 	@SuppressWarnings("static-access")
 	@Override
 	public List<Activity> queryActivity(String creatorId,String status,String type,Integer period,String fromTime, String toTime,
-			                            Double longitude,Double latitude,String qsDistance,String ageGroup,boolean isFree,String queryText,
+			                            Double longitude,Double latitude,String qsDistance,String ageGroup,String stage,
+			                            boolean isFree,String queryText,
 			                            Integer page, Integer per_page, String sortBy) {
 			
 		List<Criteria> criterias = new ArrayList<Criteria>();
@@ -76,6 +77,10 @@ public class ActivityRepositoryImpl implements ActivityRepositoryCustom {
 			else if (ageGroup.equals("pre-teen"))
 				criterias.add(new Criteria().andOperator(Criteria.where("fromAge").lte(14),
                         								 Criteria.where("toAge").gte(12)));
+		}
+		
+		if (stage != null) {
+			criterias.add(new Criteria().where("stage").is(stage));
 		}
 		
 		if (isFree) {
