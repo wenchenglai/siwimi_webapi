@@ -53,6 +53,7 @@ public class ActivityController {
 			@RequestParam(value="distance", required=false) String qsDistance, 
 			@RequestParam(value="queryText", required=false) String queryText,
 			@RequestParam(value="ageGroup", required=false) String ageGroup,
+			@RequestParam(value="stage", required=false) String stage,
 			@RequestParam(value="isFree", required=false, defaultValue="false") boolean isFree,
 			@RequestParam(value="pageNumber", required=false) Integer pageNumber, 
 			@RequestParam(value="pageSize", required=false) Integer pageSize,
@@ -62,7 +63,7 @@ public class ActivityController {
 		
 		List<Activity> activityList = activityService.findActivities(
 				creatorId,requesterId,status,type,period,fromTime,toTime,
-                longitude,latitude,qsDistance,ageGroup,isFree,queryText,
+                longitude,latitude,qsDistance,ageGroup,stage,isFree,queryText,
                 pageNumber,pageSize,sortBy);
 		
 		Set<Member> members = new HashSet<Member>();
